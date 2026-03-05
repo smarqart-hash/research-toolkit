@@ -28,6 +28,10 @@ but the implementation is entirely independent.
   include or require PyMuPDF. If AGPL is incompatible with your use case,
   use `pypdf` or `pdfplumber` (both MIT-licensed) as alternatives.
 
+- **marker-pdf** (optional `[parsing]` extra) — GPL-3.0 licensed.
+  Same isolation as PyMuPDF. Not imported by core code. Only pulled in
+  if you explicitly install `pip install research-toolkit[parsing]`.
+
 ## AI Disclosure
 
 This toolkit was developed with AI assistance (Claude Code by Anthropic).

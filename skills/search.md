@@ -76,6 +76,27 @@ If both Semantic Scholar and Exa return no results (rate limit, network):
 | `src/agents/forschungsstand.py` | Orchestration + generator |
 | `src/utils/evidence_card.py` | Evidence card schema |
 
+## Coverage Note
+
+Semantic Scholar is English-language dominant. For comprehensive or systematic reviews, supplement with domain-specific databases:
+- **Biomedical:** PubMed, Cochrane Library
+- **German-language academic:** LIVIVO, BASE
+- **Broad academic:** OpenAlex, Scopus, Web of Science
+
+The search output should note: "This search used Semantic Scholar [+ Exa]. Non-Anglophone literature and databases not covered by these sources may be systematically underrepresented."
+
+## Provenance
+
+Every search action is logged to `provenance.jsonl`:
+```json
+{"timestamp": "...", "phase": "search", "agent": "semantic_scholar", "action": "search", "query": "...", "results_count": 87}
+```
+
+If using an LLM for clustering or evidence extraction, log the model and version separately:
+```json
+{"phase": "search", "agent": "llm", "model": "user-provided", "action": "cluster", "prompt_hash": "sha256:..."}
+```
+
 ## Recommended Models
 
 Works best with capable models (Claude Sonnet/Opus, GPT-4, or similar) for query generation, evidence extraction, and overview writing. For parallel sub-tasks like clustering, lighter models (Claude Haiku, GPT-4o-mini) suffice.

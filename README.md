@@ -29,7 +29,7 @@ Think of it like Unix pipes for research: each skill does one thing well, takes 
 
 **Voice profiles** = writing style templates. They define: sentence length, typical phrases, formality level, things to do and avoid. Currently two voices: formal academic English and formal academic German.
 
-**Evidence cards** = structured paper summaries. Instead of dumping full paper text into downstream tools (expensive, noisy), the Search skill compresses each paper into a JSON card with: the main claim, method used, key metrics, limitations, and a confidence level.
+**Evidence cards** = structured paper summaries. Instead of dumping full paper text into downstream tools (expensive, noisy), the Search skill compresses each paper into a JSON card with: the main claim, method used, key metrics, limitations, and a confidence level. Evidence cards are **pointers, not substitutes** — they accelerate your reading path but do not replace engaging with primary sources. Before citing a paper based on its evidence card, verify the claim against the original.
 
 ## Status
 
@@ -200,6 +200,24 @@ The setup wizard (`python setup.py`) guides you through API key configuration.
 See [`examples/ai_automated_research/`](examples/ai_automated_research/) for a complete pipeline run on "AI-Assisted Automated Research" — including real Semantic Scholar search results, evidence cards, a literature review draft, structured review feedback, and citation verification.
 
 This example is meta: it uses the toolkit to research the field of automated research tools.
+
+## Known Limitations
+
+| Skill | Limitation | Impact |
+|-------|-----------|--------|
+| **Search** | Semantic Scholar only (English-dominant). Non-Anglophone literature, grey literature, and databases like LIVIVO/BASE/PubMed not covered. | Systematic bias toward English-language publications. Supplement with domain-specific databases for comprehensive reviews. |
+| **Search** | Ranking uses citation count + recency composite. Not validated against domain-specific ground truth. | May surface popular papers over methodologically strongest ones. |
+| **Draft** | Voice calibration not fine-tuned. Self-check does not detect circular argumentation or logical fallacies. | Outputs require expert review before any submission. |
+| **Review** | Confidence labels in evidence cards are categorical ("high/medium/low"), not calibrated probabilities. | Labels should be read as heuristic indicators, not quantitative assessments. |
+| **Check** | Citation extraction uses regex for Harvard-style references. Other citation formats may be missed. | Run Check as a safety net, not as sole verification. |
+| **Pipeline** | Provenance trail covers toolkit actions but not the external LLM interaction ("bring your own"). | The LLM step is outside the audit trail — document model and version separately. |
+
+## Responsible Use
+
+- **Check is not optional.** Any AI-generated content will contain errors. Run the Check skill before using AI-drafted text. This is the minimum verification step.
+- **Evidence cards are pointers.** Before including any claim from an evidence card in a manuscript, verify it against the primary source. The toolkit accelerates your reading path — it does not replace reading.
+- **Document your AI use.** The provenance JSONL trail covers the toolkit's actions. For the LLM step, record which model, version, and prompts you used. Consider [PRISMA-trAIce](https://pmc.ncbi.nlm.nih.gov/articles/PMC12694947/) for systematic reviews.
+- **Supplement the search.** Semantic Scholar is English-dominant. For comprehensive reviews, add domain-specific databases (PubMed, LIVIVO, Scopus) manually.
 
 ## What This Is Not
 
