@@ -2,6 +2,30 @@
 
 > Quelle: `examples/ai_automated_research/draft.md` (eigenes Meta-Paper)
 
+## Uebergreifende These: Ceiling-Detektor
+
+Der reflexive Loop ist nicht primaer ein Self-Improvement-Mechanismus — er ist ein
+**Ceiling-Detektor**. Das System kann seinen Output iterieren, aber nicht seine
+eigenen Faehigkeiten erweitern.
+
+**Fundamentale Asymmetrie:**
+- Die Pipeline kann Papers suchen, ranken, Drafts generieren, Reviews durchfuehren
+- Die Pipeline kann NICHT erkennen, ob ihr Ranking schlecht ist (kein Ground-Truth),
+  Evidence Cards auf Halluzination pruefen, oder Review-Kriterien hinterfragen
+
+**Konsequenz fuer die Entwicklung:**
+- **Verbessern** wo moeglich (bessere Heuristiken, mehr Signale, Screening-Schritt)
+- **Ceiling sichtbar machen** wo fundamental (PRISMA-Flow zeigt Verluste, Ranking
+  wird testbar gegen Ground Truth, HITL-Gates dokumentieren menschliche Entscheidungen)
+
+**Goodhart's Law in der Pipeline:**
+`compute_delta()` in `reviewer.py` misst ob der Draft den Reviewer zufriedenstellt —
+nicht ob er wissenschaftlich besser wird. Das System optimiert auf Legibility, nicht
+auf epistemische Qualitaet. Die HITL-Gates in `state.py` sind das ehrlichste
+Engineering: Sie gestehen ein, wo die Maschine nicht entscheiden kann.
+
+---
+
 ## F1: Screening-Schritt fehlt (HOCH)
 
 **Referenz:** Nykvist et al. (2025) — GPT performt "remarkably well" beim Title/Abstract-Screening
