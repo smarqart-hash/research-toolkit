@@ -101,7 +101,7 @@ def search(
     console.print(Panel(f"Searching: [bold]{topic}[/bold]", style="blue"))
 
     try:
-        papers, stats = asyncio.run(search_papers(topic, config=config))
+        papers, stats, _prisma = asyncio.run(search_papers(topic, config=config))
     except Exception as e:
         console.print(f"[red]Search failed:[/red] {e}")
         raise typer.Exit(1)

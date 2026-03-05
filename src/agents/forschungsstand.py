@@ -31,6 +31,7 @@ from src.agents.paper_ranker import (
     from_semantic_scholar,
     rank_papers,
 )
+from src.agents.screener import PrismaFlow, ScreeningCriteria, screen_papers
 from src.agents.semantic_scholar import SemanticScholarClient
 from src.utils.evidence_card import EvidenceCard
 
@@ -80,16 +81,18 @@ async def search_papers(
     *,
     queries: list[str] | None = None,
     config: SearchConfig | None = None,
-) -> tuple[list[UnifiedPaper], dict[str, int]]:
+    screening: ScreeningCriteria | None = None,
+) -> tuple[list[UnifiedPaper], dict[str, int], PrismaFlow | None]:
     """Sucht Papers via Semantic Scholar + optional Exa.
 
     Args:
         topic: Hauptthema.
         queries: Optionale zusaetzliche Suchqueries (aus Leitfragen).
         config: Such-Konfiguration.
+        screening: Optionale Screening-Kriterien (PRISMA-Flow).
 
     Returns:
-        Tuple aus (deduplizierte + gerankte Papers, Statistiken).
+        Tuple aus (Papers, Statistiken, PrismaFlow oder None).
     """
     if config is None:
         config = SearchConfig()
@@ -163,15 +166,26 @@ async def search_papers(
             stats["exa_errors"],
         )
 
-    # Deduplizierung + Ranking
+    # Deduplizierung + Ranking (mit SPECTER2 wenn Topic als Query)
     deduped = deduplicate(all_papers)
-    ranked = rank_papers(deduped, top_k=config.top_k)
+    ranked = rank_papers(deduped, top_k=config.top_k, query=topic)
 
     stats["before_dedup"] = len(all_papers)
     stats["after_dedup"] = len(deduped)
     stats["after_ranking"] = len(ranked)
 
-    return ranked, stats
+    # Optionales Screening
+    prisma_flow: PrismaFlow | None = None
+    if screening is not None:
+        screening_result = screen_papers(ranked, screening)
+        prisma_flow = screening_result.prisma_flow
+        prisma_flow.identified = len(all_papers)
+        prisma_flow.after_dedup = len(deduped)
+        prisma_flow.after_ranking = len(ranked)
+        ranked = screening_result.included
+        stats["after_screening"] = len(ranked)
+
+    return ranked, stats, prisma_flow
 
 
 def generate_search_queries(topic: str, leitfragen: list[str]) -> list[str]:

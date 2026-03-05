@@ -245,7 +245,7 @@ class TestSearchPapersErrorStats:
                 "src.agents.forschungsstand.SemanticScholarClient.search_papers",
                 side_effect=mock_search,
             ):
-                papers, stats = await search_papers("test", config=config)
+                papers, stats, _prisma = await search_papers("test", config=config)
                 assert stats["ss_errors"] >= 1
                 assert stats["ss_total"] == 0
                 assert len(papers) == 0
@@ -264,7 +264,7 @@ class TestSearchPapersErrorStats:
                 "src.agents.forschungsstand.SemanticScholarClient.search_papers",
                 side_effect=mock_search,
             ):
-                papers, stats = await search_papers("test", config=config)
+                papers, stats, _prisma = await search_papers("test", config=config)
                 assert stats["ss_errors"] >= 1
 
         asyncio.run(run())
