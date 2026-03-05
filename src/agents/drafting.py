@@ -107,6 +107,17 @@ class SelfCheckFinding(BaseModel):
     suggestion: str = ""
 
 
+class ReflexiveMetadata(BaseModel):
+    """Metadaten fuer die reflexive Limitations-Sektion."""
+
+    tools_used: list[str] = Field(default_factory=list)
+    databases: list[str] = Field(default_factory=list)
+    model_info: str = ""
+    known_biases: list[str] = Field(default_factory=list)
+    prisma_flow_summary: str = ""
+    ceiling_notes: list[str] = Field(default_factory=list)
+
+
 class DraftingConfig(BaseModel):
     """Konfiguration fuer einen Drafting-Durchlauf."""
 
@@ -117,6 +128,7 @@ class DraftingConfig(BaseModel):
     forschungsstand_path: Path | None = None
     voice_profile_name: str = ""
     user_decisions: dict[str, str] = Field(default_factory=dict)
+    reflexive: bool = False
 
 
 class DraftResult(BaseModel):
@@ -328,6 +340,8 @@ def self_check_draft(
     voice: VoiceProfile,
     venue: VenueProfile,
     leitfragen: list[str] | None = None,
+    *,
+    config: DraftingConfig | None = None,
 ) -> list[SelfCheckFinding]:
     """Prueft den gesamten Entwurf."""
     findings: list[SelfCheckFinding] = []
@@ -378,7 +392,102 @@ def self_check_draft(
                 ),
             ]
 
+    # --- Reflexive Transparenz pruefen ---
+    if config is not None and config.reflexive:
+        has_reflexive = any(
+            "transparenz" in s.heading.lower()
+            or "limitations" in s.heading.lower()
+            or "reflexi" in s.heading.lower()
+            for s in sections
+        )
+        if not has_reflexive:
+            findings = [
+                *findings,
+                SelfCheckFinding(
+                    dimension="Reflexivitaet",
+                    severity=SelfCheckSeverity.WARNING,
+                    section="Gesamtdokument",
+                    message="Methodische Transparenz-Sektion fehlt (reflexive=True).",
+                    suggestion="generate_reflexive_section() aufrufen und Sektion einfuegen.",
+                ),
+            ]
+
     return findings
+
+
+# --- Reflexive Limitations-Sektion ---
+
+
+def generate_reflexive_section(
+    metadata: ReflexiveMetadata,
+) -> DraftSection:
+    """Generiert die Methodische-Transparenz-Sektion.
+
+    Dokumentiert verwendete Tools, Datenbanken, Known Biases und
+    Ceiling-Limitations der Pipeline.
+    """
+    lines: list[str] = []
+
+    lines.append(
+        "Dieser Abschnitt dokumentiert die methodischen Grenzen und "
+        "eingesetzten Werkzeuge der vorliegenden Analyse."
+    )
+    lines.append("")
+
+    if metadata.tools_used:
+        lines.append("**Verwendete Tools:**")
+        for tool in metadata.tools_used:
+            lines.append(f"- {tool}")
+        lines.append("")
+
+    if metadata.databases:
+        lines.append("**Datenbanken und Suchquellen:**")
+        for db in metadata.databases:
+            lines.append(f"- {db}")
+        lines.append("")
+
+    if metadata.model_info:
+        lines.append(f"**Sprachmodell:** {metadata.model_info}")
+        lines.append("")
+
+    if metadata.prisma_flow_summary:
+        lines.append(f"**PRISMA-Flow:** {metadata.prisma_flow_summary}")
+        lines.append("")
+
+    if metadata.known_biases:
+        lines.append("**Known Biases:**")
+        for bias in metadata.known_biases:
+            lines.append(f"- {bias}")
+        lines.append("")
+
+    if metadata.ceiling_notes:
+        lines.append("**Systemische Grenzen (Ceiling):**")
+        for note in metadata.ceiling_notes:
+            lines.append(f"- {note}")
+        lines.append("")
+
+    if not any([
+        metadata.tools_used,
+        metadata.databases,
+        metadata.model_info,
+        metadata.known_biases,
+        metadata.ceiling_notes,
+        metadata.prisma_flow_summary,
+    ]):
+        lines.append(
+            "Keine spezifischen Metadaten verfuegbar. "
+            "Bitte ReflexiveMetadata mit konkreten Angaben befuellen."
+        )
+        lines.append("")
+
+    content = "\n".join(lines)
+    return DraftSection(
+        heading="Methodische Transparenz",
+        level=2,
+        content=content,
+        word_count=len(content.split()),
+        provenance=ProvenanceSource.GENERATED,
+    )
 
 
 # --- Provenance-Tracking (leichtgewichtig) ---

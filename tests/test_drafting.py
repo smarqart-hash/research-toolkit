@@ -9,6 +9,7 @@ from src.agents.drafting import (
     DraftResult,
     DraftSection,
     ProvenanceSource,
+    ReflexiveMetadata,
     SelfCheckFinding,
     SelfCheckSeverity,
     VenueProfile,
@@ -17,6 +18,7 @@ from src.agents.drafting import (
     format_draft_as_markdown,
     format_self_check_as_markdown,
     generate_chapter_structure,
+    generate_reflexive_section,
     load_venue_profile,
     load_voice_profile,
     save_draft,
@@ -397,3 +399,133 @@ class TestDraftResult:
         result.compute_stats()
         assert result.total_word_count == 5
         assert result.timestamp != ""
+
+
+# --- Reflexive Limitations-Sektion ---
+
+
+class TestReflexiveConfig:
+    def test_reflexive_flag_default_false(self):
+        config = DraftingConfig(topic="Test")
+        assert config.reflexive is False
+
+    def test_reflexive_flag_set(self):
+        config = DraftingConfig(topic="Test", reflexive=True)
+        assert config.reflexive is True
+
+
+class TestReflexiveMetadata:
+    def test_basic_metadata(self):
+        meta = ReflexiveMetadata(
+            tools_used=["Semantic Scholar API", "Exa Search"],
+            databases=["Semantic Scholar", "Exa"],
+            model_info="Claude Opus 4",
+            known_biases=["Citation bias: populaere Papers bevorzugt"],
+        )
+        assert len(meta.tools_used) == 2
+        assert meta.model_info == "Claude Opus 4"
+
+    def test_empty_metadata(self):
+        meta = ReflexiveMetadata()
+        assert meta.tools_used == []
+        assert meta.ceiling_notes == []
+
+
+class TestGenerateReflexiveSection:
+    def test_basic_section(self):
+        meta = ReflexiveMetadata(
+            tools_used=["Semantic Scholar API"],
+            databases=["Semantic Scholar"],
+        )
+        section = generate_reflexive_section(meta)
+        assert section.heading == "Methodische Transparenz"
+        assert len(section.content) > 0
+
+    def test_contains_tools(self):
+        meta = ReflexiveMetadata(
+            tools_used=["Semantic Scholar API", "SPECTER2 Embeddings"],
+        )
+        section = generate_reflexive_section(meta)
+        assert "Semantic Scholar API" in section.content
+        assert "SPECTER2 Embeddings" in section.content
+
+    def test_contains_biases(self):
+        meta = ReflexiveMetadata(
+            known_biases=["English-language bias", "Citation count favors older papers"],
+        )
+        section = generate_reflexive_section(meta)
+        assert "English-language bias" in section.content
+
+    def test_contains_ceiling_notes(self):
+        meta = ReflexiveMetadata(
+            ceiling_notes=["Ranking hat keinen Ground-Truth-Feedback-Loop"],
+        )
+        section = generate_reflexive_section(meta)
+        assert "Ground-Truth" in section.content
+
+    def test_contains_model_info(self):
+        meta = ReflexiveMetadata(model_info="Claude Opus 4")
+        section = generate_reflexive_section(meta)
+        assert "Claude Opus 4" in section.content
+
+    def test_contains_prisma_flow(self):
+        meta = ReflexiveMetadata(
+            prisma_flow_summary="150 identified -> 98 dedup -> 30 ranked -> 22 included",
+        )
+        section = generate_reflexive_section(meta)
+        assert "150 identified" in section.content
+
+    def test_markdown_format(self):
+        meta = ReflexiveMetadata(
+            tools_used=["Tool A"],
+            known_biases=["Bias A"],
+        )
+        section = generate_reflexive_section(meta)
+        assert section.level == 2
+        assert section.provenance == ProvenanceSource.GENERATED
+
+    def test_empty_metadata_still_generates(self):
+        meta = ReflexiveMetadata()
+        section = generate_reflexive_section(meta)
+        assert section.heading == "Methodische Transparenz"
+        assert len(section.content) > 0
+
+
+class TestSelfCheckReflexive:
+    def test_warns_if_reflexive_but_no_section(self):
+        venue = _venue()
+        config = DraftingConfig(topic="Test", reflexive=True)
+        sections = [
+            _section(heading="Einleitung", content="Text " * 20),
+        ]
+        findings = self_check_draft(sections, _voice(), venue, config=config)
+        reflexive_findings = [
+            f for f in findings if f.dimension == "Reflexivitaet"
+        ]
+        assert len(reflexive_findings) >= 1
+
+    def test_no_warning_if_reflexive_section_present(self):
+        venue = _venue()
+        config = DraftingConfig(topic="Test", reflexive=True)
+        sections = [
+            _section(heading="Einleitung", content="Text " * 20),
+            _section(heading="Methodische Transparenz", content="Reflexive Analyse " * 30),
+        ]
+        findings = self_check_draft(sections, _voice(), venue, config=config)
+        reflexive_findings = [
+            f for f in findings
+            if f.dimension == "Reflexivitaet"
+        ]
+        assert len(reflexive_findings) == 0
+
+    def test_no_warning_if_not_reflexive(self):
+        venue = _venue()
+        config = DraftingConfig(topic="Test", reflexive=False)
+        sections = [
+            _section(heading="Einleitung", content="Text " * 20),
+        ]
+        findings = self_check_draft(sections, _voice(), venue, config=config)
+        reflexive_findings = [
+            f for f in findings if f.dimension == "Reflexivitaet"
+        ]
+        assert len(reflexive_findings) == 0

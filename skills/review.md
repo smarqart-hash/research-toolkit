@@ -72,6 +72,18 @@ Per issue, REQUIRED fields:
 
 Do NOT rewrite -- only rate and suggest. Every issue needs a precise location and an actionable suggestion. If venue is missing: ASK, do not guess.
 
+## Calibration Transparency
+
+**Important:** The ordinal labels used in this review are NOT benchmark-calibrated:
+- Anchor examples provide internal consistency, not external validity
+- Inter-rater reliability (LLM vs. human) has not been measured
+- `compute_delta()` tracks whether the draft satisfies the reviewer — this is
+  NOT the same as scientific quality improvement (Goodhart's Law applies)
+- The verdict (READY/REVISION_NEEDED/MAJOR_REWORK) is a heuristic threshold,
+  not a validated quality gate
+
+Human review remains essential for epistemistic quality assessment.
+
 ## Recommended Models
 
 Review benefits from capable reasoning models. Use Claude Opus/Sonnet or GPT-4 for the main review pass. Lighter models (Claude Haiku, GPT-4o-mini) can handle structural checks and the splitting decision.

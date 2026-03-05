@@ -37,6 +37,12 @@ Every agent action is logged to an append-only JSONL file (`provenance.jsonl`). 
 
 Review dimensions use ordinal labels (strong / adequate / needs work / critical) instead of numeric scores. This matches how human reviewers think and avoids false precision.
 
+**Calibration Status:** These labels are NOT benchmark-calibrated. There is no
+empirical comparison between LLM ratings and human expert ratings. The anchor
+examples in rubric files provide internal consistency, but inter-rater reliability
+(LLM vs. human) is unknown. Any Spearman correlations cited are reference values
+without confidence intervals. See [Known Limitations](#calibration-limitations).
+
 ### Two-Pass Review for Long Documents
 
 Documents over ~3000 words are split into chapters, reviewed individually, then synthesized in a second pass. This prevents context window overflow and improves consistency.
@@ -86,3 +92,28 @@ src/
     ├── document_splitter.py # Markdown chapter splitting
     └── rubric_loader.py     # Rubric + venue matching
 ```
+
+## Calibration Limitations
+
+### Review Dimension Calibration
+
+The review system uses ordinal labels that are **internally consistent** (via
+rubric anchor examples) but **not externally calibrated**:
+
+1. **No benchmark comparison** — Labels like "strong" vs "adequate" are defined
+   by rubric anchors, not by empirical inter-rater studies
+2. **Inter-rater reliability unknown** — No systematic LLM vs. human comparison
+   has been conducted for any rubric
+3. **Spearman correlation** — The 0.42 reference value lacks confidence intervals
+   and was not reproduced across venues
+4. **Goodhart's Law risk** — `compute_delta()` in reviewer.py measures whether
+   a draft satisfies the reviewer agent, not whether it is scientifically better.
+   The system optimizes for legibility, not epistemistic quality
+
+### Ranking Calibration
+
+The search ranking combines heuristic scores (citations, recency) with optional
+SPECTER2 semantic similarity. Neither ranking method has been validated against
+expert-curated paper lists for any specific topic. The `specter2_score` field
+on UnifiedPaper enables post-hoc comparison between both methods, making the
+ranking ceiling visible but not eliminating it.
