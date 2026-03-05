@@ -39,7 +39,7 @@ Think of it like Unix pipes for research: each skill does one thing well, takes 
 
 ```bash
 # 1. Clone and install
-git clone https://github.com/stefanmarquart/research-toolkit.git
+git clone https://github.com/smarqart-hash/research-toolkit.git
 cd research-toolkit
 pip install -e ".[dev]"
 
@@ -233,4 +233,4 @@ This toolkit uses the [Semantic Scholar API](https://www.semanticscholar.org/pro
 
 ---
 
-Built by [Stefan Marquart](https://github.com/stefanmarquart)
+Built by [Stefan Marquart](https://github.com/smarqart-hash)
