@@ -1,0 +1,285 @@
+{
+  "topic": "AI-Assisted Automated Research: Tools, Methods, and Implications",
+  "total_found": 120,
+  "total_after_dedup": 120,
+  "top_ranked": 20,
+  "papers": [
+    {
+      "title": "ProtAgents: protein discovery via large language model multi-agent collaborations combining physics and machine learning",
+      "authors": [
+        "Alireza Ghafarollahi",
+        "Markus J. Buehler"
+      ],
+      "year": 2024,
+      "abstract": "Designing de novo proteins beyond those found in nature holds significant promise for advancements in both scientific and engineering applications. Current methodologies for protein design often rely on AI-based models, such as surrogate models that address end-to-end problems by linking protein structure to material properties or vice versa. However, these models frequently focus on specific material objectives or structural properties, limiting their flexibility when incorporating out-of-domai",
+      "citation_count": 74,
+      "relevance_score": 0.713,
+      "doi": "10.1039/d4dd00013g",
+      "url": "https://www.semanticscholar.org/paper/797597040167622a126c3206bbf94459238e2c19"
+    },
+    {
+      "title": "Understanding the LLM-ification of CHI: Unpacking the Impact of LLMs at CHI through a Systematic Literature Review",
+      "authors": [
+        "Rock Yuren Pang",
+        "Hope Schroeder",
+        "Kynnedy Simone Smith"
+      ],
+      "year": 2025,
+      "abstract": "Large language models (LLMs) have been positioned to revolutionize HCI, by reshaping not only the interfaces, design patterns, and sociotechnical systems that we study, but also the research practices we use. To-date, however, there has been little understanding of LLMs’ uptake in HCI. We address this gap via a systematic literature review of 153 CHI papers from 2020-24 that engage with LLMs. We taxonomize: (1) domains where LLMs are applied; (2) roles of LLMs in HCI projects; (3) contribution t",
+      "citation_count": 25,
+      "relevance_score": 0.704,
+      "doi": "10.1145/3706598.3713726",
+      "url": "https://www.semanticscholar.org/paper/73b5b51d825a744611e782447f27dc0846069e0c"
+    },
+    {
+      "title": "Automatically Inspecting Thousands of Static Bug Warnings with Large Language Model: How Far Are We?",
+      "authors": [
+        "Cheng Wen",
+        "Yuandao Cai",
+        "Bin Zhang"
+      ],
+      "year": 2024,
+      "abstract": "Static analysis tools for capturing bugs and vulnerabilities in software programs are widely employed in practice, as they have the unique advantages of high coverage and independence from the execution environment. However, existing tools for analyzing large codebases often produce a great deal of false warnings over genuine bug reports. As a result, developers are required to manually inspect and confirm each warning, a challenging, time-consuming, and automation-essential task. This article a",
+      "citation_count": 49,
+      "relevance_score": 0.695,
+      "doi": "10.1145/3653718",
+      "url": "https://www.semanticscholar.org/paper/b93d6d9682ef2f3cb6e7e567a31f120a5d6decfb"
+    },
+    {
+      "title": "ChatGPT-3.5 as writing assistance in students’ essays",
+      "authors": [
+        "Ž. Bašić",
+        "Anamarija Banovac",
+        "Ivana Kružić"
+      ],
+      "year": 2023,
+      "abstract": "ChatGPT-3.5, an AI language model capable of text generation, translation, summarization, and question-answering, has recently been released for public use. Studies have shown it can generate abstracts, research papers, and dissertations, and create quality essays on different topics. This led to ethical issues in using ChatGPT in academic writing, AI authorship, and evaluating students’ essays. However, it is still unknown how ChatGPT performs in students’ environments as a writing assistant to",
+      "citation_count": 102,
+      "relevance_score": 0.689,
+      "doi": "10.1057/s41599-023-02269-7",
+      "url": "https://www.semanticscholar.org/paper/5c125a2d0ed00185a08c67ee64b9d29250fd5274"
+    },
+    {
+      "title": "Predicting blood–brain barrier permeability of molecules with a large language model and machine learning",
+      "authors": [
+        "E. Huang",
+        "Jai-Sing Yang",
+        "Ken Y. K. Liao"
+      ],
+      "year": 2024,
+      "abstract": "Predicting the blood–brain barrier (BBB) permeability of small-molecule compounds using a novel artificial intelligence platform is necessary for drug discovery. Machine learning and a large language model on artificial intelligence (AI) tools improve the accuracy and shorten the time for new drug development. The primary goal of this research is to develop artificial intelligence (AI) computing models and novel deep learning architectures capable of predicting whether molecules can permeate the",
+      "citation_count": 37,
+      "relevance_score": 0.683,
+      "doi": "10.1038/s41598-024-66897-y",
+      "url": "https://www.semanticscholar.org/paper/308c0e056a1d93cd7f3b3850554c3b0adccd6d44"
+    },
+    {
+      "title": "Advances in automated support for requirements engineering: a systematic literature review",
+      "authors": [
+        "M. Umar",
+        "K. Lano"
+      ],
+      "year": 2024,
+      "abstract": "Requirements Engineering (RE) has undergone several transitions over the years, from traditional methods to agile approaches emphasising increased automation. In many software development projects, requirements are expressed in natural language and embedded within large volumes of text documents. At the same time, RE activities aim to define software systems' functionalities and constraints. However, manually executing these tasks is time-consuming and prone to errors. Numerous research efforts ",
+      "citation_count": 36,
+      "relevance_score": 0.682,
+      "doi": "10.1007/s00766-023-00411-0",
+      "url": "https://www.semanticscholar.org/paper/c1860303ee4421980a79a53f94e85390bddb7d57"
+    },
+    {
+      "title": "A systematic review of large language model (LLM) evaluations in clinical medicine",
+      "authors": [
+        "Sina Shool",
+        "Sara Adimi",
+        "Reza Saboori Amleshi"
+      ],
+      "year": 2025,
+      "abstract": "Large Language Models (LLMs), advanced AI tools based on transformer architectures, demonstrate significant potential in clinical medicine by enhancing decision support, diagnostics, and medical education. However, their integration into clinical workflows requires rigorous evaluation to ensure reliability, safety, and ethical alignment. This systematic review examines the evaluation parameters and methodologies applied to LLMs in clinical medicine, highlighting their capabilities, limitations, ",
+      "citation_count": 156,
+      "relevance_score": 0.682,
+      "doi": "10.1186/s12911-025-02954-4",
+      "url": "https://www.semanticscholar.org/paper/705a913fd7153069b99a66c03862657122d9f737"
+    },
+    {
+      "title": "A synthesis of evidence for policy from behavioural science during COVID-19",
+      "authors": [
+        "Kai Ruggeri",
+        "Friederike Stock",
+        "S. Haslam"
+      ],
+      "year": 2023,
+      "abstract": "Scientific evidence regularly guides policy decisions^ 1 , with behavioural science increasingly part of this process^ 2 . In April 2020, an influential paper^ 3 proposed 19 policy recommendations (‘claims’) detailing how evidence from behavioural science could contribute to efforts to reduce impacts and end the COVID-19 pandemic. Here we assess 747 pandemic-related research articles that empirically investigated those claims. We report the scale of evidence and whether evidence supports them to",
+      "citation_count": 73,
+      "relevance_score": 0.674,
+      "doi": "10.1038/s41586-023-06840-9",
+      "url": "https://www.semanticscholar.org/paper/236b321259072a525759910493433836963d5061"
+    },
+    {
+      "title": "A Hybrid Semi-Automated Workflow for Systematic and Literature Review Processes with Large Language Model Analysis",
+      "authors": [
+        "Anjia Ye",
+        "Ananda Maiti",
+        "Matthew Schmidt"
+      ],
+      "year": 2024,
+      "abstract": "Systematic reviews (SRs) are a rigorous method for synthesizing empirical evidence to answer specific research questions. However, they are labor-intensive because of their collaborative nature, strict protocols, and typically large number of documents. Large language models (LLMs) and their applications such as gpt-4/ChatGPT have the potential to reduce the human workload of the SR process while maintaining accuracy. We propose a new hybrid methodology that combines the strengths of LLMs and hu",
+      "citation_count": 22,
+      "relevance_score": 0.661,
+      "doi": "10.3390/fi16050167",
+      "url": "https://www.semanticscholar.org/paper/3949e193d1900e353fcb188c603c4ab8de1e133e"
+    },
+    {
+      "title": "DARWIN Series: Domain Specific Large Language Models for Natural Science",
+      "authors": [
+        "Tong Xie",
+        "Yuwei Wan",
+        "Wei Huang"
+      ],
+      "year": 2023,
+      "abstract": "Emerging tools bring forth fresh approaches to work, and the field of natural science is no different. In natural science, traditional manual, serial, and labour-intensive work is being augmented by automated, parallel, and iterative processes driven by artificial intelligence-based experimental automation and more. To add new capabilities in natural science, enabling the acceleration and enrichment of automation of the discovery process, we present DARWIN, a series of tailored LLMs for natural ",
+      "citation_count": 48,
+      "relevance_score": 0.657,
+      "doi": "10.48550/arXiv.2308.13565",
+      "url": "https://www.semanticscholar.org/paper/4c6fb350e7769cb730a15c62927b6e9b563d0157"
+    },
+    {
+      "title": "AI-based automated speech therapy tools for persons with speech sound disorder: a systematic literature review",
+      "authors": [
+        "Chinmoy Deka",
+        "Abhishek Shrivastava",
+        "Ajish K. Abraham"
+      ],
+      "year": 2024,
+      "abstract": "ABSTRACT In response to the limited availability of speech therapy services, researchers are developing AI-based automated speech therapy tools for individuals with speech sound disorder (SSD). However, their effectiveness/efficacy compared to conventional speech therapy remains unclear, and no guidelines exist for designing these tools or their required automation levels compared to therapy by speech-language pathologists (SLPs). Moreover, AI applications raise concerns about job displacement, ",
+      "citation_count": 18,
+      "relevance_score": 0.653,
+      "doi": "10.1080/2050571X.2024.2359274",
+      "url": "https://www.semanticscholar.org/paper/5321cc2853f0e0dfc57298af98401bf6fa982883"
+    },
+    {
+      "title": "DORA AI Scientist: Multi-agent Virtual Research Team for Scientific Exploration Discovery and Automated Report Generation",
+      "authors": [
+        "Vladimir Naumov",
+        "Diana Zagirova",
+        "Sha Lin"
+      ],
+      "year": 2025,
+      "abstract": "Modern goal-oriented scientific research process involves hierarchical teams of researchers of diverse backgrounds performing generalist and domain-specific tasks. Many of these tasks include hypothesis generation, literature review, data collection, cleanup, processing and analysis, experimental design, virtual and physical experiments, research report and academic paper writing, reference management, bibliography and quality control. Most of these tasks can be performed automatically or in a c",
+      "citation_count": 6,
+      "relevance_score": 0.647,
+      "doi": "10.1101/2025.03.06.641840",
+      "url": "https://www.semanticscholar.org/paper/b913baa47245a4a76054bb12e04d61c3c88fb532"
+    },
+    {
+      "title": "A review of large language models and autonomous agents in chemistry",
+      "authors": [
+        "M. C. Ramos",
+        "C. Collison",
+        "Andrew D. White"
+      ],
+      "year": 2024,
+      "abstract": "Large language models (LLMs) have emerged as powerful tools in chemistry, significantly impacting molecule design, property prediction, and synthesis optimization. This review highlights LLM capabilities in these domains and their potential to accelerate scientific discovery through automation. We also review LLM-based autonomous agents: LLMs with a broader set of tools to interact with their surrounding environment. These agents perform diverse tasks such as paper scraping, interfacing with aut",
+      "citation_count": 156,
+      "relevance_score": 0.645,
+      "doi": "10.48550/arXiv.2407.01603",
+      "url": "https://www.semanticscholar.org/paper/cac8c4f79077c74aa059d1c58c021be1c89f1178"
+    },
+    {
+      "title": "Unlocking AI Potential: Effort Expectancy, Satisfaction, and Usage in Research",
+      "authors": [
+        "Nurul Ashikin Izhar",
+        "W. Teh",
+        "Anita Adnan"
+      ],
+      "year": 2025,
+      "abstract": "Aim/Purpose: This study investigates the key factors influencing the adoption and use of artificial intelligence (AI) applications among researchers, focusing on effort expectancy, satisfaction, perceived ease of use, and perceived usefulness, which shaped attitudes and drove AI adoption as a research assistant. \n\nBackground: AI tools have rapidly become game-changers in academic research, transforming tasks such as literature retrieval, writing, editing, and data analysis. Despite their potenti",
+      "citation_count": 5,
+      "relevance_score": 0.64,
+      "doi": "10.28945/5450",
+      "url": "https://www.semanticscholar.org/paper/4bf3a04b8413abc4fdf0149232b5979449b3596a"
+    },
+    {
+      "title": "DeepReview: Improving LLM-based Paper Review with Human-like Deep Thinking Process",
+      "authors": [
+        "Minjun Zhu",
+        "Yixuan Weng",
+        "Linyi Yang"
+      ],
+      "year": 2025,
+      "abstract": "Large Language Models (LLMs) are increasingly utilized in scientific research assessment, particularly in automated paper review. However, existing LLM-based review systems face significant challenges, including limited domain expertise, hallucinated reasoning, and a lack of structured evaluation. To address these limitations, we introduce DeepReview, a multi-stage framework designed to emulate expert reviewers by incorporating structured analysis, literature retrieval, and evidence-based argume",
+      "citation_count": 49,
+      "relevance_score": 0.632,
+      "doi": "10.48550/arXiv.2503.08569",
+      "url": "https://www.semanticscholar.org/paper/60c8a127e6ae8c8e21dd7edfc187ff7f0d9ae2bd"
+    },
+    {
+      "title": "Testing the utility of GPT for title and abstract screening in environmental systematic evidence synthesis",
+      "authors": [
+        "Björn Nykvist",
+        "Biljana Macura",
+        "Maria Xylia"
+      ],
+      "year": 2025,
+      "abstract": "In this paper we show that OpenAI’s Large Language Model (LLM) GPT perform remarkably well when used for title and abstract eligibility screening of scientific articles and within a (systematic) literature review workflow. We evaluated GPT on screening data from a systematic review study on electric vehicle charging infrastructure demand with almost 12,000 records using the same eligibility criteria as human screeners. We tested 3 different versions of this model that were tasked to distinguishi",
+      "citation_count": 4,
+      "relevance_score": 0.632,
+      "doi": "10.1186/s13750-025-00360-x",
+      "url": "https://www.semanticscholar.org/paper/d7327fdeb93156500f92613f12dce65230193227"
+    },
+    {
+      "title": "Toward Automated Scientific Discovery in Hydrology: The Opportunities and Dangers of AI Augmented Research Frameworks",
+      "authors": [
+        "Darri Eythorsson",
+        "Martyn Clark"
+      ],
+      "year": 2025,
+      "abstract": "This commentary explores the potential of artificial intelligence (AI) to transform hydrological modelling workflows. We introduce a prototype AI‐assisted framework called INDRA (Intelligent Network for Dynamic River Analysis) that leverages a multi‐agent architecture composed of specialised large language models (LLMs) to assist in model conceptualization, configuration, execution, and interpretation. INDRA integrates with CONFLUENCE, a comprehensive modelling framework, to provide context‐awar",
+      "citation_count": 4,
+      "relevance_score": 0.632,
+      "doi": "10.1002/hyp.70065",
+      "url": "https://www.semanticscholar.org/paper/3c1a08993d7a38b04c73877609e6657a4cbb2d9a"
+    },
+    {
+      "title": "Automated Literature Review Using NLP Techniques and LLM-Based Retrieval-Augmented Generation",
+      "authors": [
+        "Nurshat Fateh Ali",
+        "M. Mohtasim",
+        "Shakil Mosharrof"
+      ],
+      "year": 2024,
+      "abstract": "This research presents and compares multiple approaches to automate the generation of literature reviews using several Natural Language Processing (NLP) techniques and retrieval-augmented generation (RAG) with a Large Language Model (LLM). The ever-increasing number of research articles provides a huge challenge for manual literature review. It has resulted in an increased demand for automation. Developing a system capable of automatically generating the literature reviews from only the PDF file",
+      "citation_count": 10,
+      "relevance_score": 0.629,
+      "doi": "10.1109/ICISET62123.2024.10939517",
+      "url": "https://www.semanticscholar.org/paper/d1797bef42d5192be92db3d7ebd7aa4df114f7f1"
+    },
+    {
+      "title": "Is artificial intelligence for everyone? Analyzing the role of ChatGPT as a writing assistant for medical students",
+      "authors": [
+        "Zahra Shahsavar",
+        "Reza Kafipour",
+        "Laleh Khojasteh"
+      ],
+      "year": 2024,
+      "abstract": "This study explores the potential impact of ChatGPT on the academic writing skills development of medical students enrolled in a compulsory 3-unit writing course at a medical university. The research focuses on two primary objectives, which are formulated as two research questions: Firstly, does the use of ChatGPT enhance medical students’ English academic writing skills compared to conventional writing training? Secondly, how does the use of ChatGPT impact on different components of academic wr",
+      "citation_count": 9,
+      "relevance_score": 0.625,
+      "doi": "10.3389/feduc.2024.1457744",
+      "url": "https://www.semanticscholar.org/paper/3f2c540df3afd0685d6f0ca1e827de5db4a1d039"
+    },
+    {
+      "title": "A Comprehensive Survey of Scientific Large Language Models and Their Applications in Scientific Discovery",
+      "authors": [
+        "Yu Zhang",
+        "Xiusi Chen",
+        "Bowen Jin"
+      ],
+      "year": 2024,
+      "abstract": "In many scientific fields, large language models (LLMs) have revolutionized the way text and other modalities of data (e.g., molecules and proteins) are handled, achieving superior performance in various applications and augmenting the scientific discovery process. Nevertheless, previous surveys on scientific LLMs often concentrate on one or two fields or a single modality. In this paper, we aim to provide a more holistic view of the research landscape by unveiling cross-field and cross-modal co",
+      "citation_count": 100,
+      "relevance_score": 0.625,
+      "doi": "10.48550/arXiv.2406.10833",
+      "url": "https://www.semanticscholar.org/paper/3dd5ad34012164c4ec9c571a12cc6a7561683dea"
+    }
+  ]
+}

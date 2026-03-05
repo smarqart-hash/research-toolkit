@@ -1,0 +1,99 @@
+{
+  "rubric_id": "policy",
+  "name": "Policy-Dokumente (IMPULS, POSITION)",
+  "applies_to": ["policy_brief", "position_paper"],
+  "auto_dimensions": [
+    {
+      "name": "Struktur & Vollstaendigkeit",
+      "description": "Sind alle erwarteten Sektionen vorhanden und logisch angeordnet?",
+      "anchors": {
+        "stark": "Alle Sektionen laut Venue-Template vorhanden, logische Reihenfolge, klare Uebergaenge",
+        "angemessen": "Alle Kernsektionen vorhanden, kleinere Luecken in Uebergaengen",
+        "ausbaufaehig": "1-2 erwartete Sektionen fehlen oder sind nur angerissen",
+        "kritisch": "Grundstruktur nicht erkennbar oder mehrere Kernsektionen fehlen"
+      }
+    },
+    {
+      "name": "Klarheit & Verstaendlichkeit",
+      "description": "Ist der Text fuer die Zielgruppe (Politik, Wirtschaft) verstaendlich?",
+      "anchors": {
+        "stark": "Fachbegriffe erklaert, Saetze praegnant, keine unnoetige Komplexitaet",
+        "angemessen": "Ueberwiegend verstaendlich, vereinzelt unerklaerte Fachbegriffe",
+        "ausbaufaehig": "Mehrere unerklaerte Fachbegriffe, Schachtelsaetze, unklare Bezuege",
+        "kritisch": "Fuer Nicht-Fachleute unverstaendlich, akademischer Jargon dominiert"
+      }
+    },
+    {
+      "name": "Quellenangaben",
+      "description": "Sind zentrale Behauptungen mit Quellen belegt?",
+      "anchors": {
+        "stark": "Alle wesentlichen Aussagen belegt, Quellen aktuell und relevant",
+        "angemessen": "Ueberwiegend belegt, 1-2 zentrale Claims ohne Quelle",
+        "ausbaufaehig": "Mehrere zentrale Behauptungen ohne Beleg",
+        "kritisch": "Kaum Quellen, Kernaussagen nicht nachpruefbar"
+      }
+    },
+    {
+      "name": "Argumentationslogik",
+      "description": "Ist die Herleitung schluessig, ohne logische Spruenge?",
+      "anchors": {
+        "stark": "Jeder Absatz baut auf dem vorherigen auf, Schlussfolgerungen folgen aus Praemissen",
+        "angemessen": "Grundlogik stimmt, vereinzelt abrupte Uebergaenge",
+        "ausbaufaehig": "Mehrere logische Spruenge, Schlussfolgerungen nicht vollstaendig hergeleitet",
+        "kritisch": "Argumentation nicht nachvollziehbar, Widersprueche im Text"
+      }
+    },
+    {
+      "name": "Handlungsempfehlungen",
+      "description": "Sind Empfehlungen konkret, umsetzbar und an Adressaten gerichtet?",
+      "anchors": {
+        "stark": "Alle Empfehlungen mit Adressat, konkreter Aktion und Zeithorizont",
+        "angemessen": "Adressaten benannt, Aktionen teils noch unspezifisch",
+        "ausbaufaehig": "Empfehlungen vorhanden aber vage, Adressaten fehlen teilweise",
+        "kritisch": "Keine Empfehlungen oder rein deskriptiv ohne Handlungsaufforderung"
+      }
+    },
+    {
+      "name": "Regulatorik-Referenzen",
+      "description": "Werden relevante regulatorische Frameworks referenziert?",
+      "anchors": {
+        "stark": "Alle relevanten Frameworks aus Policy-Context erwaehnt und korrekt eingeordnet",
+        "angemessen": "Wichtigste Frameworks erwaehnt, 1-2 relevante fehlen",
+        "ausbaufaehig": "Nur oberflaechliche Regulatorik-Referenzen, wesentliche Luecken",
+        "kritisch": "Regulatorischer Rahmen komplett ignoriert"
+      }
+    }
+  ],
+  "human_dimensions": [
+    {
+      "name": "Originalitaet / Innovationsgehalt",
+      "flag_when": "Keine explizite Abgrenzung zum bestehenden Diskurs erkennbar"
+    },
+    {
+      "name": "Inhaltliche Korrektheit",
+      "flag_when": "Behauptungen die nicht anhand der Quellen verifizierbar sind"
+    },
+    {
+      "name": "Politische Passfaehigkeit",
+      "flag_when": "Policy-Context-Frameworks werden im Dokument nicht referenziert"
+    }
+  ],
+  "severity_anchors": {
+    "CRITICAL": [
+      "Recommendations without any addressees in a policy document",
+      "Zentrale Behauptung ohne jede Quellenangabe"
+    ],
+    "HIGH": [
+      "Relevant regulatory frameworks not referenced",
+      "Fachbegriff ohne Erklaerung, der fuer Zielgruppe unbekannt ist"
+    ],
+    "MEDIUM": [
+      "Argumentationssprung zwischen zwei Absaetzen",
+      "Quelle aelter als 5 Jahre bei schnelllebendem Thema"
+    ],
+    "LOW": [
+      "Inkonsistente Formatierung innerhalb einer Sektion",
+      "Redundanz zwischen zwei Absaetzen"
+    ]
+  }
+}

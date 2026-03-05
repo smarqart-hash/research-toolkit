@@ -1,0 +1,270 @@
+"""Tests fuer den Forschungsstand-Generator."""
+
+import asyncio
+from pathlib import Path
+from unittest.mock import AsyncMock, patch
+
+import httpx
+
+from src.agents.forschungsstand import (
+    ForschungsstandResult,
+    SearchConfig,
+    ThemeCluster,
+    format_as_markdown,
+    generate_search_queries,
+    load_forschungsstand,
+    save_forschungsstand,
+    search_papers,
+    slugify,
+)
+from src.agents.paper_ranker import UnifiedPaper
+
+
+# --- Fixtures ---
+
+
+def _sample_papers() -> list[UnifiedPaper]:
+    return [
+        UnifiedPaper(
+            paper_id="doi:10.1234/a",
+            title="Deep RL Traffic Control",
+            abstract="DRL fuer Ampelsteuerung.",
+            year=2024,
+            authors=["Mueller", "Schmidt"],
+            citation_count=42,
+            source="semantic_scholar",
+            doi="10.1234/a",
+        ),
+        UnifiedPaper(
+            paper_id="doi:10.1234/b",
+            title="Computer Vision in Urban Traffic",
+            abstract="CV-basierte Verkehrserfassung.",
+            year=2023,
+            authors=["Weber"],
+            citation_count=15,
+            source="semantic_scholar",
+            doi="10.1234/b",
+        ),
+    ]
+
+
+def _sample_result() -> ForschungsstandResult:
+    papers = _sample_papers()
+    return ForschungsstandResult(
+        topic="KI-basierte Verkehrssteuerung",
+        leitfragen=["Welche DRL-Ansaetze gibt es?", "Wie skaliert das?"],
+        clusters=[
+            ThemeCluster(
+                theme="Deep Reinforcement Learning",
+                description="DRL-Methoden zur Ampelsteuerung zeigen vielversprechende Ergebnisse.",
+                papers=["doi:10.1234/a"],
+                key_findings=["30% Reduktion der Wartezeiten"],
+                open_questions=["Skalierung auf groessere Netze"],
+            ),
+            ThemeCluster(
+                theme="Computer Vision",
+                description="CV-basierte Verkehrserfassung als Alternative zu Induktionsschleifen.",
+                papers=["doi:10.1234/b"],
+                key_findings=["95% Erkennungsrate bei Fussgaengern"],
+                open_questions=["Datenschutz bei kamerabasierter Erfassung"],
+            ),
+        ],
+        papers=papers,
+        total_found=87,
+        total_after_dedup=54,
+        sources_used=["Semantic Scholar", "Exa"],
+    )
+
+
+# --- Query-Generierung ---
+
+
+class TestGenerateSearchQueries:
+    def test_topic_only(self):
+        queries = generate_search_queries("KI Verkehr", [])
+        assert queries == ["KI Verkehr"]
+
+    def test_with_leitfragen(self):
+        queries = generate_search_queries(
+            "KI Verkehr",
+            ["Welche DRL-Ansaetze gibt es?", "Wie skaliert das System?"],
+        )
+        assert len(queries) == 3
+        assert queries[0] == "KI Verkehr"
+        # Fragewoerter entfernt
+        assert "Welche" not in queries[1]
+        assert "Wie" not in queries[2]
+
+    def test_preserves_topic_in_queries(self):
+        queries = generate_search_queries("Traffic AI", ["What approaches exist?"])
+        # Freitext-Fragen ohne deutsches Prafix bleiben erhalten
+        assert "Traffic AI" in queries[0]
+
+
+# --- Markdown-Formatierung ---
+
+
+class TestFormatAsMarkdown:
+    def test_contains_topic(self):
+        result = _sample_result()
+        md = format_as_markdown(result)
+        assert "KI-basierte Verkehrssteuerung" in md
+
+    def test_contains_clusters(self):
+        result = _sample_result()
+        md = format_as_markdown(result)
+        assert "Deep Reinforcement Learning" in md
+        assert "Computer Vision" in md
+
+    def test_contains_leitfragen(self):
+        result = _sample_result()
+        md = format_as_markdown(result)
+        assert "Welche DRL-Ansaetze gibt es?" in md
+
+    def test_contains_key_findings(self):
+        result = _sample_result()
+        md = format_as_markdown(result)
+        assert "30% Reduktion der Wartezeiten" in md
+
+    def test_contains_open_questions(self):
+        result = _sample_result()
+        md = format_as_markdown(result)
+        assert "Skalierung auf groessere Netze" in md
+
+    def test_contains_sources(self):
+        result = _sample_result()
+        md = format_as_markdown(result)
+        assert "Mueller et al." in md
+        assert "Weber" in md
+
+    def test_source_count_in_intro(self):
+        result = _sample_result()
+        md = format_as_markdown(result)
+        assert "54" in md  # total_after_dedup
+
+    def test_markdown_structure(self):
+        result = _sample_result()
+        md = format_as_markdown(result)
+        assert md.startswith("## Stand der Forschung:")
+        assert "### 1." in md
+        assert "### 2." in md
+        assert "### Quellenverzeichnis" in md
+
+
+# --- Persistenz ---
+
+
+class TestSlugify:
+    def test_basic(self):
+        assert slugify("KI-basierte Verkehrssteuerung") == "ki-basierte-verkehrssteuerung"
+
+    def test_spaces_and_special_chars(self):
+        assert slugify("Space-Based Data Centers!") == "space-based-data-centers"
+
+    def test_umlauts_normalized(self):
+        # Unicode-Normalisierung: Ü→U, ö→o, ß→ gestripped (kein ASCII-Aequivalent)
+        slug = slugify("Über Größe")
+        assert " " not in slug
+        assert slug == "uber-groe"
+
+    def test_max_length(self):
+        long_text = "a" * 100
+        assert len(slugify(long_text, max_length=30)) <= 30
+
+    def test_no_trailing_dash(self):
+        slug = slugify("test---end---", max_length=10)
+        assert not slug.endswith("-")
+
+
+class TestPersistence:
+    def test_save_and_load(self, tmp_path: Path):
+        result = _sample_result()
+        path = save_forschungsstand(result, tmp_path)
+        loaded = load_forschungsstand(path)
+        assert loaded.topic == result.topic
+        assert len(loaded.clusters) == 2
+        assert len(loaded.papers) == 2
+        assert loaded.total_found == 87
+
+    def test_creates_topic_subdirectory(self, tmp_path: Path):
+        result = _sample_result()
+        save_forschungsstand(result, tmp_path)
+        expected = tmp_path / "ki-basierte-verkehrssteuerung" / "forschungsstand.json"
+        assert expected.exists()
+
+    def test_custom_slug(self, tmp_path: Path):
+        result = _sample_result()
+        save_forschungsstand(result, tmp_path, slug="custom-slug")
+        assert (tmp_path / "custom-slug" / "forschungsstand.json").exists()
+
+    def test_creates_nested_directory(self, tmp_path: Path):
+        result = _sample_result()
+        output_dir = tmp_path / "nested" / "dir"
+        save_forschungsstand(result, output_dir)
+        assert (output_dir / "ki-basierte-verkehrssteuerung" / "forschungsstand.json").exists()
+
+
+# --- SearchConfig ---
+
+
+class TestSearchConfig:
+    def test_defaults(self):
+        config = SearchConfig()
+        assert config.max_results_per_query == 50
+        assert config.top_k == 30
+        assert config.use_exa is True
+        assert config.year_filter is None
+
+    def test_custom_config(self):
+        config = SearchConfig(
+            max_results_per_query=20,
+            year_filter="2022-2026",
+            fields_of_study=["Computer Science"],
+            top_k=15,
+        )
+        assert config.year_filter == "2022-2026"
+        assert config.top_k == 15
+
+
+class TestSearchPapersErrorStats:
+    """Tests fuer differenzierte Fehlerbehandlung in search_papers."""
+
+    def test_http_errors_counted_in_stats(self):
+        """HTTP-Fehler werden in ss_errors gezaehlt, nicht stumm geschluckt."""
+        config = SearchConfig(use_exa=False)
+
+        async def mock_search(*args, **kwargs):
+            raise httpx.HTTPStatusError(
+                "Rate Limit",
+                request=httpx.Request("GET", "https://test.com"),
+                response=httpx.Response(429, content=b"Too Many Requests"),
+            )
+
+        async def run():
+            with patch(
+                "src.agents.forschungsstand.SemanticScholarClient.search_papers",
+                side_effect=mock_search,
+            ):
+                papers, stats = await search_papers("test", config=config)
+                assert stats["ss_errors"] >= 1
+                assert stats["ss_total"] == 0
+                assert len(papers) == 0
+
+        asyncio.run(run())
+
+    def test_timeout_counted_in_stats(self):
+        """Timeouts werden in ss_errors gezaehlt."""
+        config = SearchConfig(use_exa=False)
+
+        async def mock_search(*args, **kwargs):
+            raise httpx.TimeoutException("Timeout")
+
+        async def run():
+            with patch(
+                "src.agents.forschungsstand.SemanticScholarClient.search_papers",
+                side_effect=mock_search,
+            ):
+                papers, stats = await search_papers("test", config=config)
+                assert stats["ss_errors"] >= 1
+
+        asyncio.run(run())

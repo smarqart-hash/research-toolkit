@@ -1,0 +1,89 @@
+{
+  "rubric_id": "akademisch",
+  "name": "Akademische Dokumente (STUDIE, Forschungspaper)",
+  "applies_to": ["working_paper", "conference_paper", "literature_review", "arxiv_cs_ai", "nature_communications", "research_report"],
+  "auto_dimensions": [
+    {
+      "name": "Struktur & Vollstaendigkeit",
+      "description": "Sind alle erwarteten Sektionen vorhanden?",
+      "anchors": {
+        "stark": "Alle Sektionen laut Template, klare Gliederung, Abstract praegnant",
+        "angemessen": "Kernsektionen vorhanden, kleinere Luecken",
+        "ausbaufaehig": "1-2 Kernsektionen fehlen oder sind nur Platzhalter",
+        "kritisch": "Grundstruktur fehlt oder ist nicht erkennbar"
+      }
+    },
+    {
+      "name": "Klarheit & Praezision",
+      "description": "Sind Formulierungen praezise und eindeutig?",
+      "anchors": {
+        "stark": "Begriffe konsistent, Saetze praegnant, keine Ambiguitaet",
+        "angemessen": "Ueberwiegend klar, vereinzelt unpraezise Formulierungen",
+        "ausbaufaehig": "Mehrfach ungenaue Begriffe, inkonsistente Terminologie",
+        "kritisch": "Durchgehend unklare Sprache, zentrale Begriffe undefiniert"
+      }
+    },
+    {
+      "name": "Quellenangaben",
+      "description": "Sind Behauptungen mit wissenschaftlichen Quellen belegt?",
+      "anchors": {
+        "stark": "Alle Claims belegt, Quellen peer-reviewed und aktuell",
+        "angemessen": "Ueberwiegend belegt, 1-2 Claims ohne Quelle",
+        "ausbaufaehig": "Mehrere unbelegte Behauptungen im Ergebnisteil",
+        "kritisch": "Kaum Quellen, zentrale Ergebnisse nicht nachpruefbar"
+      }
+    },
+    {
+      "name": "Argumentationslogik",
+      "description": "Ist die wissenschaftliche Argumentation schluessig?",
+      "anchors": {
+        "stark": "Praemissen klar, Schlussfolgerungen logisch, Einschraenkungen benannt",
+        "angemessen": "Grundlogik stimmt, vereinzelt fehlende Einschraenkungen",
+        "ausbaufaehig": "Logische Spruenge, Uebergeneralisierungen",
+        "kritisch": "Korrelation/Kausalitaet verwechselt, Zirkelschluesse"
+      }
+    },
+    {
+      "name": "Methodik-Transparenz",
+      "description": "Ist das Vorgehen nachvollziehbar und reproduzierbar?",
+      "anchors": {
+        "stark": "Methodik detailliert beschrieben, reproduzierbar, Limitationen benannt",
+        "angemessen": "Methodik beschrieben, Details fehlen fuer volle Reproduzierbarkeit",
+        "ausbaufaehig": "Methodik nur oberflaechlich, zentrale Schritte unklar",
+        "kritisch": "Keine Methodik-Beschreibung oder Black-Box-Ansatz"
+      }
+    }
+  ],
+  "human_dimensions": [
+    {
+      "name": "Originalitaet / Innovationsgehalt",
+      "flag_when": "Keine Abgrenzung zum Stand der Forschung in Related Work"
+    },
+    {
+      "name": "Inhaltliche Korrektheit",
+      "flag_when": "Statistische Aussagen oder Ergebnisse die nicht verifizierbar sind"
+    },
+    {
+      "name": "Literatureinbettung",
+      "flag_when": "Wichtige Referenzwerke des Feldes nicht erwaehnt"
+    }
+  ],
+  "severity_anchors": {
+    "CRITICAL": [
+      "Methodik-Kapitel fehlt vollstaendig",
+      "Zentrale Ergebnisse ohne jede statistische Absicherung"
+    ],
+    "HIGH": [
+      "Korrelation als Kausalitaet dargestellt",
+      "Keine Limitationen-Diskussion"
+    ],
+    "MEDIUM": [
+      "Veraltete Quelle (>5 Jahre) fuer aktuelle Behauptung",
+      "Inkonsistente Terminologie zwischen Kapiteln"
+    ],
+    "LOW": [
+      "Redundanz zwischen Abstract und Einleitung",
+      "Formatierung der Literaturliste inkonsistent"
+    ]
+  }
+}

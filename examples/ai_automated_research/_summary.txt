@@ -1,0 +1,11 @@
+Total: 120, Dedup: 120, Top: 20
+  [2024] ProtAgents: protein discovery via large language model multi-agent collaboration (c=74)
+  [2025] Understanding the LLM-ification of CHI: Unpacking the Impact of LLMs at CHI thro (c=25)
+  [2024] Automatically Inspecting Thousands of Static Bug Warnings with Large Language Mo (c=49)
+  [2023] ChatGPT-3.5 as writing assistance in students? essays (c=102)
+  [2024] Predicting blood?brain barrier permeability of molecules with a large language m (c=37)
+  [2024] Advances in automated support for requirements engineering: a systematic literat (c=36)
+  [2025] A systematic review of large language model (LLM) evaluations in clinical medici (c=156)
+  [2023] A synthesis of evidence for policy from behavioural science during COVID-19 (c=73)
+  [2024] A Hybrid Semi-Automated Workflow for Systematic and Literature Review Processes  (c=22)
+  [2023] DARWIN Series: Domain Specific Large Language Models for Natural Science (c=48)

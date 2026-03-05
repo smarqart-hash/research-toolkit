@@ -1,0 +1,14 @@
+{
+  "venue_id": "literature_review",
+  "name": "Systematic Literature Review",
+  "type": "review",
+  "language": "en",
+  "page_range": [20, 40],
+  "citation_style": "apa",
+  "citation_format": "(Author, Year)",
+  "sections": ["Abstract", "Introduction", "Search Strategy", "Inclusion Criteria", "Results", "Synthesis", "Discussion", "Limitations", "Conclusion", "References"],
+  "review_criteria": ["systematic_rigor", "completeness", "synthesis_quality", "transparency"],
+  "ai_disclosure_required": true,
+  "ai_disclosure_template": "AI tools were used for [screening/extraction]. The PRISMA protocol was followed.",
+  "notes": "Follows PRISMA guidelines. Requires transparent search methodology."
+}

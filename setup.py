@@ -1,0 +1,193 @@
+"""Research Toolkit — Interactive Setup Wizard.
+
+Guides through API key configuration, venue/voice selection,
+and writes a .env file for the toolkit.
+"""
+
+from __future__ import annotations
+
+import os
+import sys
+from pathlib import Path
+
+try:
+    from rich.console import Console
+    from rich.panel import Panel
+    from rich.prompt import Confirm, Prompt
+    from rich.table import Table
+except ImportError:
+    print("Error: 'rich' is required. Install with: pip install rich")
+    sys.exit(1)
+
+console = Console()
+
+VENUES = [
+    ("working_paper", "Working Paper", "15-30 pages, informal preprint"),
+    ("conference_paper", "Conference Paper", "8-12 pages, ACM/IEEE style"),
+    ("literature_review", "Literature Review", "20-40 pages, PRISMA-oriented"),
+    ("policy_brief", "Policy Brief", "10-20 pages, action-oriented"),
+    ("research_report", "Research Report", "30-80 pages, comprehensive"),
+    ("position_paper", "Position Paper", "5-15 pages, argumentative"),
+    ("arxiv_cs_ai", "arXiv cs.AI", "Preprint, no page limit"),
+    ("nature_communications", "Nature Communications", "~5000 words, strict format"),
+]
+
+VOICES = [
+    ("academic_en", "Academic English", "Formal, hedged, evidence-driven"),
+    ("academic_de", "Academic German", "Formal-akademisch, sachlich-distanziert"),
+]
+
+
+def main() -> None:
+    """Interaktiver Setup-Wizard."""
+    console.print()
+    console.print(
+        Panel(
+            "[bold]Research Toolkit[/bold] — Setup",
+            subtitle="Modular AI toolkit for academic research",
+            style="blue",
+        )
+    )
+    console.print()
+
+    # Pruefe ob .env bereits existiert
+    env_path = Path(".env")
+    if env_path.exists():
+        if not Confirm.ask("[yellow].env already exists.[/yellow] Overwrite?", default=False):
+            console.print("Setup cancelled.")
+            return
+
+    # --- 1. API Keys ---
+    console.print("[bold cyan]1. API Keys[/bold cyan]")
+    console.print()
+    console.print("  Semantic Scholar API (recommended for higher rate limits)")
+    console.print("  [dim]Get yours at: https://www.semanticscholar.org/product/api[/dim]")
+    console.print("  [dim]Free tier works without a key, but with lower rate limits.[/dim]")
+    s2_key = Prompt.ask("  S2 API Key (Enter to skip)", default="", show_default=False)
+    console.print()
+
+    console.print("  Exa API (extends search coverage, 1000 free requests/month)")
+    console.print("  [dim]Get yours at: https://exa.ai[/dim]")
+    exa_key = Prompt.ask("  Exa API Key (Enter to skip)", default="", show_default=False)
+    console.print()
+
+    # --- 2. Default Venue ---
+    console.print("[bold cyan]2. Default Venue Profile[/bold cyan]")
+    console.print()
+
+    table = Table(show_header=True)
+    table.add_column("#", style="dim", width=3)
+    table.add_column("ID", style="cyan")
+    table.add_column("Name", style="white")
+    table.add_column("Description", style="dim")
+    for i, (vid, name, desc) in enumerate(VENUES, 1):
+        table.add_row(str(i), vid, name, desc)
+    console.print(table)
+    console.print()
+
+    venue_choices = [str(i) for i in range(1, len(VENUES) + 1)]
+    venue_idx = Prompt.ask(
+        "  Select venue",
+        choices=venue_choices,
+        default="1",
+    )
+    venue_id = VENUES[int(venue_idx) - 1][0]
+    console.print(f"  Selected: [green]{venue_id}[/green]")
+    console.print()
+
+    # --- 3. Default Voice ---
+    console.print("[bold cyan]3. Default Voice Profile[/bold cyan]")
+    console.print()
+    for i, (vid, name, desc) in enumerate(VOICES, 1):
+        console.print(f"  [{i}] {name} — {desc}")
+    console.print()
+
+    voice_idx = Prompt.ask("  Select voice", choices=["1", "2"], default="1")
+    voice_id = VOICES[int(voice_idx) - 1][0]
+    console.print(f"  Selected: [green]{voice_id}[/green]")
+    console.print()
+
+    # --- 4. Output Directory ---
+    console.print("[bold cyan]4. Output Directory[/bold cyan]")
+    output_dir = Prompt.ask("  Output directory", default="./output")
+    console.print()
+
+    # --- 5. Model Recommendations ---
+    console.print("[bold cyan]5. Model Recommendations[/bold cyan]")
+    console.print()
+    rec_table = Table(show_header=True)
+    rec_table.add_column("Skill", style="cyan")
+    rec_table.add_column("Recommended", style="green")
+    rec_table.add_column("Budget", style="dim")
+    rec_table.add_row("Search", "Claude Sonnet / GPT-4o", "Haiku / GPT-4o-mini")
+    rec_table.add_row("Draft", "Claude Opus / GPT-4", "— (quality matters)")
+    rec_table.add_row("Review", "Claude Opus / GPT-4", "Sonnet for structure")
+    rec_table.add_row("Check", "Any (mostly API calls)", "Haiku / GPT-4o-mini")
+    console.print(rec_table)
+    console.print()
+    console.print("  [dim]The toolkit is model-agnostic. Load skill files from skills/ into your AI assistant.[/dim]")
+    console.print()
+
+    # --- 6. .env schreiben ---
+    env_content = f"""# Research Toolkit Configuration
+# Generated by setup.py
+
+# Semantic Scholar API Key (optional, recommended for higher rate limits)
+# Get yours at: https://www.semanticscholar.org/product/api
+S2_API_KEY={s2_key}
+
+# Exa API Key (optional, extends search coverage)
+# Get yours at: https://exa.ai — 1000 free requests/month
+EXA_API_KEY={exa_key}
+
+# Default venue profile
+DEFAULT_VENUE={venue_id}
+
+# Default voice profile
+DEFAULT_VOICE={voice_id}
+
+# Output directory for generated files
+OUTPUT_DIR={output_dir}
+"""
+    env_path.write_text(env_content, encoding="utf-8")
+
+    # --- 7. Optionaler API-Test ---
+    if s2_key:
+        if Confirm.ask("  Test Semantic Scholar API connection?", default=True):
+            _test_s2_api(s2_key)
+
+    # --- Fertig ---
+    console.print()
+    console.print(Panel("[bold green]Setup complete![/bold green]", style="green"))
+    console.print()
+    console.print("  Next steps:")
+    console.print(f'  [cyan]research-toolkit search "your topic"[/cyan]')
+    console.print(f"  [cyan]research-toolkit venues[/cyan]          — list all venue profiles")
+    console.print("  [cyan]cat skills/search.md[/cyan]             — load search skill into your AI assistant")
+    console.print(f"  [cyan]research-toolkit --help[/cyan]          — see all commands")
+    console.print()
+
+
+def _test_s2_api(api_key: str) -> None:
+    """Teste Semantic Scholar API Verbindung."""
+    try:
+        import httpx
+
+        response = httpx.get(
+            "https://api.semanticscholar.org/graph/v1/paper/search",
+            params={"query": "test", "limit": 1},
+            headers={"x-api-key": api_key},
+            timeout=10,
+        )
+        if response.status_code == 200:
+            console.print("  [green]API connection successful![/green]")
+        elif response.status_code == 403:
+            console.print("  [red]API key invalid.[/red] Check your key at semanticscholar.org")
+        else:
+            console.print(f"  [yellow]Unexpected response: {response.status_code}[/yellow]")
+    except Exception as e:
+        console.print(f"  [red]Connection failed:[/red] {e}")
+
+
+if __name__ == "__main__":
+    main()

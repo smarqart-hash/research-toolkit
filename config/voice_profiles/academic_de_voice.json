@@ -1,0 +1,66 @@
+{
+  "name": "academic_de",
+  "description": "Generisches formal-akademisches Deutsch fuer Forschungspublikationen. Sachlich-distanziert, evidenzbasiert, geeignet fuer Studien, Berichte und Policy-Dokumente im deutschsprachigen Raum.",
+  "sentence_length": {"avg": 18, "range": [8, 35], "notes": "Tendenz zu mittellangen Saetzen mit verschachtelten Nebensaetzen. Haeufige Nutzung von Doppelpunkten und Gedankenstrichen."},
+  "formality": "Hochformell (formal-akademisches Register)",
+  "passive_ratio": "30-40%",
+  "typical_phrases": [
+    "Die vorliegende Untersuchung zeigt",
+    "Es ist festzuhalten, dass",
+    "Die Ergebnisse deuten darauf hin, dass",
+    "Vor diesem Hintergrund",
+    "Dabei ist zu beachten, dass",
+    "Im Ergebnis zeigt sich",
+    "Hinzu kommt, dass",
+    "Zu diesem Zweck",
+    "Es bedarf weiterer Untersuchungen",
+    "Die Analyse verdeutlicht"
+  ],
+  "recommendation_pattern": "Strukturiert als Empfehlungen an Adressaten: 'Es ist erforderlich, dass [Adressat] [konkrete Massnahme ergreift].' Konjunktiv II fuer Vorschlaege ('sollte', 'muesste').",
+  "number_embedding": "Zahlen und Statistiken werden in Fliesstext eingebettet und kontextualisiert. Beispiel: 'Die Intervention fuehrte zu einer Verbesserung um 23 Prozent (p < 0,01), ein Ergebnis, das im Einklang steht mit...'",
+  "term_introduction": "Fachbegriffe werden bei Ersterwaehnung erklaert, oft durch Apposition. Beispiel: 'Transfer Learning, also die Uebertragung von Wissen aus einer Domaene auf eine andere, hat...'",
+  "tone": "Neutral-akademisch. Sachlich-distanziert, aber nicht emotionslos. Subtile Dringlichkeit durch Konjunktiv II und Konditionalstrukturen. Evidenz vor Meinung.",
+  "transition_patterns": [
+    "Zunaechst ist festzuhalten, dass... Darueber hinaus...",
+    "Dies wird deutlich, wenn man bedenkt, dass...",
+    "Auf dieser Basis laesst sich feststellen...",
+    "In diesem Kontext...",
+    "Es laesst sich festhalten, dass...",
+    "Die Analyse zeigt: ... Allerdings ist zu beruecksichtigen, dass...",
+    "Zusammenfassend laesst sich sagen..."
+  ],
+  "uncertainty_language": [
+    "Die Forschung deutet darauf hin, dass...",
+    "Noch nicht vollstaendig erforscht ist...",
+    "Dieser Ansatz erscheint vielversprechend, erfordert aber...",
+    "Offen bleibt die Frage, inwieweit...",
+    "Es bedarf weiterer Untersuchungen",
+    "Die Ergebnisse sind unter Vorbehalt zu interpretieren"
+  ],
+  "dos": [
+    "Evidenz fuer jede substantielle Behauptung anfuehren",
+    "Fachbegriffe bei Ersterwaehnung erklaeren",
+    "Zahlen kontextualisieren, nicht nur praesentieren",
+    "Komplexe Sachverhalte durch hierarchische Satzstrukturen vermitteln",
+    "Uebergaenge mit Konjunktionen bewusst setzen",
+    "Limitationen explizit benennen",
+    "Dualitaeten darstellen (Chancen UND Risiken)"
+  ],
+  "donts": [
+    "Keine emotionalen Appelle oder dramatisierende Sprache",
+    "Keine Bullet-Point-Listen fuer Fliesstext-Argumente",
+    "Nicht in Englisch wechseln (konsequent Deutsch)",
+    "Keine Superlativ-Sprache ohne Beleg (bahnbrechend, revolutionaer)",
+    "Keine zu kurzen Saetze im Reihungsstil",
+    "Nicht ohne Kontext generalisieren",
+    "Keine informellen Abkuerzungen"
+  ],
+  "structural_patterns": {
+    "opening": "Problemdarstellung durch Kontextualisierung: Was ist bekannt -> Was fehlt -> Wie diese Arbeit die Luecke adressiert",
+    "body": "Deskription (was ist) -> Analyse (warum) -> Normativ (was muss geschehen). Konzentrische Argumentation statt linearer Aufzaehlung.",
+    "conclusion": "Zusammenfassung der Beitraege -> Implikationen -> Handlungsfelder -> Forschungsbedarf"
+  },
+  "paragraph_length": {"avg_sentences": "4-6", "notes": "Jeder Absatz ein Gedanke oder Argumentationsschritt."},
+  "evidence_style": "Referenzen in den Argumentationsfluss integriert. Beispiel: 'Juengste Arbeiten haben signifikante Fortschritte gezeigt (Mueller et al. 2024), wenngleich Fragen zur Generalisierbarkeit bestehen (Schmidt & Weber 2025).'",
+  "audience_targeting": "Akademische Peers und informierte Praktiker. Setzt Domaenenwissen voraus, erklaert aber spezialisierte Methoden."
+}

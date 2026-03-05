@@ -1,0 +1,14 @@
+{
+  "venue_id": "position_paper",
+  "name": "Position Paper",
+  "type": "opinion",
+  "language": "en",
+  "page_range": [5, 15],
+  "citation_style": "apa",
+  "citation_format": "(Author, Year)",
+  "sections": ["Abstract", "Position Statement", "Background", "Arguments", "Counterarguments", "Conclusion", "References"],
+  "review_criteria": ["argumentation", "evidence_quality", "clarity", "persuasiveness"],
+  "ai_disclosure_required": false,
+  "ai_disclosure_template": null,
+  "notes": "Argumentative format. Clearly states a position and defends it with evidence."
+}

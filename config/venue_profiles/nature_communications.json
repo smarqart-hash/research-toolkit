@@ -1,0 +1,31 @@
+{
+  "venue_id": "nature_communications",
+  "name": "Nature Communications",
+  "type": "journal",
+  "word_limit": 5000,
+  "page_limit": null,
+  "citation_style": "nature",
+  "latex_template": "nature",
+  "sections": [
+    "Abstract",
+    "Introduction",
+    "Results",
+    "Discussion",
+    "Methods",
+    "Data Availability",
+    "References"
+  ],
+  "review_criteria": [
+    "significance",
+    "novelty",
+    "technical_quality",
+    "clarity",
+    "data_availability",
+    "reproducibility"
+  ],
+  "figure_format": "eps",
+  "figure_dpi": 300,
+  "ai_disclosure_required": true,
+  "ai_disclosure_template": "We acknowledge the use of [AI tool] for [specific contribution]. All AI-generated content was critically reviewed and verified by the authors.",
+  "notes": "Strenge Formatvorgaben. Methods am Ende. Data Availability Statement PFLICHT."
+}

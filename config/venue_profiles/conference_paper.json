@@ -1,0 +1,14 @@
+{
+  "venue_id": "conference_paper",
+  "name": "Conference Paper",
+  "type": "conference",
+  "language": "en",
+  "page_range": [8, 12],
+  "citation_style": "numeric",
+  "citation_format": "[1]",
+  "sections": ["Abstract", "Introduction", "Related Work", "Approach", "Evaluation", "Results", "Conclusion", "References"],
+  "review_criteria": ["novelty", "technical_soundness", "clarity", "significance", "reproducibility"],
+  "ai_disclosure_required": true,
+  "ai_disclosure_template": "We used [tool] for [purpose]. All outputs were verified by the authors.",
+  "notes": "Typical ACM/IEEE conference format. Strict page limits apply."
+}

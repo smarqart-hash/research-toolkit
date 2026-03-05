@@ -1,0 +1,66 @@
+{
+  "name": "academic_en",
+  "description": "Generic formal academic English voice for research publications. Objective, measured, evidence-driven prose suitable for journals, conferences, and working papers.",
+  "sentence_length": {"avg": 22, "range": [10, 40], "notes": "Medium-length sentences with subordinate clauses. Avoid both choppy fragments and run-on sentences."},
+  "formality": "Formal academic register",
+  "passive_ratio": "25-35%",
+  "typical_phrases": [
+    "This study examines",
+    "The findings suggest that",
+    "It is worth noting that",
+    "A growing body of evidence indicates",
+    "These results are consistent with",
+    "Further research is needed to",
+    "The implications of these findings",
+    "In light of the above",
+    "Building on prior work",
+    "The present analysis reveals"
+  ],
+  "recommendation_pattern": "Structured as implications or suggestions: 'These findings suggest that [stakeholder] should consider [action].' Hedged, not imperative.",
+  "number_embedding": "Statistics and quantitative results embedded in prose with context. Example: 'The intervention improved outcomes by 23% (p < 0.01), a finding consistent with...' rather than isolated bullet points.",
+  "term_introduction": "Technical terms defined on first use via apposition or parenthetical. Example: 'Transfer learning (the practice of applying knowledge from one domain to another) has shown...'",
+  "tone": "Objective, measured, evidence-driven. Hedged claims with appropriate qualifiers (may, suggests, appears to). No emotional appeals or sensationalism.",
+  "transition_patterns": [
+    "Building on this, ...",
+    "In contrast, ...",
+    "Moreover, ...",
+    "Taken together, these findings suggest ...",
+    "Notwithstanding these limitations, ...",
+    "Turning to the question of ...",
+    "A closer examination reveals ..."
+  ],
+  "uncertainty_language": [
+    "The evidence suggests, but does not conclusively demonstrate, that...",
+    "While preliminary, these findings indicate...",
+    "Further investigation is warranted to...",
+    "The extent to which this generalizes remains an open question.",
+    "These results should be interpreted with caution due to..."
+  ],
+  "dos": [
+    "Use hedging language (may, suggests, appears to)",
+    "Cite evidence for every substantive claim",
+    "Define technical terms on first use",
+    "Use active voice for author actions, passive for methods",
+    "Structure paragraphs: topic sentence -> evidence -> interpretation",
+    "Acknowledge limitations explicitly",
+    "Connect findings to broader literature",
+    "Use parallel structure in lists and comparisons"
+  ],
+  "donts": [
+    "No first person singular (use 'we' or passive)",
+    "No colloquial language or contractions",
+    "No superlatives without evidence (groundbreaking, revolutionary)",
+    "No emotional appeals or dramatic language",
+    "No unsupported generalizations",
+    "No rhetorical questions in formal sections",
+    "No informal abbreviations (don't, can't, it's)"
+  ],
+  "structural_patterns": {
+    "opening": "Gap identification: What is known -> What is missing -> How this work addresses the gap",
+    "body": "Claim -> Evidence -> Interpretation -> Limitation, repeated per section",
+    "conclusion": "Summary of contributions -> Implications -> Future work"
+  },
+  "paragraph_length": {"avg_sentences": "4-6", "notes": "Each paragraph develops one idea. Topic sentence first, supporting evidence, then interpretation."},
+  "evidence_style": "Inline citations integrated into argument flow. Example: 'Recent work has demonstrated significant gains (Smith et al. 2024), though questions remain about generalizability (Chen & Kumar 2025).'",
+  "audience_targeting": "Academic peers and informed practitioners. Assumes domain knowledge but explains specialized methods."
+}

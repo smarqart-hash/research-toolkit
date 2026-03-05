@@ -1,0 +1,31 @@
+{
+  "venue_id": "arxiv_cs_ai",
+  "name": "arXiv cs.AI",
+  "type": "preprint",
+  "word_limit": null,
+  "page_limit": null,
+  "citation_style": "numeric",
+  "latex_template": "article",
+  "sections": [
+    "Abstract",
+    "Introduction",
+    "Related Work",
+    "Methodology",
+    "Experiments",
+    "Results",
+    "Discussion",
+    "Conclusion",
+    "References"
+  ],
+  "review_criteria": [
+    "novelty",
+    "technical_soundness",
+    "clarity",
+    "reproducibility"
+  ],
+  "figure_format": "pdf",
+  "figure_dpi": 300,
+  "ai_disclosure_required": false,
+  "ai_disclosure_template": null,
+  "notes": "Kein formales Peer Review. Preprint-Server. Frei formatierbar."
+}

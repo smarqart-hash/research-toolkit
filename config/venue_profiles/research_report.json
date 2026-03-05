@@ -1,0 +1,18 @@
+{
+  "venue_id": "research_report",
+  "name": "Research Report",
+  "type": "report",
+  "language": "en",
+  "page_range": [30, 80],
+  "citation_style": "apa",
+  "citation_format": "(Author, Year, p. XX)",
+  "sections": ["Executive Summary", "Introduction", "Literature Review", "Methodology", "Findings", "Analysis", "Discussion", "Recommendations", "Conclusion", "Appendices", "References"],
+  "handlungsempfehlungen": {
+    "format": "Structured recommendations with addressees",
+    "example": "Recommendation 1: [Action] — addressed to [stakeholder group]."
+  },
+  "review_criteria": ["methodology", "evidence_quality", "completeness", "clarity", "policy_relevance"],
+  "ai_disclosure_required": true,
+  "ai_disclosure_template": "This report used AI-assisted tools for [purpose]. All findings were independently verified.",
+  "notes": "Comprehensive format for institutional or commissioned research."
+}

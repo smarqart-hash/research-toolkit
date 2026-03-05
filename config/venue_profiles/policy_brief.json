@@ -1,0 +1,18 @@
+{
+  "venue_id": "policy_brief",
+  "name": "Policy Brief",
+  "type": "policy",
+  "language": "en",
+  "page_range": [10, 20],
+  "citation_style": "footnote",
+  "citation_format": "Footnote (Author Year)",
+  "sections": ["Executive Summary", "Background", "Key Findings", "Policy Implications", "Recommendations", "References"],
+  "handlungsempfehlungen": {
+    "format": "Addressed to stakeholder groups",
+    "example": "For policymakers: [specific action]. For industry: [specific action]."
+  },
+  "review_criteria": ["clarity", "policy_relevance", "actionability", "evidence_quality"],
+  "ai_disclosure_required": false,
+  "ai_disclosure_template": null,
+  "notes": "Concise, action-oriented. Target audience: decision-makers in policy and industry."
+}

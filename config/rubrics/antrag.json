@@ -1,0 +1,95 @@
+{
+  "rubric_id": "antrag",
+  "name": "Projektantrag / Foerderantrag",
+  "applies_to": [],
+  "auto_dimensions": [
+    {
+      "name": "Problemrelevanz",
+      "description": "Ist das Problem klar definiert und gesellschaftlich/wissenschaftlich relevant?",
+      "anchors": {
+        "stark": "Problem klar umrissen, Relevanz mit Zahlen/Quellen belegt, Dringlichkeit erkennbar",
+        "angemessen": "Problem benannt, Relevanz argumentiert aber nicht quantifiziert",
+        "ausbaufaehig": "Problem vage, Relevanz nur behauptet",
+        "kritisch": "Problemstellung unklar oder trivial"
+      }
+    },
+    {
+      "name": "Methodik & Arbeitsplan",
+      "description": "Ist der Ansatz realistisch, nachvollziehbar und zeitlich geplant?",
+      "anchors": {
+        "stark": "Arbeitspakete definiert, Meilensteine terminiert, Methoden begruendet",
+        "angemessen": "Arbeitsplan vorhanden, Methoden benannt aber nicht alle begruendet",
+        "ausbaufaehig": "Methodik oberflaechlich, Zeitplan unrealistisch oder fehlend",
+        "kritisch": "Keine erkennbare Methodik oder kein Arbeitsplan"
+      }
+    },
+    {
+      "name": "Machbarkeit",
+      "description": "Sind Zeitplan, Budget und Team-Kompetenz plausibel?",
+      "anchors": {
+        "stark": "Budget nachvollziehbar, Team-Expertise belegt, Risiken adressiert",
+        "angemessen": "Budget und Team benannt, Risiken teilweise adressiert",
+        "ausbaufaehig": "Budget oder Team-Qualifikation nicht plausibel dargelegt",
+        "kritisch": "Unrealistischer Zeitplan, Budget fehlt, Team unklar"
+      }
+    },
+    {
+      "name": "Wirkungspotenzial",
+      "description": "Welcher Impact ist erwartbar und wie wird er gemessen?",
+      "anchors": {
+        "stark": "Impact quantifiziert, Transferstrategie beschrieben, Nachhaltigkeitsplan",
+        "angemessen": "Impact beschrieben, Messung angedeutet",
+        "ausbaufaehig": "Impact nur vage benannt, keine Messstrategie",
+        "kritisch": "Kein erkennbarer Impact oder rein akademischer Selbstzweck"
+      }
+    },
+    {
+      "name": "Klarheit & Verstaendlichkeit",
+      "description": "Ist der Antrag fuer Gutachter klar und ueberzeugend geschrieben?",
+      "anchors": {
+        "stark": "Praegnant, gut strukturiert, Kernbotschaft in 2 Saetzen fassbar",
+        "angemessen": "Verstaendlich, aber stellenweise langatmig",
+        "ausbaufaehig": "Unklare Passagen, Gutachter muss mehrfach lesen",
+        "kritisch": "Unverstaendlich, zentrales Vorhaben nicht erkennbar"
+      }
+    },
+    {
+      "name": "Formale Vollstaendigkeit",
+      "description": "Sind alle geforderten Sektionen und Anhaenge vorhanden?",
+      "anchors": {
+        "stark": "Alle Pflichtfelder ausgefuellt, Anhaenge vollstaendig",
+        "angemessen": "Kernsektionen vorhanden, optionale Anhaenge fehlen",
+        "ausbaufaehig": "1-2 Pflichtsektionen fehlen oder sind Platzhalter",
+        "kritisch": "Mehrere Pflichtsektionen fehlen, formale Anforderungen nicht erfuellt"
+      }
+    }
+  ],
+  "human_dimensions": [
+    {
+      "name": "Innovationsgehalt",
+      "flag_when": "Keine Abgrenzung zum State of the Art oder bestehenden Foerderprojekten"
+    },
+    {
+      "name": "Inhaltliche Korrektheit",
+      "flag_when": "Technische Annahmen die nicht verifizierbar sind"
+    }
+  ],
+  "severity_anchors": {
+    "CRITICAL": [
+      "Pflichtsektionen laut Ausschreibung fehlen",
+      "Budget fehlt oder ist offensichtlich unrealistisch"
+    ],
+    "HIGH": [
+      "Keine Abgrenzung zu bestehenden Foerderprojekten",
+      "Arbeitspakete ohne Meilensteine oder Deliverables"
+    ],
+    "MEDIUM": [
+      "Team-Qualifikation nicht belegt (keine CVs referenziert)",
+      "Risikomanagement nur oberflaechlich"
+    ],
+    "LOW": [
+      "Formatierung weicht von Vorgaben ab",
+      "Abkuerzungen nicht beim ersten Vorkommen aufgeloest"
+    ]
+  }
+}

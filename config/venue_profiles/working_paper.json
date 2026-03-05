@@ -1,0 +1,14 @@
+{
+  "venue_id": "working_paper",
+  "name": "Working Paper",
+  "type": "preprint",
+  "language": "en",
+  "page_range": [15, 30],
+  "citation_style": "apa",
+  "citation_format": "(Author, Year)",
+  "sections": ["Abstract", "Introduction", "Background", "Methodology", "Findings", "Discussion", "Conclusion", "References"],
+  "review_criteria": ["clarity", "methodology", "contribution"],
+  "ai_disclosure_required": false,
+  "ai_disclosure_template": null,
+  "notes": "Informal preprint format. No formal peer review. Flexible structure."
+}
