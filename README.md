@@ -33,7 +33,7 @@ Think of it like Unix pipes for research: each skill does one thing well, takes 
 
 ## Status
 
-> **Working Prototype.** This toolkit demonstrates what's achievable with AI-assisted development in a short timeframe. The architecture and data models are solid (207 tests passing), but individual skills have not been fine-tuned for production quality. The Draft and Review skills require an LLM backend (not included) to generate actual text — the toolkit provides structure, prompts, and quality checks. There is significant room for improvement in search coverage, ranking algorithms, voice calibration, and citation extraction accuracy.
+> **Working Prototype.** The architecture and data models are solid (248 tests passing). The Draft and Review skills require an LLM backend (not included) to generate actual text — the toolkit provides structure, prompts, and quality checks. Recent improvements from the [reflexive meta-loop](#reflexive-meta-loop): PRISMA-compliant screening, SPECTER2 semantic ranking, and automatic methodological transparency sections.
 
 ## Quickstart
 
@@ -90,7 +90,7 @@ Each skill has a detailed instruction file in `skills/` that you can load into a
 
 ### Search
 
-Queries Semantic Scholar (and optionally Exa) with multiple search terms, deduplicates by DOI/title, ranks by citation count + recency, and extracts evidence cards.
+Queries Semantic Scholar (and optionally Exa) with multiple search terms, deduplicates by DOI/title, and ranks results. Ranking uses a heuristic composite score (citations + recency + open access), optionally enhanced with **SPECTER2 semantic similarity** (`pip install -e ".[nlp]"`). Includes **PRISMA-compliant screening** with configurable criteria (year range, minimum citations, keyword filters, field exclusions).
 
 ```bash
 research-toolkit search "federated learning privacy" --max 50 --years 2022-2026
@@ -195,18 +195,34 @@ The setup wizard (`python setup.py`) guides you through API key configuration.
 3. Exa uses neural search — finds papers that keyword search misses
 4. Without Exa: Search uses only Semantic Scholar (still effective for most topics)
 
+## Reflexive Meta-Loop
+
+The toolkit was used to generate a paper about itself — then the findings from that paper drove two improvement sprints. This is documented in [`docs/meta-loop/`](docs/meta-loop/).
+
+| Sprint | Finding | What changed |
+|--------|---------|-------------|
+| **1: Search Quality** | No screening, no semantic ranking | Added PRISMA-compliant screening (`src/agents/screener.py`), SPECTER2 ranking, pipeline documentation with ceiling transparency |
+| **2: Reflexivity** | No methodological transparency in output | Added `--reflexive` flag for automatic limitations section, calibration limitations documented |
+
+**Key insight:** The loop is a *ceiling detector*, not self-improvement. The pipeline can iterate its output, but cannot extend its own capabilities. See [`docs/meta-loop/findings.md`](docs/meta-loop/findings.md).
+
 ## Example Output
 
-See [`examples/ai_automated_research/`](examples/ai_automated_research/) for a complete pipeline run on "AI-Assisted Automated Research" — including real Semantic Scholar search results, evidence cards, a literature review draft, structured review feedback, and citation verification.
+The [`examples/ai_automated_research/`](examples/ai_automated_research/) directory contains two versions of the same literature review — generated before and after the meta-loop improvements:
 
-This example is meta: it uses the toolkit to research the field of automated research tools.
+| Version | Screening | Ranking | Reflexive Section | File |
+|---------|-----------|---------|-------------------|------|
+| **v1** (pre-sprint) | None — 120 found, 120 kept | Citation + recency only | None | [`draft.md`](examples/ai_automated_research/draft.md) |
+| **v2** (post-sprint) | PRISMA-flow with criteria | SPECTER2 + heuristic | Methodische Transparenz | [`draft-v2.md`](examples/ai_automated_research/draft-v2.md) |
+
+Both use the same topic ("AI-Assisted Automated Research") and the same Semantic Scholar data, making the differences directly comparable.
 
 ## Known Limitations
 
 | Skill | Limitation | Impact |
 |-------|-----------|--------|
 | **Search** | Semantic Scholar only (English-dominant). Non-Anglophone literature, grey literature, and databases like LIVIVO/BASE/PubMed not covered. | Systematic bias toward English-language publications. Supplement with domain-specific databases for comprehensive reviews. |
-| **Search** | Ranking uses citation count + recency composite. Not validated against domain-specific ground truth. | May surface popular papers over methodologically strongest ones. |
+| **Search** | Ranking uses citation count + recency + optional SPECTER2 semantic similarity. Not validated against domain-specific ground truth. | `specter2_score` field enables post-hoc comparison, but no feedback loop exists. |
 | **Draft** | Voice calibration not fine-tuned. Self-check does not detect circular argumentation or logical fallacies. | Outputs require expert review before any submission. |
 | **Review** | Confidence labels in evidence cards are categorical ("high/medium/low"), not calibrated probabilities. | Labels should be read as heuristic indicators, not quantitative assessments. |
 | **Check** | Citation extraction uses regex for Harvard-style references. Other citation formats may be missed. | Run Check as a safety net, not as sole verification. |
