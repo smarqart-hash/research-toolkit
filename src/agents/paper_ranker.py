@@ -2,17 +2,27 @@
 
 Nimmt Ergebnisse aus Semantic Scholar + Exa, entfernt Duplikate,
 und rankt nach Relevanz fuer den Forschungsstand.
+
+Ranking-Modi:
+- Ohne query: Heuristische Score (Citations + Recency + OA + Abstract + Source)
+- Mit query: SPECTER2-enhanced (semantische Aehnlichkeit + Heuristik)
 """
 
 from __future__ import annotations
 
 import hashlib
+import logging
 from collections.abc import Sequence
 
 from pydantic import BaseModel, Field, computed_field
 
 from src.agents.exa_client import ExaResult
 from src.agents.semantic_scholar import PaperResult
+
+logger = logging.getLogger(__name__)
+
+# SPECTER2 Model-Cache (Lazy Loading)
+_specter2_model = None
 
 
 class UnifiedPaper(BaseModel):
@@ -30,6 +40,7 @@ class UnifiedPaper(BaseModel):
     url: str | None = None
     is_open_access: bool = False
     tags: list[str] = Field(default_factory=list)
+    specter2_score: float | None = None  # None wenn nicht berechnet
 
     @computed_field
     @property
@@ -132,8 +143,139 @@ def deduplicate(papers: Sequence[UnifiedPaper]) -> list[UnifiedPaper]:
     return list(seen.values())
 
 
-def rank_papers(papers: Sequence[UnifiedPaper], *, top_k: int | None = None) -> list[UnifiedPaper]:
-    """Rankt Papers nach relevance_score (absteigend)."""
+# --- SPECTER2 ---
+
+
+def _load_specter2_model():
+    """Laedt SPECTER2 Model (Lazy, gecacht).
+
+    Raises:
+        ImportError: Wenn sentence-transformers nicht installiert.
+    """
+    global _specter2_model
+    if _specter2_model is not None:
+        return _specter2_model
+    from sentence_transformers import SentenceTransformer
+    _specter2_model = SentenceTransformer("allenai/specter2_base")
+    return _specter2_model
+
+
+def compute_specter2_similarity(
+    query: str,
+    papers: Sequence[UnifiedPaper],
+) -> dict[str, float]:
+    """Berechnet SPECTER2-Cosine-Similarity zwischen Query und Paper-Abstracts.
+
+    Returns:
+        Dict von paper_id -> similarity_score (0-1).
+        Leeres Dict wenn sentence-transformers nicht installiert.
+    """
+    try:
+        model = _load_specter2_model()
+    except (ImportError, OSError) as e:
+        logger.info("SPECTER2 nicht verfuegbar: %s", e)
+        return {}
+
+    import numpy as np
+
+    # Papers mit Abstract sammeln
+    papers_with_abstract = [p for p in papers if p.abstract and p.abstract.strip()]
+    if not papers_with_abstract:
+        return {p.paper_id: 0.0 for p in papers}
+
+    # Embeddings berechnen
+    texts = [query, *[p.abstract for p in papers_with_abstract]]
+    embeddings = model.encode(texts, normalize_embeddings=True)
+
+    query_emb = embeddings[0]
+    paper_embs = embeddings[1:]
+
+    # Cosine Similarity (bereits normalisiert -> Dot Product)
+    similarities = np.dot(paper_embs, query_emb)
+
+    # Score-Dict aufbauen
+    scores: dict[str, float] = {}
+    for paper in papers:
+        scores[paper.paper_id] = 0.0  # Default fuer Papers ohne Abstract
+
+    for i, paper in enumerate(papers_with_abstract):
+        scores[paper.paper_id] = float(max(0.0, min(1.0, similarities[i])))
+
+    return scores
+
+
+# --- Ranking ---
+
+
+def _compute_enhanced_score(
+    paper: UnifiedPaper,
+    specter2_scores: dict[str, float],
+) -> float:
+    """Berechnet kombinierten Score mit SPECTER2-Gewichtung.
+
+    Gewichtung wenn SPECTER2 verfuegbar:
+    - 30% SPECTER2 Similarity
+    - 25% Citations (log-skaliert)
+    - 25% Recency
+    - 10% Open Access
+    - 10% Abstract vorhanden
+    """
+    import math
+
+    s2_score = specter2_scores.get(paper.paper_id, 0.0)
+    score = 0.3 * s2_score
+
+    # Zitationen (max 0.25)
+    if paper.citation_count and paper.citation_count > 0:
+        score += min(0.25, math.log10(paper.citation_count + 1) / 10 * 0.625)
+
+    # Aktualitaet (max 0.25)
+    if paper.year:
+        recency = max(0, paper.year - 2018) / 8
+        score += min(0.25, recency * 0.25)
+
+    # Open Access (0.1)
+    if paper.is_open_access:
+        score += 0.1
+
+    # Abstract vorhanden (0.1)
+    if paper.abstract:
+        score += 0.1
+
+    return round(min(1.0, score), 3)
+
+
+def rank_papers(
+    papers: Sequence[UnifiedPaper],
+    *,
+    top_k: int | None = None,
+    query: str | None = None,
+) -> list[UnifiedPaper]:
+    """Rankt Papers nach Relevanz.
+
+    Mit query: SPECTER2-enhanced Ranking (semantische Aehnlichkeit + Heuristik).
+    Ohne query: Heuristisches Ranking (relevance_score).
+    """
+    if query is not None:
+        specter2_scores = compute_specter2_similarity(query, papers)
+        if specter2_scores:
+            # SPECTER2-Scores auf Papers speichern
+            updated = []
+            for paper in papers:
+                s2_score = specter2_scores.get(paper.paper_id)
+                updated = [
+                    *updated,
+                    paper.model_copy(update={"specter2_score": s2_score}),
+                ]
+            enhanced_scores = {
+                p.paper_id: _compute_enhanced_score(p, specter2_scores) for p in updated
+            }
+            ranked = sorted(updated, key=lambda p: enhanced_scores[p.paper_id], reverse=True)
+            if top_k:
+                return ranked[:top_k]
+            return ranked
+
+    # Fallback: heuristisches Ranking
     ranked = sorted(papers, key=lambda p: p.relevance_score, reverse=True)
     if top_k:
         return ranked[:top_k]

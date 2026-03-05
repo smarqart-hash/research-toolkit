@@ -1,8 +1,13 @@
 """Tests fuer Paper-Deduplizierung und Ranking."""
 
+from unittest.mock import patch
+
+import pytest
+
 from src.agents.exa_client import ExaResult
 from src.agents.paper_ranker import (
     UnifiedPaper,
+    compute_specter2_similarity,
     deduplicate,
     from_exa,
     from_semantic_scholar,
@@ -217,3 +222,110 @@ class TestRanking:
             paper_id="2", title="New", source="semantic_scholar", year=2025
         )
         assert new.relevance_score > old.relevance_score
+
+    def test_rank_with_query_uses_specter2(self):
+        """SPECTER2-Score beeinflusst Ranking wenn query angegeben."""
+        papers = [
+            UnifiedPaper(
+                paper_id="1",
+                title="Protein Folding",
+                abstract="Protein structure prediction",
+                source="semantic_scholar",
+                citation_count=500,
+                year=2024,
+            ),
+            UnifiedPaper(
+                paper_id="2",
+                title="AI Research Automation",
+                abstract="Automated literature review with AI",
+                source="semantic_scholar",
+                citation_count=10,
+                year=2024,
+            ),
+        ]
+        # Mit Mock: SPECTER2 gibt hohen Score fuer Paper 2
+        mock_scores = {"1": 0.1, "2": 0.95}
+        with patch(
+            "src.agents.paper_ranker.compute_specter2_similarity",
+            return_value=mock_scores,
+        ):
+            ranked = rank_papers(papers, query="AI automated research")
+        # Paper 2 sollte trotz weniger Citations oben sein
+        assert ranked[0].paper_id == "2"
+
+    def test_rank_without_query_ignores_specter2(self):
+        """Ohne query: heuristisches Ranking wie bisher."""
+        papers = [
+            UnifiedPaper(
+                paper_id="1", title="Low Cite", source="semantic_scholar", citation_count=5
+            ),
+            UnifiedPaper(
+                paper_id="2", title="High Cite", source="semantic_scholar", citation_count=500
+            ),
+        ]
+        ranked = rank_papers(papers)
+        assert ranked[0].paper_id == "2"
+
+    def test_specter2_score_stored_on_paper(self):
+        """SPECTER2-Score wird auf UnifiedPaper gespeichert."""
+        papers = [
+            UnifiedPaper(
+                paper_id="1",
+                title="Test",
+                abstract="Test abstract",
+                source="semantic_scholar",
+            ),
+        ]
+        mock_scores = {"1": 0.85}
+        with patch(
+            "src.agents.paper_ranker.compute_specter2_similarity",
+            return_value=mock_scores,
+        ):
+            ranked = rank_papers(papers, query="test query")
+        assert ranked[0].specter2_score == 0.85
+
+
+# --- SPECTER2 ---
+
+
+class TestSpecter2:
+    def test_returns_empty_when_not_installed(self):
+        """Graceful Degradation: leeres Dict ohne sentence-transformers."""
+        with patch(
+            "src.agents.paper_ranker._load_specter2_model",
+            side_effect=ImportError("No module"),
+        ):
+            result = compute_specter2_similarity("test query", [])
+            assert result == {}
+
+    def test_papers_without_abstract_get_zero(self):
+        """Papers ohne Abstract bekommen Score 0."""
+        papers = [
+            UnifiedPaper(
+                paper_id="no_abs",
+                title="No Abstract",
+                abstract=None,
+                source="semantic_scholar",
+            ),
+        ]
+        mock_model = _MockSentenceTransformer()
+        with patch(
+            "src.agents.paper_ranker._load_specter2_model",
+            return_value=mock_model,
+        ):
+            result = compute_specter2_similarity("test query", papers)
+        assert result.get("no_abs", 0.0) == 0.0
+
+    def test_specter2_score_default_none(self):
+        """Neues Feld specter2_score ist default None."""
+        paper = UnifiedPaper(paper_id="1", title="Test", source="exa")
+        assert paper.specter2_score is None
+
+
+class _MockSentenceTransformer:
+    """Mock fuer SentenceTransformer.encode()."""
+
+    def encode(self, texts, **kwargs):
+        import numpy as np
+
+        return np.random.rand(len(texts), 768).astype(np.float32)
