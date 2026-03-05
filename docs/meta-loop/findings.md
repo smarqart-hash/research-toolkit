@@ -98,3 +98,82 @@ werden aber nicht im Ranking genutzt.
 **Loesung:** SPECTER2-Relevanz-Score in Ranking einbauen. Known Limitations verschaerfen.
 
 **Sprint:** 1
+
+---
+
+## Findings aus v1-v2-Vergleich (Post-Sprint-Reflexion)
+
+> Quelle: Vergleich `examples/ai_automated_research/draft.md` (v1) vs `draft-v2.md` (v2).
+> Bestaetigung der Ceiling-Detektor-These: Die Verbesserungen v1→v2 sind
+> **Transparenz-Verbesserungen**, keine **epistemischen Verbesserungen**.
+> Die Pipeline weiss jetzt besser was sie nicht weiss — aber sie weiss nicht mehr.
+
+---
+
+## F7: Screening-Validierung fehlt (HOCH)
+
+**Problem:** Screening-Kriterien wurden einmalig definiert, nicht gegen Experten validiert.
+Borderline-Cases (z.B. Umar & Lano 2024 — Requirements Engineering mit teilweiser
+methodischer Uebertragbarkeit) koennten falsch klassifiziert sein.
+
+**Loesung:** Zweiter Reviewer (Mensch oder anderes LLM) fuer Borderline-Entscheidungen.
+Inter-Rater-Agreement messen. Kostet externe Validierung — Pipeline kann das nicht selbst.
+
+**Typ:** Empirisch (kein reiner Code-Change)
+
+---
+
+## F8: Multi-Source Search (MITTEL)
+
+**Problem:** Beide Versionen (v1 + v2) nutzen identische 120 Papers aus Semantic Scholar.
+Exa war deaktiviert. OpenAlex, PubMed, BASE als Quellen wuerden den Input-Pool diversifizieren
+und den English-Language-Bias reduzieren.
+
+**Loesung:** Weitere API-Clients (OpenAlex ist kostenlos, PubMed via E-utilities).
+`search_papers()` akzeptiert bereits mehrere Quellen via `from_exa()` / `from_semantic_scholar()` —
+Pattern ist erweiterbar.
+
+**Typ:** Code (API-Integration, mittlerer Aufwand)
+
+---
+
+## F9: Evidence Card Verification (HOCH)
+
+**Problem:** Der Check-Skill verifiziert ob Quellen *existieren* (Titel, Autor, Jahr stimmen),
+aber nicht ob *Claims korrekt extrahiert* wurden. Ein Evidence Card koennte sagen
+"Paper findet 18% Trust-Reduktion" obwohl das Paper das Gegenteil zeigt.
+
+**Loesung:** NLI/Entailment-basierter Verification-Step: Claim aus Evidence Card gegen
+Abstract oder Full-Text pruefen (z.B. via Cross-Encoder). Braucht Zugang zu Full-Text
+und ein Entailment-Modell.
+
+**Typ:** Code + Forschung (hoher Aufwand)
+
+---
+
+## F10: Ranking Feedback-Loop (HOCH)
+
+**Problem:** `specter2_score` macht die Diskrepanz zwischen heuristischem und semantischem
+Ranking sichtbar — aber es gibt keinen Mechanismus zu lernen, welche Methode besser ist.
+Fuer das Meta-Paper-Thema rankt Semantic Similarity z.B. ProtAgents (Protein-Design) hoch,
+obwohl es thematisch peripher ist.
+
+**Loesung:** A/B-Test gegen Experten-kuratierte Paper-Liste fuer 3-5 Topics.
+Precision@K und nDCG messen. Braucht Ground-Truth-Daten — Pipeline kann sich
+nicht selbst evaluieren.
+
+**Typ:** Empirisch (kein reiner Code-Change)
+
+---
+
+## F11: Voice Calibration (MITTEL)
+
+**Problem:** v2 klingt immer noch "generisch akademisch". Die Voice-Profile
+(`config/voice_profiles/`) definieren Satzlaenge und Formalitaet, aber wurden
+nicht gegen echte Venue-Samples kalibriert. Ein Nature-Paper liest sich anders
+als ein Policy Brief — dieser Unterschied ist in den Profilen nicht abgebildet.
+
+**Loesung:** Corpus-Analyse: 10 echte Papers pro Venue extrahieren, statistisch
+auswerten (Satzlaenge, Passiv-Anteil, Transition-Woerter), Profile daraus ableiten.
+
+**Typ:** Code (Corpus-Analyse-Tool) + Daten (Venue-Samples)
