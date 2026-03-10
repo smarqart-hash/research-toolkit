@@ -212,7 +212,8 @@ class TestSearchConfig:
         config = SearchConfig()
         assert config.max_results_per_query == 50
         assert config.top_k == 30
-        assert config.use_exa is True
+        assert config.sources == ["ss", "openalex"]
+        assert config.languages == ["en", "de"]
         assert config.year_filter is None
 
     def test_custom_config(self):
@@ -225,13 +226,22 @@ class TestSearchConfig:
         assert config.year_filter == "2022-2026"
         assert config.top_k == 15
 
+    def test_custom_sources(self):
+        config = SearchConfig(sources=["ss", "exa"])
+        assert "exa" in config.sources
+        assert "openalex" not in config.sources
+
+    def test_custom_languages(self):
+        config = SearchConfig(languages=["en"])
+        assert config.languages == ["en"]
+
 
 class TestSearchPapersErrorStats:
     """Tests fuer differenzierte Fehlerbehandlung in search_papers."""
 
     def test_http_errors_counted_in_stats(self):
         """HTTP-Fehler werden in ss_errors gezaehlt, nicht stumm geschluckt."""
-        config = SearchConfig(use_exa=False)
+        config = SearchConfig(sources=["ss"])
 
         async def mock_search(*args, **kwargs):
             raise httpx.HTTPStatusError(
@@ -254,7 +264,7 @@ class TestSearchPapersErrorStats:
 
     def test_timeout_counted_in_stats(self):
         """Timeouts werden in ss_errors gezaehlt."""
-        config = SearchConfig(use_exa=False)
+        config = SearchConfig(sources=["ss"])
 
         async def mock_search(*args, **kwargs):
             raise httpx.TimeoutException("Timeout")
@@ -266,5 +276,151 @@ class TestSearchPapersErrorStats:
             ):
                 papers, stats, _prisma = await search_papers("test", config=config)
                 assert stats["ss_errors"] >= 1
+
+        asyncio.run(run())
+
+
+class TestSearchPapersMultiSource:
+    """Tests fuer parallele Multi-Source-Suche."""
+
+    def _make_ss_paper(self):
+        """Minimales Semantic Scholar Paper-Mock."""
+        from unittest.mock import MagicMock
+
+        paper = MagicMock()
+        paper.doi = "10.1234/ss"
+        paper.paperId = "ss123"
+        paper.title = "SS Paper"
+        paper.abstract = "Abstract SS"
+        paper.year = 2023
+        paper.authors = []
+        paper.citationCount = 5
+        paper.isOpenAccess = False
+        paper.arxiv_id = None
+        paper.fieldsOfStudy = []
+        return paper
+
+    def _make_oa_work(self):
+        """Minimales OpenAlex Work-Mock."""
+        from src.agents.openalex_client import (
+            OpenAlexOpenAccess,
+            OpenAlexWork,
+        )
+
+        return OpenAlexWork(
+            id="https://openalex.org/W123",
+            doi="https://doi.org/10.1234/oa",
+            display_name="OA Paper",
+            publication_year=2022,
+            cited_by_count=10,
+            open_access=OpenAlexOpenAccess(is_oa=True),
+        )
+
+    def test_ss_only_source(self):
+        """sources=["ss"] — nur SS wird abgefragt."""
+        config = SearchConfig(sources=["ss"])
+        ss_paper = self._make_ss_paper()
+
+        async def mock_ss_search(*args, **kwargs):
+            from unittest.mock import MagicMock
+
+            resp = MagicMock()
+            resp.data = [ss_paper]
+            return resp
+
+        async def run():
+            with patch(
+                "src.agents.forschungsstand.SemanticScholarClient.search_papers",
+                side_effect=mock_ss_search,
+            ):
+                papers, stats, _ = await search_papers("test", config=config)
+                assert stats["ss_total"] >= 1
+                assert stats["openalex_total"] == 0
+                assert stats["exa_total"] == 0
+
+        asyncio.run(run())
+
+    def test_ss_and_openalex_combined(self):
+        """sources=["ss", "openalex"] — beide Quellen liefern Papers."""
+        config = SearchConfig(sources=["ss", "openalex"])
+        ss_paper = self._make_ss_paper()
+        oa_work = self._make_oa_work()
+
+        async def mock_ss_search(*args, **kwargs):
+            from unittest.mock import MagicMock
+
+            resp = MagicMock()
+            resp.data = [ss_paper]
+            return resp
+
+        async def mock_oa_search(*args, **kwargs):
+            from src.agents.openalex_client import OpenAlexSearchResponse
+
+            return OpenAlexSearchResponse(results=[oa_work])
+
+        async def run():
+            with (
+                patch(
+                    "src.agents.forschungsstand.SemanticScholarClient.search_papers",
+                    side_effect=mock_ss_search,
+                ),
+                patch(
+                    "src.agents.forschungsstand.OpenAlexClient.search_works",
+                    side_effect=mock_oa_search,
+                ),
+            ):
+                papers, stats, _ = await search_papers("test", config=config)
+                assert stats["ss_total"] >= 1
+                assert stats["openalex_total"] >= 1
+                assert len(papers) >= 1  # nach Dedup
+
+        asyncio.run(run())
+
+    def test_openalex_error_graceful_degradation(self):
+        """OpenAlex-Fehler stoppt nicht SS-Ergebnis."""
+        config = SearchConfig(sources=["ss", "openalex"])
+        ss_paper = self._make_ss_paper()
+
+        async def mock_ss_search(*args, **kwargs):
+            from unittest.mock import MagicMock
+
+            resp = MagicMock()
+            resp.data = [ss_paper]
+            return resp
+
+        async def mock_oa_search(*args, **kwargs):
+            raise httpx.TimeoutException("OA Timeout")
+
+        async def run():
+            with (
+                patch(
+                    "src.agents.forschungsstand.SemanticScholarClient.search_papers",
+                    side_effect=mock_ss_search,
+                ),
+                patch(
+                    "src.agents.forschungsstand.OpenAlexClient.search_works",
+                    side_effect=mock_oa_search,
+                ),
+            ):
+                papers, stats, _ = await search_papers("test", config=config)
+                # SS hat Ergebnis trotz OA-Fehler
+                assert stats["ss_total"] >= 1
+                assert stats["openalex_errors"] >= 1
+                assert len(papers) >= 1
+
+        asyncio.run(run())
+
+    def test_stats_contain_openalex_keys(self):
+        """Stats enthalten openalex_total und openalex_errors."""
+        config = SearchConfig(sources=["ss"])
+
+        async def run():
+            with patch(
+                "src.agents.forschungsstand.SemanticScholarClient.search_papers",
+                return_value=type("R", (), {"data": []})(),
+            ):
+                _, stats, _ = await search_papers("test", config=config)
+                assert "openalex_total" in stats
+                assert "openalex_errors" in stats
 
         asyncio.run(run())
