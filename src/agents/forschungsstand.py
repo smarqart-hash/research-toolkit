@@ -11,6 +11,7 @@ Drei Input-Modi:
 
 from __future__ import annotations
 
+import asyncio
 import logging
 import re
 import unicodedata
@@ -21,12 +22,14 @@ import httpx
 from pydantic import BaseModel, Field
 
 from src.agents.exa_client import ExaClient
+from src.agents.openalex_client import OpenAlexClient
 
 logger = logging.getLogger(__name__)
 from src.agents.paper_ranker import (
     UnifiedPaper,
     deduplicate,
     from_exa,
+    from_openalex,
     from_semantic_scholar,
     rank_papers,
 )
@@ -68,11 +71,118 @@ class SearchConfig:
     max_results_per_query: int = 50
     year_filter: str | None = None  # z.B. "2020-2026"
     fields_of_study: list[str] = field(default_factory=list)
-    use_exa: bool = True  # Exa nur wenn API Key vorhanden
+    sources: list[str] = field(default_factory=lambda: ["ss", "openalex"])
+    languages: list[str] = field(default_factory=lambda: ["en", "de"])
     top_k: int = 30  # Max Papers nach Ranking
 
 
 # --- Such-Orchestrierung ---
+
+
+async def _search_ss(
+    queries: list[str],
+    config: SearchConfig,
+    stats: dict[str, int],
+) -> list[UnifiedPaper]:
+    """Sucht Papers via Semantic Scholar.
+
+    Aktualisiert stats in-place fuer ss_total/ss_errors.
+    """
+    ss_client = SemanticScholarClient()
+    papers: list[UnifiedPaper] = []
+    for query in queries:
+        try:
+            response = await ss_client.search_papers(
+                query,
+                limit=config.max_results_per_query,
+                year=config.year_filter,
+                fields_of_study=config.fields_of_study or None,
+            )
+            batch = [from_semantic_scholar(p) for p in response.data]
+            papers = [*papers, *batch]
+            stats["ss_total"] += len(batch)
+        except httpx.HTTPStatusError as e:
+            stats["ss_errors"] += 1
+            logger.warning(
+                "Semantic Scholar HTTP %d fuer Query '%s': %s",
+                e.response.status_code,
+                query,
+                e.response.text[:200],
+            )
+        except httpx.TimeoutException:
+            stats["ss_errors"] += 1
+            logger.warning("Semantic Scholar Timeout fuer Query '%s'", query)
+    return papers
+
+
+async def _search_openalex(
+    queries: list[str],
+    config: SearchConfig,
+    stats: dict[str, int],
+) -> list[UnifiedPaper]:
+    """Sucht Papers via OpenAlex.
+
+    Aktualisiert stats in-place fuer openalex_total/openalex_errors.
+    """
+    oa_client = OpenAlexClient()
+    papers: list[UnifiedPaper] = []
+    for query in queries:
+        try:
+            response = await oa_client.search_works(
+                query,
+                per_page=config.max_results_per_query,
+                year_range=config.year_filter,
+                languages=config.languages or None,
+            )
+            batch = [from_openalex(w) for w in response.results]
+            papers = [*papers, *batch]
+            stats["openalex_total"] += len(batch)
+        except httpx.HTTPStatusError as e:
+            stats["openalex_errors"] += 1
+            logger.warning(
+                "OpenAlex HTTP %d fuer Query '%s': %s",
+                e.response.status_code,
+                query,
+                e.response.text[:200],
+            )
+        except httpx.TimeoutException:
+            stats["openalex_errors"] += 1
+            logger.warning("OpenAlex Timeout fuer Query '%s'", query)
+    return papers
+
+
+async def _search_exa(
+    queries: list[str],
+    config: SearchConfig,
+    stats: dict[str, int],
+) -> list[UnifiedPaper]:
+    """Sucht Papers via Exa (nur wenn API Key vorhanden).
+
+    Aktualisiert stats in-place fuer exa_total/exa_errors.
+    """
+    exa_client = ExaClient()
+    if not exa_client.is_available:
+        logger.info("Exa nicht verfuegbar (EXA_API_KEY nicht gesetzt)")
+        return []
+    papers: list[UnifiedPaper] = []
+    for query in queries:
+        try:
+            exa_response = await exa_client.search_papers(query, num_results=20)
+            batch = [from_exa(r) for r in exa_response.results]
+            papers = [*papers, *batch]
+            stats["exa_total"] += len(batch)
+        except httpx.HTTPStatusError as e:
+            stats["exa_errors"] += 1
+            logger.warning(
+                "Exa HTTP %d fuer Query '%s': %s",
+                e.response.status_code,
+                query,
+                e.response.text[:200],
+            )
+        except httpx.TimeoutException:
+            stats["exa_errors"] += 1
+            logger.warning("Exa Timeout fuer Query '%s'", query)
+    return papers
 
 
 async def search_papers(
@@ -84,7 +194,7 @@ async def search_papers(
     refine: bool = False,
     no_validate: bool = True,
 ) -> tuple[list[UnifiedPaper], dict[str, int], PrismaFlow | None]:
-    """Sucht Papers via Semantic Scholar + optional Exa.
+    """Sucht Papers parallel via konfigurierten Quellen (SS, OpenAlex, Exa).
 
     Args:
         topic: Hauptthema.
@@ -100,8 +210,14 @@ async def search_papers(
     if config is None:
         config = SearchConfig()
 
-    all_papers: list[UnifiedPaper] = []
-    stats: dict[str, int] = {"ss_total": 0, "exa_total": 0, "ss_errors": 0, "exa_errors": 0}
+    stats: dict[str, int] = {
+        "ss_total": 0,
+        "exa_total": 0,
+        "ss_errors": 0,
+        "exa_errors": 0,
+        "openalex_total": 0,
+        "openalex_errors": 0,
+    }
 
     # Queries zusammenstellen — mit oder ohne Smart Expansion
     if refine:
@@ -115,7 +231,7 @@ async def search_papers(
         # Optionale Dry-Run-Validierung
         if not no_validate:
             ss_client_for_validate = SemanticScholarClient()
-            exa_client_for_validate = ExaClient() if config.use_exa else None
+            exa_client_for_validate = ExaClient() if "exa" in config.sources else None
             query_set = await validate_queries(
                 query_set, ss_client_for_validate, exa_client_for_validate
             )
@@ -134,64 +250,37 @@ async def search_papers(
             ss_queries = [*ss_queries, *queries]
         exa_queries = ss_queries[:2]
 
-    # Semantic Scholar (primaer)
-    ss_client = SemanticScholarClient()
-    for query in ss_queries:
-        try:
-            response = await ss_client.search_papers(
-                query,
-                limit=config.max_results_per_query,
-                year=config.year_filter,
-                fields_of_study=config.fields_of_study or None,
-            )
-            ss_papers = [from_semantic_scholar(p) for p in response.data]
-            all_papers = [*all_papers, *ss_papers]
-            stats["ss_total"] += len(ss_papers)
-        except httpx.HTTPStatusError as e:
-            stats["ss_errors"] += 1
-            logger.warning(
-                "Semantic Scholar HTTP %d fuer Query '%s': %s",
-                e.response.status_code,
-                query,
-                e.response.text[:200],
-            )
-        except httpx.TimeoutException:
-            stats["ss_errors"] += 1
-            logger.warning("Semantic Scholar Timeout fuer Query '%s'", query)
+    # Parallele Suche ueber alle konfigurierten Quellen
+    search_tasks = []
+    sources_used: list[str] = []
 
-    # Exa (optional, ergaenzend)
-    if config.use_exa:
-        exa_client = ExaClient()
-        if exa_client.is_available:
-            for query in exa_queries:
-                try:
-                    exa_response = await exa_client.search_papers(
-                        query,
-                        num_results=20,
-                    )
-                    exa_papers = [from_exa(r) for r in exa_response.results]
-                    all_papers = [*all_papers, *exa_papers]
-                    stats["exa_total"] += len(exa_papers)
-                except httpx.HTTPStatusError as e:
-                    stats["exa_errors"] += 1
-                    logger.warning(
-                        "Exa HTTP %d fuer Query '%s': %s",
-                        e.response.status_code,
-                        query,
-                        e.response.text[:200],
-                    )
-                except httpx.TimeoutException:
-                    stats["exa_errors"] += 1
-                    logger.warning("Exa Timeout fuer Query '%s'", query)
-        else:
-            logger.info("Exa nicht verfuegbar (EXA_API_KEY nicht gesetzt)")
+    if "ss" in config.sources:
+        search_tasks.append(_search_ss(ss_queries, config, stats))
+        sources_used.append("Semantic Scholar")
+    if "openalex" in config.sources:
+        search_tasks.append(_search_openalex(ss_queries, config, stats))
+        sources_used.append("OpenAlex")
+    if "exa" in config.sources:
+        search_tasks.append(_search_exa(exa_queries, config, stats))
+        sources_used.append("Exa")
 
-    # Warnung wenn beide Quellen leer
-    if stats["ss_total"] == 0 and stats["exa_total"] == 0:
+    results = await asyncio.gather(*search_tasks, return_exceptions=True)
+
+    all_papers: list[UnifiedPaper] = []
+    for result in results:
+        if isinstance(result, Exception):
+            logger.warning("Quelle fehlgeschlagen: %s", result)
+            continue
+        all_papers = [*all_papers, *result]
+
+    # Warnung wenn alle Quellen leer
+    total_found = stats["ss_total"] + stats["openalex_total"] + stats["exa_total"]
+    if total_found == 0:
         logger.warning(
-            "Keine Papers gefunden! SS-Fehler: %d, Exa-Fehler: %d. "
+            "Keine Papers gefunden! SS-Fehler: %d, OpenAlex-Fehler: %d, Exa-Fehler: %d. "
             "Pruefen: S2_API_KEY gesetzt? Netzwerk erreichbar?",
             stats["ss_errors"],
+            stats["openalex_errors"],
             stats["exa_errors"],
         )
 

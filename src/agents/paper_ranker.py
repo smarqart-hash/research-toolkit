@@ -17,6 +17,7 @@ from collections.abc import Sequence
 from pydantic import BaseModel, Field, computed_field
 
 from src.agents.exa_client import ExaResult
+from src.agents.openalex_client import OpenAlexWork
 from src.agents.semantic_scholar import PaperResult
 
 logger = logging.getLogger(__name__)
@@ -80,8 +81,8 @@ class UnifiedPaper(BaseModel):
         if self.abstract:
             score += 0.1
 
-        # Semantic Scholar bevorzugt (zuverlaessigere Metadaten) (0.1)
-        if self.source == "semantic_scholar":
+        # Strukturierte Metadaten: SS und OpenAlex bevorzugt (0.1)
+        if self.source in ("semantic_scholar", "openalex"):
             score += 0.1
 
         return round(min(1.0, score), 3)
@@ -117,6 +118,31 @@ def from_exa(result: ExaResult) -> UnifiedPaper:
         citation_count=None,
         source="exa",
         url=result.url,
+    )
+
+
+def from_openalex(work: OpenAlexWork) -> UnifiedPaper:
+    """Konvertiert ein OpenAlex Work in UnifiedPaper.
+
+    DOI-Normalisierung: OpenAlex liefert DOIs als vollstaendige URL
+    ("https://doi.org/10.xxx") — wir extrahieren nur den DOI-Teil.
+    """
+    # DOI aus URL extrahieren: "https://doi.org/10.xxx" → "10.xxx"
+    doi: str | None = None
+    if work.doi:
+        doi = work.doi.removeprefix("https://doi.org/").removeprefix("http://doi.org/")
+
+    return UnifiedPaper(
+        paper_id=doi or work.id,
+        title=work.display_name,
+        abstract=work.abstract,  # via @property aus inverted_index
+        year=work.publication_year,
+        authors=[a.author.display_name for a in work.authorships],
+        citation_count=work.cited_by_count,
+        source="openalex",
+        doi=doi,
+        url=work.id,  # OpenAlex URL als Referenz
+        is_open_access=work.open_access.is_oa,
     )
 
 

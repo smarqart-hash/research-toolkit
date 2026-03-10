@@ -28,7 +28,7 @@ class SearchScope(BaseModel):
     """Suchbereich-Eingrenzung."""
 
     year_range: tuple[int, int] | None = None
-    languages: list[str] = Field(default_factory=lambda: ["en"])
+    languages: list[str] = Field(default_factory=lambda: ["en", "de"])
     fields_of_study: list[str] = Field(default_factory=list)
 
 

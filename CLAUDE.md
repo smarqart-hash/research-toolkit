@@ -28,7 +28,7 @@ CLI (Typer) → Agents (Domain-Logik) → Pipeline (State + Provenance)
 
 | Feature | Dateien |
 |---------|---------|
-| Search + Ranking | `forschungsstand.py`, `paper_ranker.py`, `semantic_scholar.py`, `exa_client.py` |
+| Search + Ranking | `forschungsstand.py`, `paper_ranker.py`, `semantic_scholar.py`, `exa_client.py`, `openalex_client.py` |
 | Draft | `drafting.py` + `config/venue_profiles/` + `config/voice_profiles/` |
 | Review | `reviewer.py` + `rubric_loader.py` |
 | Check | `quellen_checker.py` + `reference_extractor.py` |
@@ -59,9 +59,9 @@ CLI (Typer) → Agents (Domain-Logik) → Pipeline (State + Provenance)
 
 ## Tests
 
-- **Framework**: pytest (207 Tests, alle passing)
+- **Framework**: pytest (420 Tests, alle passing)
 - **Pfad**: `tests/` — pythonpath: `["src", "."]`
-- **Factories**: `_ss_paper()`, `_exa_result()` als lokale Helfer (kein Factory-Framework)
+- **Factories**: `_ss_paper()`, `_exa_result()`, `_openalex_work()` als lokale Helfer (kein Factory-Framework)
 - **Fixtures**: `@pytest.fixture` fuer State, tmp_path
 - **Mocking**: `@patch("module.Class.method")` fuer externe APIs
 - **Assertions**: Simple `assert X == Y`, `pytest.raises(ValueError, match="...")`
@@ -76,7 +76,7 @@ pytest tests/ --cov=src --cov-report=term-missing
 ## CLI Commands
 
 ```bash
-research-toolkit search TOPIC        # --max, --exa/--no-exa, --years
+research-toolkit search TOPIC        # --max, --sources ss,openalex,exa, --years
 research-toolkit draft TOPIC --venue X  # --voice, --input, --mode
 research-toolkit review DOCUMENT     # --venue
 research-toolkit check DOCUMENT
@@ -90,7 +90,7 @@ Heuristische Composite Score (0-1):
 - 30% Recency (2018-2026)
 - 10% Open Access Bonus
 - 10% Abstract vorhanden
-- 10% Semantic Scholar Preference
+- 10% Strukturierte Metadaten (SS + OpenAlex bevorzugt)
 
 **SPECTER2 ist NICHT aktiv** — nur als optionale Dependency `[nlp]` installierbar.
 Deduplication via DOI oder Title-Hash (SHA256).
@@ -101,6 +101,7 @@ Deduplication via DOI oder Title-Hash (SHA256).
 |----------|-------|----------|
 | `S2_API_KEY` | Semantic Scholar API | Nein (funktioniert ohne, aber Rate Limits) |
 | `EXA_API_KEY` | Exa Search API | Nein (Exa wird uebersprungen) |
+| `OPENALEX_MAILTO` | OpenAlex Polite Pool (hoehere Rate Limits) | Nein (funktioniert ohne) |
 | `OUTPUT_DIR` | Output-Verzeichnis | Nein (default: ./output) |
 
 ## Meta-Loop (Aktive Entwicklung)
