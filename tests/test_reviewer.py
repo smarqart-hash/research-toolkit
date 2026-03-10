@@ -14,7 +14,9 @@ from agents.reviewer import (
     ReviewResult,
     Severity,
     Verdict,
+    apply_automatable_flags,
     compute_delta,
+    load_automatable_config,
     load_latest_review,
     save_review,
 )
@@ -220,6 +222,72 @@ class TestDelta:
         delta = compute_delta(current, previous)
         assert len(delta.new_ids) == 1
         assert len(delta.resolved_ids) == 0
+
+
+class TestAutomatable:
+    def test_default_is_true(self) -> None:
+        dim = DimensionResult(name="Structure", rating=Rating.STARK, comment="OK")
+        assert dim.automatable is True
+
+    def test_explicit_false(self) -> None:
+        dim = DimensionResult(
+            name="Logic", rating=Rating.AUSBAUFAEHIG, comment="Schwach", automatable=False
+        )
+        assert dim.automatable is False
+
+    def test_load_automatable_config(self, tmp_path: Path) -> None:
+        import json
+
+        config = {"structure": True, "logic": False, "context": False}
+        config_path = tmp_path / "automatable.json"
+        config_path.write_text(json.dumps(config), encoding="utf-8")
+        loaded = load_automatable_config(config_path)
+        assert loaded["structure"] is True
+        assert loaded["logic"] is False
+
+    def test_load_automatable_config_missing_file(self, tmp_path: Path) -> None:
+        loaded = load_automatable_config(tmp_path / "nonexistent.json")
+        assert loaded == {}
+
+    def test_unknown_dimension_defaults_true(self) -> None:
+        config = {"structure": True, "logic": False}
+        dim_name = "novelty"
+        automatable = config.get(dim_name.lower(), True)
+        assert automatable is True
+
+    def test_automatable_roundtrip(self, tmp_path: Path) -> None:
+        result = ReviewResult(
+            document="test.md",
+            venue="test",
+            rubric="policy",
+            dimensions=[
+                DimensionResult(
+                    name="Logic", rating=Rating.STARK, comment="OK", automatable=False
+                ),
+            ],
+        )
+        path = save_review(result, tmp_path)
+        loaded = load_latest_review("test.md", tmp_path)
+        assert loaded is not None
+        assert loaded.dimensions[0].automatable is False
+
+    def test_apply_automatable_flags(self) -> None:
+        dims = [
+            DimensionResult(name="Structure", rating=Rating.STARK, comment="OK"),
+            DimensionResult(name="Logic", rating=Rating.AUSBAUFAEHIG, comment="Schwach"),
+            DimensionResult(name="Clarity", rating=Rating.ANGEMESSEN, comment="Gut"),
+        ]
+        config = {"structure": True, "logic": False, "clarity": True}
+        result = apply_automatable_flags(dims, config)
+        assert result[0].automatable is True
+        assert result[1].automatable is False
+        assert result[2].automatable is True
+
+    def test_apply_automatable_flags_unknown_dimension(self) -> None:
+        dims = [DimensionResult(name="Novelty", rating=Rating.STARK, comment="OK")]
+        config = {"structure": True}
+        result = apply_automatable_flags(dims, config)
+        assert result[0].automatable is True
 
 
 class TestPersistence:

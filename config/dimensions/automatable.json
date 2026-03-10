@@ -1,0 +1,9 @@
+{
+  "structure": true,
+  "clarity": true,
+  "format": true,
+  "evidence": true,
+  "logic": false,
+  "context": false,
+  "significance": false
+}

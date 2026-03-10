@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["topic", "timestamp", "ranking_method", "top_k_shown"],
+  "properties": {
+    "topic": { "type": "string" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "ranking_method": { "type": "string" },
+    "top_k_shown": { "type": "integer" },
+    "expert_relevant": { "type": "array", "items": { "type": "string" } },
+    "expert_irrelevant": { "type": "array", "items": { "type": "string" } },
+    "notes": { "type": "string" }
+  }
+}

@@ -382,6 +382,63 @@ class TestSaveDraft:
         provenance_data = json.loads(paths["provenance"].read_text(encoding="utf-8"))
         assert len(provenance_data) == 1
 
+    def test_save_draft_with_citation_tracking(self, tmp_path: Path) -> None:
+        """Citation Tracking loggt CITATION_USED Events in Provenance."""
+        from pipeline.provenance import ProvenanceLogger
+        from utils.evidence_card import EvidenceCard
+
+        result = DraftResult(
+            config=DraftingConfig(topic="Test", venue="test"),
+            sections=[
+                DraftSection(
+                    heading="Einleitung",
+                    content="Smith (2024) zeigt signifikante Ergebnisse.",
+                ),
+            ],
+            timestamp="2026-03-10T12:00:00Z",
+        )
+        cards = [
+            EvidenceCard(
+                card_id="ec-1",
+                paper_id="doi:10.1234/smith",
+                paper_title="Smith Paper",
+                authors=["Smith, J."],
+                year=2024,
+                claim="C",
+                method="M",
+            ),
+            EvidenceCard(
+                card_id="ec-2",
+                paper_id="doi:10.1234/other",
+                paper_title="Unrelated Paper",
+                authors=["Other, X."],
+                year=2023,
+                claim="C",
+                method="M",
+            ),
+        ]
+        prov_logger = ProvenanceLogger(path=tmp_path / "provenance.jsonl")
+        save_draft(result, tmp_path, evidence_cards=cards, provenance_logger=prov_logger)
+
+        entries = prov_logger.read_all()
+        citation_entries = [e for e in entries if e.action == "CITATION_USED"]
+        assert len(citation_entries) == 1
+        assert citation_entries[0].evidence_card_id == "doi:10.1234/smith"
+        assert citation_entries[0].phase == "synthesis"
+        assert citation_entries[0].agent == "citation-tracker"
+
+    def test_save_draft_without_citation_tracking(self, tmp_path: Path) -> None:
+        """Ohne Evidence Cards: kein Citation Tracking, keine Fehler."""
+        result = DraftResult(
+            config=DraftingConfig(topic="Test", venue="test"),
+            sections=[
+                DraftSection(heading="Test", content="Content"),
+            ],
+            timestamp="2026-03-10T12:00:00Z",
+        )
+        paths = save_draft(result, tmp_path)
+        assert paths["draft"].exists()
+
 
 # --- DraftResult Stats ---
 
