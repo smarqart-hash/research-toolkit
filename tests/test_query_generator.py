@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from pathlib import Path
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
@@ -15,6 +16,8 @@ from src.agents.query_generator import (
     _expand_local,
     _extract_leitfragen_keywords,
     _find_synonyms,
+    _load_expand_prompt,
+    _load_synonyms,
     expand_queries,
     refine_topic,
     validate_queries,
@@ -133,6 +136,34 @@ class TestBuildBooleanQuery:
         assert result == "traffic"
 
 
+# --- Config-Fallbacks ---
+
+
+class TestLoadSynonyms:
+    def test_returns_dict_from_file(self) -> None:
+        result = _load_synonyms()
+        assert isinstance(result, dict)
+        assert len(result) > 0
+
+    @patch("src.agents.query_generator._CONFIG_DIR", Path("/nonexistent"))
+    def test_returns_empty_on_missing_file(self) -> None:
+        result = _load_synonyms()
+        assert result == {}
+
+
+class TestLoadExpandPrompt:
+    def test_returns_prompt_from_file(self) -> None:
+        result = _load_expand_prompt()
+        assert "JSON" in result
+        assert len(result) > 50
+
+    @patch("src.agents.query_generator._CONFIG_DIR", Path("/nonexistent"))
+    def test_returns_fallback_on_missing_file(self) -> None:
+        result = _load_expand_prompt()
+        assert "JSON" in result
+        assert len(result) < 100
+
+
 # --- Stufe 1: Lokale Expansion ---
 
 
@@ -194,9 +225,9 @@ class TestExpandLLM:
 
     @pytest.mark.asyncio
     @patch("src.utils.llm_client.llm_complete")
-    async def test_invalid_json_raises(self, mock_llm: AsyncMock) -> None:
+    async def test_invalid_json_raises_with_preview(self, mock_llm: AsyncMock) -> None:
         mock_llm.return_value = "not valid json"
-        with pytest.raises(ValueError, match="kein valides JSON"):
+        with pytest.raises(ValueError, match="(?s)kein valides JSON.*Preview.*not valid"):
             await _expand_llm("test")
 
     @pytest.mark.asyncio

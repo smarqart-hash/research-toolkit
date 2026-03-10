@@ -176,13 +176,16 @@ async def _expand_llm(
     if leitfragen_text:
         user_message = f"{user_message}\nLeitfragen:\n{leitfragen_text}"
 
-    raw_response = await llm_complete(system_prompt, user_message, json_mode=True)
+    raw_response = await llm_complete(system_prompt, user_message)
 
     # JSON parsen
     try:
         data = json.loads(raw_response)
     except json.JSONDecodeError as e:
-        raise ValueError(f"LLM-Response ist kein valides JSON: {e}") from e
+        preview = raw_response[:200] if raw_response else "(leer)"
+        raise ValueError(
+            f"LLM-Response ist kein valides JSON: {e}\nPreview: {preview}"
+        ) from e
 
     # Validierung: min. 3 SS + 2 Exa
     ss_queries = data.get("ss_queries", [])

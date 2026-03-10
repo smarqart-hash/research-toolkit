@@ -49,7 +49,6 @@ async def llm_complete(
     user_message: str,
     *,
     config: LLMConfig | None = None,
-    json_mode: bool = False,
 ) -> str:
     """Sendet einen Chat-Completions-Request an ein OpenAI-kompatibles API.
 
@@ -57,7 +56,6 @@ async def llm_complete(
         system_prompt: System-Nachricht.
         user_message: User-Nachricht.
         config: LLM-Konfiguration (Default: aus Env-Vars).
-        json_mode: Ob JSON-Response erzwungen werden soll.
 
     Returns:
         Antwort-Text des Modells.
@@ -89,8 +87,8 @@ async def llm_complete(
         "max_tokens": config.max_tokens,
         "temperature": config.temperature,
     }
-    if json_mode:
-        payload["response_format"] = {"type": "json_object"}
+    # response_format nicht setzen — nicht alle Provider unterstuetzen es
+    # (z.B. Gemini Flash via OpenRouter). Stattdessen im Prompt erzwingen.
 
     async with httpx.AsyncClient(timeout=config.timeout_s) as client:
         response = await client.post(
