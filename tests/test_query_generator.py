@@ -31,7 +31,7 @@ class TestSearchScope:
     def test_defaults(self) -> None:
         scope = SearchScope()
         assert scope.year_range is None
-        assert scope.languages == ["en"]
+        assert scope.languages == ["en", "de"]
         assert scope.fields_of_study == []
 
     def test_custom_values(self) -> None:
