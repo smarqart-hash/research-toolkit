@@ -356,5 +356,39 @@ def venues() -> None:
     console.print(table)
 
 
+@app.command()
+def doctor() -> None:
+    """Check feature availability — shows which optional dependencies are configured."""
+    _load_env()
+
+    from src.agents.doctor import check_dependencies
+
+    deps = check_dependencies()
+
+    table = Table(title="Research Toolkit — Feature Status")
+    table.add_column("Feature", style="white")
+    table.add_column("Status", style="white")
+    table.add_column("Note", style="dim")
+
+    for dep in deps:
+        status = "[green]OK[/green]" if dep.available else "[red]MISSING[/red]"
+        table.add_row(dep.name, status, dep.note)
+
+    console.print(table)
+
+    available_count = sum(1 for d in deps if d.available)
+    total = len(deps)
+    console.print(f"\n[cyan]{available_count}/{total}[/cyan] features available")
+
+    missing = [d for d in deps if not d.available]
+    if missing:
+        console.print("\n[yellow]To enable missing features:[/yellow]")
+        for dep in missing:
+            if dep.env_var:
+                console.print(f"  export {dep.env_var}=<your-key>")
+            elif dep.note:
+                console.print(f"  {dep.note}")
+
+
 if __name__ == "__main__":
     app()

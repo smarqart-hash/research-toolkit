@@ -2,8 +2,6 @@
 
 from unittest.mock import patch
 
-import pytest
-
 from src.agents.exa_client import ExaResult
 from src.agents.openalex_client import OpenAlexAuthorship, OpenAlexOpenAccess, OpenAlexWork
 from src.agents.paper_ranker import (
@@ -16,7 +14,6 @@ from src.agents.paper_ranker import (
     rank_papers,
 )
 from src.agents.semantic_scholar import Author, ExternalIds, PaperResult
-
 
 # --- Fixtures ---
 
@@ -550,6 +547,63 @@ class TestScoreSerialization:
         dumped = paper.model_dump()
         assert "specter2_score" in dumped
         assert dumped["specter2_score"] is None
+
+
+class TestEnhancedScoreSourceAware:
+    """Testet dass SPECTER2 enhanced scoring source-aware ist."""
+
+    def test_openalex_citation_cap_in_enhanced(self):
+        """OpenAlex Citation-Cap auch bei SPECTER2-Scoring."""
+        oa_paper = UnifiedPaper(
+            paper_id="oa1",
+            title="OA Paper",
+            citation_count=5000,
+            source="openalex",
+            year=2024,
+            abstract="Abstract",
+        )
+        ss_paper = UnifiedPaper(
+            paper_id="ss1",
+            title="SS Paper",
+            citation_count=50,
+            source="semantic_scholar",
+            year=2024,
+            abstract="Abstract",
+            is_open_access=True,
+        )
+        # Gleicher SPECTER2-Score, aber SS sollte hoeher ranken
+        mock_scores = {"oa1": 0.5, "ss1": 0.5}
+        with patch(
+            "src.agents.paper_ranker.compute_specter2_similarity",
+            return_value=mock_scores,
+        ):
+            ranked = rank_papers([oa_paper, ss_paper], query="test query")
+        assert ranked[0].paper_id == "ss1"
+
+    def test_exa_citation_cap_in_enhanced(self):
+        """Exa hat niedrigsten Citation-Cap bei SPECTER2-Scoring."""
+        from src.agents.paper_ranker import _compute_enhanced_score
+
+        exa_paper = UnifiedPaper(
+            paper_id="exa1",
+            title="Exa Paper",
+            citation_count=5000,
+            source="exa",
+            year=2024,
+            abstract="Abstract",
+        )
+        ss_paper = UnifiedPaper(
+            paper_id="ss1",
+            title="SS Paper",
+            citation_count=5000,
+            source="semantic_scholar",
+            year=2024,
+            abstract="Abstract",
+        )
+        scores = {"exa1": 0.5, "ss1": 0.5}
+        exa_score = _compute_enhanced_score(exa_paper, scores)
+        ss_score = _compute_enhanced_score(ss_paper, scores)
+        assert ss_score > exa_score
 
 
 class _MockSentenceTransformer:
