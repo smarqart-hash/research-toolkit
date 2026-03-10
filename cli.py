@@ -94,6 +94,9 @@ def search(
     no_validate: bool = typer.Option(
         False, "--no-validate", help="Skip dry-run validation of refined queries"
     ),
+    append: bool = typer.Option(
+        False, "--append", "-a", help="Merge into existing results (akkumuliert)"
+    ),
     verbose: bool = typer.Option(False, "--verbose", "-v"),
 ) -> None:
     """Search academic literature via Semantic Scholar + OpenAlex (+ optional Exa)."""
@@ -105,8 +108,11 @@ def search(
         ForschungsstandResult,
         SearchConfig,
         format_as_markdown,
+        load_forschungsstand,
+        merge_results,
         save_forschungsstand,
         search_papers,
+        slugify,
     )
 
     # Deprecation-Warnung fuer --exa/--no-exa
@@ -160,6 +166,17 @@ def search(
         total_after_dedup=len(papers),
         sources_used=used_labels,
     )
+
+    # Akkumuliertes Suchen: bestehende Ergebnisse laden und mergen
+    if append:
+        existing_path = output_dir / slugify(topic) / "forschungsstand.json"
+        if existing_path.exists():
+            existing = load_forschungsstand(existing_path)
+            result = merge_results(existing, result)
+            console.print(
+                f"[cyan]Merged:[/cyan] {len(result.papers)} papers total "
+                f"(vorher {len(existing.papers)})"
+            )
 
     # Ergebnisse speichern
     output_path = output_dir / "search_results.json"
