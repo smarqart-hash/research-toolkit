@@ -147,9 +147,12 @@ def search(
         sources_used=used_labels,
     )
 
+    # Ergebnis-Verzeichnis
+    output_path = output_dir / "search_results.json"
+
     # Akkumuliertes Suchen: bestehende Ergebnisse laden und mergen
     if append:
-        existing_path = output_dir / slugify(topic) / "forschungsstand.json"
+        existing_path = output_path / slugify(topic) / "forschungsstand.json"
         if existing_path.exists():
             existing = load_forschungsstand(existing_path)
             result = merge_results(existing, result)
@@ -158,8 +161,6 @@ def search(
                 f"(vorher {len(existing.papers)})"
             )
 
-    # Ergebnisse speichern
-    output_path = output_dir / "search_results.json"
     save_forschungsstand(result, output_path)
 
     md_path = output_dir / "search_results.md"

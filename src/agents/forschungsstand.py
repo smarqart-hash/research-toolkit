@@ -440,32 +440,6 @@ def merge_results(
     )
 
 
-def _check_source_balance(stats: dict[str, int]) -> list[str]:
-    """Prueft ob Quellen-Verteilung stark asymmetrisch ist.
-
-    Warnt wenn eine aktive Quelle <10% des Gesamtpools liefert.
-    Gibt nur Warnungen zurueck wenn mindestens 2 Quellen aktiv sind.
-    """
-    source_counts = {
-        "Semantic Scholar": stats.get("ss_total", 0),
-        "OpenAlex": stats.get("openalex_total", 0),
-        "Exa": stats.get("exa_total", 0),
-    }
-    active = {k: v for k, v in source_counts.items() if v > 0}
-    total = sum(active.values())
-    if total == 0 or len(active) < 2:
-        return []
-
-    warnings: list[str] = []
-    for source, count in active.items():
-        ratio = count / total
-        if ratio < 0.1:
-            warnings = [
-                *warnings,
-                f"{source} lieferte nur {count}/{total} Papers ({ratio:.0%}). "
-                f"Ergebnisse koennten asymmetrisch sein.",
-            ]
-    return warnings
 
 
 def format_as_markdown(result: ForschungsstandResult) -> str:
