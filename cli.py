@@ -151,6 +151,8 @@ def draft(
     forschungsstand: Path = typer.Option(
         None, "--input", "-i", help="Path to search_results.json from search command"
     ),
+    revise: bool = typer.Option(False, "--revise", help="Review-Loop nach Draft ausfuehren"),
+    max_revisions: int = typer.Option(2, "--max-revisions", help="Max Revisionen (1-2)"),
     verbose: bool = typer.Option(False, "--verbose", "-v"),
 ) -> None:
     """Generate a venue-formatted draft based on research."""
@@ -175,13 +177,23 @@ def draft(
 
     venue_profile = load_venue_profile(config.venue_id)
 
-    console.print(Panel(f"Drafting: [bold]{topic}[/bold]\nVenue: {venue_profile.name}", style="blue"))
+    revise_label = " [cyan](+ review loop)[/cyan]" if revise else ""
+    console.print(
+        Panel(
+            f"Drafting: [bold]{topic}[/bold]\nVenue: {venue_profile.name}{revise_label}",
+            style="blue",
+        )
+    )
     console.print(f"Sections: {', '.join(venue_profile.sections)}")
     console.print(f"\n[yellow]Note:[/yellow] Draft generation requires an LLM backend (not included).")
     console.print("The toolkit provides structure, prompts, and quality checks.")
     console.print(f"\nVenue profile loaded: [green]{venue}[/green]")
     console.print(f"Voice profile: [green]{voice}[/green]")
     console.print(f"Output directory: [green]{output_dir}[/green]")
+
+    if revise:
+        console.print(f"\n[cyan]Review-Loop:[/cyan] max {min(max_revisions, 2)} Revisionen")
+        console.print("[yellow]Note:[/yellow] Review-Loop requires LLM_API_KEY to be set.")
 
 
 @app.command()

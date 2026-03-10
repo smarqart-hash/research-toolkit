@@ -35,6 +35,16 @@ class PhaseStatus(str, Enum):
     FAILED = "failed"
 
 
+class SynthesisSubPhase(str, Enum):
+    """Sub-Phasen innerhalb der SYNTHESIS-Phase fuer den Review-Loop."""
+
+    DRAFTING = "drafting"
+    REVIEWING = "reviewing"
+    REVISING = "revising"
+    CONSISTENCY_CHECK = "consistency_check"
+    COMPLETED = "completed"
+
+
 class HitlGate(BaseModel):
     """Human-in-the-Loop Entscheidungspunkt."""
 
@@ -53,6 +63,7 @@ class PhaseRecord(BaseModel):
     artifacts: list[str] = Field(default_factory=list)
     hitl_gate: HitlGate | None = None
     error: str | None = None
+    sub_phase: str | None = None
 
 
 class ResearchState(BaseModel):

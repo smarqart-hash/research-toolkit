@@ -1,0 +1,11 @@
+[
+  {"dimension": "Evidence", "question": "Jeder faktische Claim hat mindestens 1 Quellenbeleg?", "weight": 2.0},
+  {"dimension": "Evidence", "question": "Zitate sind korrekt formatiert (Autor Jahr)?", "weight": 1.0},
+  {"dimension": "Structure", "question": "Jede Sektion hat eine klare These oder ein Argument?", "weight": 1.5},
+  {"dimension": "Structure", "question": "Uebergaenge zwischen Sektionen sind logisch?", "weight": 1.0},
+  {"dimension": "Clarity", "question": "Keine Saetze ueber 40 Woerter?", "weight": 1.0},
+  {"dimension": "Clarity", "question": "Fachbegriffe werden bei Erstnennung erklaert?", "weight": 1.0},
+  {"dimension": "Logic", "question": "Schlussfolgerungen folgen aus den praesentierten Daten?", "weight": 2.0},
+  {"dimension": "Context", "question": "Gegenposition oder Limitationen werden adressiert?", "weight": 1.5},
+  {"dimension": "Format", "question": "Venue-spezifische Formatvorgaben eingehalten?", "weight": 1.0}
+]
