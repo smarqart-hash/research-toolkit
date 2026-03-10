@@ -381,6 +381,32 @@ def load_forschungsstand(path: Path) -> ForschungsstandResult:
     )
 
 
+def merge_results(
+    existing: ForschungsstandResult,
+    new: ForschungsstandResult,
+) -> ForschungsstandResult:
+    """Mergt neue Suchergebnisse in bestehenden Pool.
+
+    Dedupliziert ueber dedup_key. Bei Konflikten: SS > OA > Exa.
+    Akkumuliert total_found und vereinigt sources_used.
+    """
+    all_papers = [*existing.papers, *new.papers]
+    merged_papers = deduplicate(all_papers)
+
+    merged_sources = list(dict.fromkeys([*existing.sources_used, *new.sources_used]))
+
+    merged_leitfragen = list(dict.fromkeys([*existing.leitfragen, *new.leitfragen]))
+
+    return ForschungsstandResult(
+        topic=existing.topic,
+        papers=merged_papers,
+        total_found=existing.total_found + new.total_found,
+        total_after_dedup=len(merged_papers),
+        sources_used=merged_sources,
+        leitfragen=merged_leitfragen,
+    )
+
+
 def format_as_markdown(result: ForschungsstandResult) -> str:
     """Formatiert das Ergebnis als Markdown-Kapitelentwurf.
 

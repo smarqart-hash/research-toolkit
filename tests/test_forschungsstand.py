@@ -13,6 +13,7 @@ from src.agents.forschungsstand import (
     format_as_markdown,
     generate_search_queries,
     load_forschungsstand,
+    merge_results,
     save_forschungsstand,
     search_papers,
     slugify,
@@ -479,3 +480,86 @@ class TestOpenAlexPreFilter:
         assert "Relevant Paper" in titles
         assert "Borderline Paper" in titles
         assert "Irrelevant Paper" not in titles
+
+
+class TestAccumulatedSearch:
+    """Testet akkumuliertes Speichern von Suchergebnissen."""
+
+    def test_save_and_load_roundtrip(self, tmp_path):
+        """Normaler Save/Load funktioniert weiterhin."""
+        result = ForschungsstandResult(topic="Test", papers=[], total_found=0)
+        path = save_forschungsstand(result, tmp_path)
+        loaded = load_forschungsstand(path)
+        assert loaded.topic == "Test"
+
+    def test_merge_results_deduplicates(self):
+        """merge_results entfernt Duplikate aus zwei Result-Sets."""
+        paper_a = UnifiedPaper(
+            paper_id="doi:10.1",
+            title="Paper A",
+            source="semantic_scholar",
+            doi="10.1",
+        )
+        paper_b = UnifiedPaper(
+            paper_id="doi:10.2",
+            title="Paper B",
+            source="openalex",
+            doi="10.2",
+        )
+        paper_a_dup = UnifiedPaper(
+            paper_id="doi:10.1",
+            title="Paper A",
+            source="openalex",
+            doi="10.1",
+        )
+        existing = ForschungsstandResult(
+            topic="Test",
+            papers=[paper_a],
+            total_found=1,
+        )
+        new = ForschungsstandResult(
+            topic="Test",
+            papers=[paper_b, paper_a_dup],
+            total_found=2,
+        )
+        merged = merge_results(existing, new)
+        assert len(merged.papers) == 2
+        # SS-Version von Paper A bleibt (bessere Metadaten)
+        paper_a_result = [p for p in merged.papers if p.doi == "10.1"][0]
+        assert paper_a_result.source == "semantic_scholar"
+
+    def test_merge_accumulates_total_found(self):
+        """merge_results addiert total_found."""
+        existing = ForschungsstandResult(topic="T", papers=[], total_found=50)
+        new = ForschungsstandResult(topic="T", papers=[], total_found=30)
+        merged = merge_results(existing, new)
+        assert merged.total_found == 80
+
+    def test_merge_unifies_sources(self):
+        """merge_results vereinigt sources_used Listen."""
+        existing = ForschungsstandResult(
+            topic="T", papers=[], total_found=10,
+            sources_used=["Semantic Scholar"],
+        )
+        new = ForschungsstandResult(
+            topic="T", papers=[], total_found=20,
+            sources_used=["OpenAlex", "Semantic Scholar"],
+        )
+        merged = merge_results(existing, new)
+        assert "Semantic Scholar" in merged.sources_used
+        assert "OpenAlex" in merged.sources_used
+        # Keine Duplikate
+        assert len(merged.sources_used) == 2
+
+    def test_merge_preserves_leitfragen(self):
+        """merge_results vereinigt Leitfragen ohne Duplikate."""
+        existing = ForschungsstandResult(
+            topic="T", papers=[], total_found=0,
+            leitfragen=["Frage 1", "Frage 2"],
+        )
+        new = ForschungsstandResult(
+            topic="T", papers=[], total_found=0,
+            leitfragen=["Frage 2", "Frage 3"],
+        )
+        merged = merge_results(existing, new)
+        assert len(merged.leitfragen) == 3
