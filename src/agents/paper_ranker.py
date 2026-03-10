@@ -61,6 +61,7 @@ class UnifiedPaper(BaseModel):
 
         Source-aware: OpenAlex Citation-Cap bei 0.15 (statt 0.4),
         weil breite Queries hochzitierte aber irrelevante Papers liefern.
+        Max-Scores: SS ~1.0, OA ~0.75, Exa ~0.6.
         """
         import math
 

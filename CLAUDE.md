@@ -76,21 +76,25 @@ pytest tests/ --cov=src --cov-report=term-missing
 ## CLI Commands
 
 ```bash
-research-toolkit search TOPIC        # --max, --sources ss,openalex,exa, --years
+research-toolkit search TOPIC        # --max, --sources ss,openalex,exa, --years, --append
 research-toolkit draft TOPIC --venue X  # --voice, --input, --mode
 research-toolkit review DOCUMENT     # --venue
 research-toolkit check DOCUMENT
 research-toolkit venues              # Liste Venue-Profile
 ```
 
-## Ranking (Aktueller Stand)
+## Ranking (Aktueller Stand — Sprint 6)
 
-Heuristische Composite Score (0-1):
-- 40% Citations (log-skaliert)
+Source-aware Composite Score (0-1):
+- Citations (log-skaliert, **source-capped**: SS max 0.4, OA max 0.15, Exa max 0.05)
 - 30% Recency (2018-2026)
+- 15% Abstract vorhanden (aufgewertet als Qualitaetssignal)
 - 10% Open Access Bonus
-- 10% Abstract vorhanden
-- 10% Strukturierte Metadaten (SS + OpenAlex bevorzugt)
+- Metadaten-Bonus: SS 0.1, OA 0.05, Exa 0.0
+
+**OpenAlex Pre-Filter:** Papers unter relevance_score 0.3 werden vor Ranking entfernt.
+**Source-Balance Warning:** Warnung wenn eine Quelle <10% des Pools liefert.
+**Akkumuliertes Suchen:** `--append` Flag merged neue Ergebnisse in bestehenden Pool.
 
 **SPECTER2 ist NICHT aktiv** — nur als optionale Dependency `[nlp]` installierbar.
 Deduplication via DOI oder Title-Hash (SHA256).
