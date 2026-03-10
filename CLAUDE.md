@@ -22,7 +22,8 @@ CLI (Typer) → Agents (Domain-Logik) → Pipeline (State + Provenance)
 | `src/utils/document_splitter.py` | Dokument-Splitting |
 | `skills/` | LLM Instruction Files (search, draft, review, check) |
 | `config/` | Venue/Voice Profiles (JSON), Rubrics, Policy Context |
-| `cli.py` | Typer Entry Point (5 Commands) |
+| `src/agents/doctor.py` | Feature-Availability Check (doctor Command) |
+| `cli.py` | Typer Entry Point (6 Commands) |
 
 ### Kern-Dateien fuer Features
 
@@ -59,7 +60,7 @@ CLI (Typer) → Agents (Domain-Logik) → Pipeline (State + Provenance)
 
 ## Tests
 
-- **Framework**: pytest (420 Tests, alle passing)
+- **Framework**: pytest (447 Tests, alle passing)
 - **Pfad**: `tests/` — pythonpath: `["src", "."]`
 - **Factories**: `_ss_paper()`, `_exa_result()`, `_openalex_work()` als lokale Helfer (kein Factory-Framework)
 - **Fixtures**: `@pytest.fixture` fuer State, tmp_path
@@ -81,6 +82,7 @@ research-toolkit draft TOPIC --venue X  # --voice, --input, --mode
 research-toolkit review DOCUMENT     # --venue
 research-toolkit check DOCUMENT
 research-toolkit venues              # Liste Venue-Profile
+research-toolkit doctor              # Feature-Availability Check
 ```
 
 ## Ranking (Aktueller Stand — Sprint 6)
@@ -96,7 +98,7 @@ Source-aware Composite Score (0-1):
 **Source-Balance Warning:** Warnung wenn eine Quelle <10% des Pools liefert.
 **Akkumuliertes Suchen:** `--append` Flag merged neue Ergebnisse in bestehenden Pool.
 
-**SPECTER2 ist NICHT aktiv** — nur als optionale Dependency `[nlp]` installierbar.
+**SPECTER2** optional (`[nlp]`). Enhanced Score ebenfalls source-aware (SS: 0.25, OA: 0.10, Exa: 0.03).
 Deduplication via DOI oder Title-Hash (SHA256).
 
 ## Environment Variables
@@ -108,18 +110,8 @@ Deduplication via DOI oder Title-Hash (SHA256).
 | `OPENALEX_MAILTO` | OpenAlex Polite Pool (hoehere Rate Limits) | Nein (funktioniert ohne) |
 | `OUTPUT_DIR` | Output-Verzeichnis | Nein (default: ./output) |
 
-## Meta-Loop (Aktive Entwicklung)
+## Meta-Loop
 
-Reflexiver Feedback-Loop: Das Toolkit hat ein Paper ueber sich selbst generiert
-(`examples/ai_automated_research/draft.md`). Daraus wurden 6 Findings abgeleitet.
-
-### Sprint 1: Search Quality (`feature/search-quality`)
-- Screening-Schritt (PRISMA-Flow)
-- Ranking verbessern (SPECTER2 aktivieren)
-- Pipeline-Dokumentation (`skills/pipeline.md`)
-
-### Sprint 2: Reflexivitaet (`feature/reflexive-loop`)
-- `--reflexive` Flag im Draft-Skill
-- Rubric-Kalibrierung dokumentieren
-
-Spec: `docs/meta-loop/iteration-X-spec.md` VOR Implementation schreiben.
+Reflexiver Feedback-Loop: Toolkit generiert Paper ueber sich selbst, leitet Findings ab.
+Abgeschlossen: Sprint 1-6 + Quickwin (Details: `docs/plans/sprint-*-handover.md`).
+Offen: F17 (Web Research Reproduzierbarkeit).
