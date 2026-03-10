@@ -1,7 +1,7 @@
 """Research Toolkit CLI — Modular AI toolkit for academic research.
 
 Commands:
-    search  — Literature search via Semantic Scholar + Exa
+    search  — Literature search via Semantic Scholar + OpenAlex (+ optional Exa)
     draft   — Generate venue-formatted drafts
     review  — Structured 7-dimension feedback
     check   — Verify citations against databases
@@ -75,7 +75,18 @@ def _available_venues() -> list[str]:
 def search(
     topic: str = typer.Argument(..., help="Research topic to search for"),
     max_results: int = typer.Option(30, "--max", "-m", help="Max papers after ranking"),
-    use_exa: bool = typer.Option(True, "--exa/--no-exa", help="Include Exa search"),
+    sources: str = typer.Option(
+        "ss,openalex",
+        "--sources",
+        "-s",
+        help="Komma-separiert: ss,openalex,exa (Standard: ss,openalex)",
+    ),
+    use_exa: bool = typer.Option(
+        None,
+        "--exa/--no-exa",
+        help="[DEPRECATED] Bitte --sources verwenden. Wird in Sprint 6 entfernt.",
+        hidden=True,
+    ),
     year_filter: str = typer.Option(None, "--years", "-y", help="Year range, e.g. 2020-2026"),
     refine: bool = typer.Option(
         False, "--refine", "-r", help="Smart query expansion (lokal + optional LLM)"
@@ -85,7 +96,7 @@ def search(
     ),
     verbose: bool = typer.Option(False, "--verbose", "-v"),
 ) -> None:
-    """Search academic literature via Semantic Scholar + Exa."""
+    """Search academic literature via Semantic Scholar + OpenAlex (+ optional Exa)."""
     _load_env()
     _setup_logging(verbose)
     output_dir = _check_output_dir()
@@ -98,14 +109,37 @@ def search(
         search_papers,
     )
 
+    # Deprecation-Warnung fuer --exa/--no-exa
+    if use_exa is not None:
+        console.print(
+            "[yellow]WARNUNG:[/yellow] --exa/--no-exa ist deprecated. "
+            "Bitte --sources verwenden (z.B. --sources ss,openalex,exa). "
+            "Wird in Sprint 6 entfernt."
+        )
+        # Backward-Compat: --exa fuegt exa zu sources hinzu, --no-exa entfernt es
+        source_list = [s.strip() for s in sources.split(",") if s.strip()]
+        if use_exa and "exa" not in source_list:
+            source_list = [*source_list, "exa"]
+        elif not use_exa:
+            source_list = [s for s in source_list if s != "exa"]
+    else:
+        source_list = [s.strip() for s in sources.split(",") if s.strip()]
+
     config = SearchConfig(
         top_k=max_results,
-        use_exa=use_exa,
+        sources=source_list,
         year_filter=year_filter,
     )
 
     mode_label = " [cyan](smart queries)[/cyan]" if refine else ""
-    console.print(Panel(f"Searching: [bold]{topic}[/bold]{mode_label}", style="blue"))
+    active_sources = ", ".join(source_list)
+    console.print(
+        Panel(
+            f"Searching: [bold]{topic}[/bold]{mode_label}\n"
+            f"Quellen: [cyan]{active_sources}[/cyan]",
+            style="blue",
+        )
+    )
 
     try:
         papers, stats, _prisma = asyncio.run(
@@ -115,12 +149,16 @@ def search(
         console.print(f"[red]Search failed:[/red] {e}")
         raise typer.Exit(1)
 
+    # Aktive Quellen aus source_list ableiten (lesbarer Name)
+    _source_labels = {"ss": "Semantic Scholar", "openalex": "OpenAlex", "exa": "Exa"}
+    used_labels = [_source_labels.get(s, s) for s in source_list]
+
     result = ForschungsstandResult(
         topic=topic,
         papers=papers,
-        total_found=sum(stats.values()),
+        total_found=stats.get("ss_total", 0) + stats.get("openalex_total", 0) + stats.get("exa_total", 0),
         total_after_dedup=len(papers),
-        sources_used=list(stats.keys()),
+        sources_used=used_labels,
     )
 
     # Ergebnisse speichern
