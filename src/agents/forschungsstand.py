@@ -11,7 +11,6 @@ Drei Input-Modi:
 
 from __future__ import annotations
 
-import json
 import logging
 import re
 import unicodedata
@@ -82,6 +81,8 @@ async def search_papers(
     queries: list[str] | None = None,
     config: SearchConfig | None = None,
     screening: ScreeningCriteria | None = None,
+    refine: bool = False,
+    no_validate: bool = True,
 ) -> tuple[list[UnifiedPaper], dict[str, int], PrismaFlow | None]:
     """Sucht Papers via Semantic Scholar + optional Exa.
 
@@ -90,6 +91,8 @@ async def search_papers(
         queries: Optionale zusaetzliche Suchqueries (aus Leitfragen).
         config: Such-Konfiguration.
         screening: Optionale Screening-Kriterien (PRISMA-Flow).
+        refine: Smart Query Expansion aktivieren (lokal + optional LLM).
+        no_validate: Dry-Run-Validierung ueberspringen.
 
     Returns:
         Tuple aus (Papers, Statistiken, PrismaFlow oder None).
@@ -100,14 +103,40 @@ async def search_papers(
     all_papers: list[UnifiedPaper] = []
     stats: dict[str, int] = {"ss_total": 0, "exa_total": 0, "ss_errors": 0, "exa_errors": 0}
 
-    # Queries zusammenstellen
-    search_queries = [topic]
-    if queries:
-        search_queries = [*search_queries, *queries]
+    # Queries zusammenstellen — mit oder ohne Smart Expansion
+    if refine:
+        from src.agents.query_generator import expand_queries, validate_queries
+
+        query_set = await expand_queries(topic, queries)
+        ss_queries = query_set.ss_queries
+        exa_queries = query_set.exa_queries
+        stats["query_source"] = 1 if query_set.source == "llm" else 0
+
+        # Optionale Dry-Run-Validierung
+        if not no_validate:
+            ss_client_for_validate = SemanticScholarClient()
+            exa_client_for_validate = ExaClient() if config.use_exa else None
+            query_set = await validate_queries(
+                query_set, ss_client_for_validate, exa_client_for_validate
+            )
+            ss_queries = query_set.ss_queries
+            exa_queries = query_set.exa_queries
+
+        logger.info(
+            "Smart Query Expansion (%s): %d SS-Queries, %d Exa-Queries",
+            query_set.source,
+            len(ss_queries),
+            len(exa_queries),
+        )
+    else:
+        ss_queries = [topic]
+        if queries:
+            ss_queries = [*ss_queries, *queries]
+        exa_queries = ss_queries[:2]
 
     # Semantic Scholar (primaer)
     ss_client = SemanticScholarClient()
-    for query in search_queries:
+    for query in ss_queries:
         try:
             response = await ss_client.search_papers(
                 query,
@@ -134,7 +163,7 @@ async def search_papers(
     if config.use_exa:
         exa_client = ExaClient()
         if exa_client.is_available:
-            for query in search_queries[:2]:  # Nur Top-2 Queries fuer Exa
+            for query in exa_queries:
                 try:
                     exa_response = await exa_client.search_papers(
                         query,

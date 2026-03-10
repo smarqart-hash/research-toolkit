@@ -77,6 +77,12 @@ def search(
     max_results: int = typer.Option(30, "--max", "-m", help="Max papers after ranking"),
     use_exa: bool = typer.Option(True, "--exa/--no-exa", help="Include Exa search"),
     year_filter: str = typer.Option(None, "--years", "-y", help="Year range, e.g. 2020-2026"),
+    refine: bool = typer.Option(
+        False, "--refine", "-r", help="Smart query expansion (lokal + optional LLM)"
+    ),
+    no_validate: bool = typer.Option(
+        False, "--no-validate", help="Skip dry-run validation of refined queries"
+    ),
     verbose: bool = typer.Option(False, "--verbose", "-v"),
 ) -> None:
     """Search academic literature via Semantic Scholar + Exa."""
@@ -98,10 +104,13 @@ def search(
         year_filter=year_filter,
     )
 
-    console.print(Panel(f"Searching: [bold]{topic}[/bold]", style="blue"))
+    mode_label = " [cyan](smart queries)[/cyan]" if refine else ""
+    console.print(Panel(f"Searching: [bold]{topic}[/bold]{mode_label}", style="blue"))
 
     try:
-        papers, stats, _prisma = asyncio.run(search_papers(topic, config=config))
+        papers, stats, _prisma = asyncio.run(
+            search_papers(topic, config=config, refine=refine, no_validate=no_validate)
+        )
     except Exception as e:
         console.print(f"[red]Search failed:[/red] {e}")
         raise typer.Exit(1)
