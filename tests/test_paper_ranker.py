@@ -184,8 +184,8 @@ class TestFromOpenAlex:
         unified = from_openalex(work)
         assert unified.abstract is None
 
-    def test_openalex_scores_same_as_ss(self):
-        """OpenAlex erhalt denselben Metadaten-Bonus wie Semantic Scholar."""
+    def test_ss_scores_higher_than_openalex_same_signals(self):
+        """SS erhalt hoeheren Score als OpenAlex bei gleichen Signalen (source-aware caps)."""
         oa_paper = UnifiedPaper(
             paper_id="oa1",
             title="OpenAlex",
@@ -204,7 +204,8 @@ class TestFromOpenAlex:
             is_open_access=True,
             abstract="Abstract",
         )
-        assert oa_paper.relevance_score == ss_paper.relevance_score
+        # SS hat hoehere Citation-Cap (0.4) + hoeheren Metadaten-Bonus (0.1 vs 0.05)
+        assert ss_paper.relevance_score > oa_paper.relevance_score
 
     def test_exa_no_metadata_bonus(self):
         """Exa-Papers haben keinen Metadaten-Bonus."""
@@ -448,6 +449,66 @@ class TestSpecter2:
         """Neues Feld specter2_score ist default None."""
         paper = UnifiedPaper(paper_id="1", title="Test", source="exa")
         assert paper.specter2_score is None
+
+
+class TestSourceAwareRelevanceScore:
+    """Testet source-normalisierte Scores."""
+
+    def test_openalex_citation_cap(self):
+        """OpenAlex Citation-Beitrag ist auf 0.15 gedeckelt (statt 0.4)."""
+        paper = UnifiedPaper(
+            paper_id="oa1",
+            title="Highly Cited OA",
+            citation_count=5000,
+            source="openalex",
+            year=2024,
+            abstract="Test abstract",
+        )
+        assert paper.relevance_score <= 0.75
+
+    def test_ss_citation_weight_unchanged(self):
+        """SS Citation-Gewicht bleibt bei max 0.4."""
+        paper = UnifiedPaper(
+            paper_id="ss1",
+            title="SS Paper",
+            citation_count=100,
+            source="semantic_scholar",
+            year=2024,
+            abstract="Test",
+            is_open_access=True,
+        )
+        assert paper.relevance_score > 0.5
+
+    def test_openalex_high_cite_lower_than_ss_moderate_cite(self):
+        """OA-Paper mit 3000 Cites rankt niedriger als SS mit 50 + OA + Abstract."""
+        oa_paper = UnifiedPaper(
+            paper_id="oa",
+            title="Off-topic OA",
+            citation_count=3000,
+            source="openalex",
+            year=2023,
+        )
+        ss_paper = UnifiedPaper(
+            paper_id="ss",
+            title="On-topic SS",
+            citation_count=50,
+            source="semantic_scholar",
+            year=2024,
+            abstract="Relevant abstract",
+            is_open_access=True,
+        )
+        assert ss_paper.relevance_score > oa_paper.relevance_score
+
+    def test_exa_no_citations_still_ranks(self):
+        """Exa-Paper ohne Citations bekommt Score aus anderen Signalen."""
+        paper = UnifiedPaper(
+            paper_id="exa1",
+            title="Exa Paper",
+            source="exa",
+            year=2025,
+            abstract="Abstract vorhanden",
+        )
+        assert paper.relevance_score > 0.0
 
 
 class _MockSentenceTransformer:
