@@ -152,7 +152,9 @@ def draft(
         None, "--input", "-i", help="Path to search_results.json from search command"
     ),
     revise: bool = typer.Option(False, "--revise", help="Review-Loop nach Draft ausfuehren"),
-    max_revisions: int = typer.Option(2, "--max-revisions", help="Max Revisionen (1-2)"),
+    max_revisions: int = typer.Option(
+        2, "--max-revisions", min=1, max=2, help="Max Revisionen (1-2)"
+    ),
     verbose: bool = typer.Option(False, "--verbose", "-v"),
 ) -> None:
     """Generate a venue-formatted draft based on research."""

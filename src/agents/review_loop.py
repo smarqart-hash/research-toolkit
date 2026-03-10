@@ -208,18 +208,28 @@ async def review_for_revision(
     return _parse_review_response(raw, sub_questions)
 
 
+def _extract_json_block(raw: str) -> str:
+    """Extrahiert JSON aus Markdown-Code-Block oder rohem Text."""
+    import re
+
+    # Versuche JSON aus ```json...``` Block zu extrahieren
+    match = re.search(r"```json\s*(.*?)\s*```", raw, re.DOTALL)
+    if match:
+        return match.group(1)
+    # Versuche generischen Code-Block
+    match = re.search(r"```\s*(.*?)\s*```", raw, re.DOTALL)
+    if match:
+        return match.group(1)
+    return raw.strip()
+
+
 def _parse_review_response(raw: str, sub_questions: list[SubQuestion]) -> CompactReview:
     """Parst LLM-Antwort in CompactReview."""
     try:
-        # JSON aus Antwort extrahieren (kann in Markdown-Block stehen)
-        json_str = raw.strip()
-        if "```json" in json_str:
-            json_str = json_str.split("```json")[1].split("```")[0].strip()
-        elif "```" in json_str:
-            json_str = json_str.split("```")[1].split("```")[0].strip()
+        json_str = _extract_json_block(raw)
         data = json.loads(json_str)
     except (json.JSONDecodeError, IndexError):
-        preview = raw[:200] if raw else "(leer)"
+        preview = raw[:50] if raw else "(leer)"
         logger.warning("Review-JSON konnte nicht geparst werden: %s", preview)
         return CompactReview(score=0)
 
