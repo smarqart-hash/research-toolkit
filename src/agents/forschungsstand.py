@@ -134,7 +134,18 @@ async def _search_openalex(
                 year_range=config.year_filter,
                 languages=config.languages or None,
             )
-            batch = [from_openalex(w) for w in response.results]
+            # Pre-Filter: OpenAlex-Papers unter Relevanz-Schwelle entfernen
+            min_oa_relevance = 0.3
+            relevant = [w for w in response.results if w.relevance_score >= min_oa_relevance]
+            filtered_count = len(response.results) - len(relevant)
+            if filtered_count > 0:
+                logger.info(
+                    "OpenAlex Pre-Filter: %d/%d Papers unter Relevanz-Schwelle %.1f entfernt",
+                    filtered_count,
+                    len(response.results),
+                    min_oa_relevance,
+                )
+            batch = [from_openalex(w) for w in relevant]
             papers = [*papers, *batch]
             stats["openalex_total"] += len(batch)
         except httpx.HTTPStatusError as e:

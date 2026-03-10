@@ -314,6 +314,7 @@ class TestSearchPapersMultiSource:
             publication_year=2022,
             cited_by_count=10,
             open_access=OpenAlexOpenAccess(is_oa=True),
+            relevance_score=1.0,  # Pre-Filter passieren
         )
 
     def test_ss_only_source(self):
@@ -424,3 +425,57 @@ class TestSearchPapersMultiSource:
                 assert "openalex_errors" in stats
 
         asyncio.run(run())
+
+
+class TestOpenAlexPreFilter:
+    """Testet OpenAlex Relevanz-Vorfilterung."""
+
+    def test_low_relevance_filtered(self):
+        """Papers mit OA relevance_score < 0.3 werden vor Ranking entfernt."""
+        from src.agents.forschungsstand import _search_openalex
+        from src.agents.openalex_client import (
+            OpenAlexSearchResponse,
+            OpenAlexWork,
+        )
+
+        mock_works = [
+            OpenAlexWork(
+                id="W1",
+                display_name="Relevant Paper",
+                relevance_score=0.8,
+                publication_year=2024,
+            ),
+            OpenAlexWork(
+                id="W2",
+                display_name="Irrelevant Paper",
+                relevance_score=0.1,
+                publication_year=2024,
+            ),
+            OpenAlexWork(
+                id="W3",
+                display_name="Borderline Paper",
+                relevance_score=0.3,
+                publication_year=2024,
+            ),
+        ]
+        mock_response = OpenAlexSearchResponse(results=mock_works)
+
+        async def run():
+            with patch(
+                "src.agents.forschungsstand.OpenAlexClient"
+            ) as mock_oa_client:
+                instance = mock_oa_client.return_value
+                instance.search_works = AsyncMock(return_value=mock_response)
+
+                config = SearchConfig()
+                stats = {"openalex_total": 0, "openalex_errors": 0}
+                return await _search_openalex(["test query"], config, stats)
+
+        papers = asyncio.run(run())
+
+        # W2 (relevance_score=0.1) sollte gefiltert sein
+        assert len(papers) == 2
+        titles = [p.title for p in papers]
+        assert "Relevant Paper" in titles
+        assert "Borderline Paper" in titles
+        assert "Irrelevant Paper" not in titles

@@ -53,6 +53,7 @@ class OpenAlexWork(BaseModel):
     open_access: OpenAlexOpenAccess = Field(default_factory=OpenAlexOpenAccess)
     language: str | None = None
     type: str | None = None
+    relevance_score: float = 0.0  # Von OpenAlex API geliefert (0-1)
 
     @property
     def abstract(self) -> str | None:
