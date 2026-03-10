@@ -12,9 +12,10 @@ class TestDoctor:
 
     def test_openalex_always_available(self):
         """OpenAlex braucht keinen Key — immer verfuegbar."""
-        result = check_dependencies()
-        openalex = [d for d in result if d.name == "OpenAlex Search"][0]
-        assert openalex.available is True
+        with patch.dict("os.environ", {}, clear=True):
+            result = check_dependencies()
+            openalex = [d for d in result if d.name == "OpenAlex Search"][0]
+            assert openalex.available is True
 
     def test_ss_depends_on_key(self):
         """Semantic Scholar ohne Key: verfuegbar aber limited."""
