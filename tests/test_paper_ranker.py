@@ -5,11 +5,13 @@ from unittest.mock import patch
 import pytest
 
 from src.agents.exa_client import ExaResult
+from src.agents.openalex_client import OpenAlexAuthorship, OpenAlexOpenAccess, OpenAlexWork
 from src.agents.paper_ranker import (
     UnifiedPaper,
     compute_specter2_similarity,
     deduplicate,
     from_exa,
+    from_openalex,
     from_semantic_scholar,
     rank_papers,
 )
@@ -99,6 +101,132 @@ class TestFromExa:
         result = ExaResult(url="https://example.com", title="No Author")
         unified = from_exa(result)
         assert unified.authors == []
+
+
+def _openalex_work_paper(
+    work_id: str = "https://openalex.org/W99",
+    doi: str | None = "https://doi.org/10.1234/oa",
+    display_name: str = "OpenAlex Test Paper",
+    publication_year: int | None = 2023,
+    cited_by_count: int = 88,
+    is_oa: bool = True,
+    authors: list[str] | None = None,
+) -> OpenAlexWork:
+    """Factory fuer OpenAlexWork in paper_ranker Tests."""
+    authorship_list = [
+        OpenAlexAuthorship.model_validate({"author": {"display_name": name}})
+        for name in (authors or ["OpenAlex Author"])
+    ]
+    return OpenAlexWork(
+        id=work_id,
+        doi=doi,
+        display_name=display_name,
+        publication_year=publication_year,
+        cited_by_count=cited_by_count,
+        open_access=OpenAlexOpenAccess(is_oa=is_oa),
+        authorships=authorship_list,
+        abstract_inverted_index={"Test": [0], "abstract": [1]},
+    )
+
+
+class TestFromOpenAlex:
+    def test_basic_conversion(self):
+        work = _openalex_work_paper()
+        unified = from_openalex(work)
+        assert unified.title == "OpenAlex Test Paper"
+        assert unified.source == "openalex"
+        assert unified.year == 2023
+        assert unified.citation_count == 88
+        assert unified.is_open_access is True
+
+    def test_doi_normalized(self):
+        """DOI wird aus URL-Form normalisiert."""
+        work = _openalex_work_paper(doi="https://doi.org/10.1234/oa")
+        unified = from_openalex(work)
+        assert unified.doi == "10.1234/oa"
+        assert unified.paper_id == "10.1234/oa"
+
+    def test_doi_http_normalized(self):
+        """Auch http:// doi.org URLs werden normalisiert."""
+        work = _openalex_work_paper(doi="http://doi.org/10.5678/test")
+        unified = from_openalex(work)
+        assert unified.doi == "10.5678/test"
+
+    def test_doi_none_uses_openalex_id(self):
+        """Ohne DOI wird die OpenAlex-ID als paper_id genutzt."""
+        work = _openalex_work_paper(doi=None)
+        unified = from_openalex(work)
+        assert unified.doi is None
+        assert unified.paper_id == "https://openalex.org/W99"
+
+    def test_authors_extracted(self):
+        work = _openalex_work_paper(authors=["Anna Mueller", "Ben Schmidt"])
+        unified = from_openalex(work)
+        assert unified.authors == ["Anna Mueller", "Ben Schmidt"]
+
+    def test_url_is_openalex_id(self):
+        """OpenAlex-ID wird als URL gespeichert."""
+        work = _openalex_work_paper(work_id="https://openalex.org/W999")
+        unified = from_openalex(work)
+        assert unified.url == "https://openalex.org/W999"
+
+    def test_abstract_from_inverted_index(self):
+        """Abstract wird aus Inverted Index rekonstruiert."""
+        work = _openalex_work_paper()
+        unified = from_openalex(work)
+        assert unified.abstract == "Test abstract"
+
+    def test_no_abstract_when_none(self):
+        work = OpenAlexWork(
+            id="https://openalex.org/W1",
+            display_name="No Abstract Work",
+        )
+        unified = from_openalex(work)
+        assert unified.abstract is None
+
+    def test_openalex_scores_same_as_ss(self):
+        """OpenAlex erhalt denselben Metadaten-Bonus wie Semantic Scholar."""
+        oa_paper = UnifiedPaper(
+            paper_id="oa1",
+            title="OpenAlex",
+            source="openalex",
+            year=2024,
+            citation_count=100,
+            is_open_access=True,
+            abstract="Abstract",
+        )
+        ss_paper = UnifiedPaper(
+            paper_id="ss1",
+            title="SS",
+            source="semantic_scholar",
+            year=2024,
+            citation_count=100,
+            is_open_access=True,
+            abstract="Abstract",
+        )
+        assert oa_paper.relevance_score == ss_paper.relevance_score
+
+    def test_exa_no_metadata_bonus(self):
+        """Exa-Papers haben keinen Metadaten-Bonus."""
+        exa_paper = UnifiedPaper(
+            paper_id="exa1",
+            title="Exa",
+            source="exa",
+            year=2024,
+            citation_count=100,
+            is_open_access=True,
+            abstract="Abstract",
+        )
+        oa_paper = UnifiedPaper(
+            paper_id="oa1",
+            title="OA",
+            source="openalex",
+            year=2024,
+            citation_count=100,
+            is_open_access=True,
+            abstract="Abstract",
+        )
+        assert oa_paper.relevance_score > exa_paper.relevance_score
 
 
 # --- Dedup-Key ---
