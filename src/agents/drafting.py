@@ -567,8 +567,15 @@ def format_self_check_as_markdown(findings: list[SelfCheckFinding]) -> str:
     return "\n".join(lines)
 
 
-def save_draft(result: DraftResult, output_dir: Path) -> dict[str, Path]:
+def save_draft(
+    result: DraftResult,
+    output_dir: Path,
+    evidence_cards: list | None = None,
+    provenance_logger: object | None = None,
+) -> dict[str, Path]:
     """Speichert Entwurf, Self-Check und Provenance.
+
+    Optional: Citation Tracking wenn evidence_cards + provenance_logger uebergeben.
 
     Returns:
         Dict mit Pfaden: {"draft": Path, "selfcheck": Path, "provenance": Path}
@@ -590,6 +597,20 @@ def save_draft(result: DraftResult, output_dir: Path) -> dict[str, Path]:
     provenance_path.write_text(
         json.dumps(result.provenance_log, indent=2, ensure_ascii=False), encoding="utf-8"
     )
+
+    # Citation Tracking (optional)
+    if evidence_cards and provenance_logger is not None:
+        from utils.citation_tracker import track_citations
+
+        cited_ids = track_citations(draft_md, evidence_cards)
+        for paper_id in cited_ids:
+            provenance_logger.log_action(
+                phase="synthesis",
+                agent="citation-tracker",
+                action="CITATION_USED",
+                evidence_card_id=paper_id,
+                metadata={"cited_in_draft": True},
+            )
 
     return {
         "draft": draft_path,

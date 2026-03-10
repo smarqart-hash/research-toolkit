@@ -54,9 +54,57 @@ class TestEvidenceCard:
             claim="Minimal claim",
             method="Survey",
         )
-        assert card.confidence == "medium"
+        assert card.confidence == 0.5
         assert card.limitations == []
         assert card.funding_source is None
+
+    def test_confidence_backward_compat_high(self, sample_card: EvidenceCard) -> None:
+        """Alte String-Confidence wird zu Float konvertiert."""
+        assert sample_card.confidence == 0.8
+
+    def test_confidence_backward_compat_low(self) -> None:
+        card = EvidenceCard(
+            card_id="ec-low",
+            paper_id="test",
+            paper_title="Test",
+            claim="C",
+            method="M",
+            confidence="low",
+        )
+        assert card.confidence == 0.3
+
+    def test_confidence_backward_compat_medium(self) -> None:
+        card = EvidenceCard(
+            card_id="ec-med",
+            paper_id="test",
+            paper_title="Test",
+            claim="C",
+            method="M",
+            confidence="medium",
+        )
+        assert card.confidence == 0.5
+
+    def test_confidence_float_passthrough(self) -> None:
+        card = EvidenceCard(
+            card_id="ec-f",
+            paper_id="test",
+            paper_title="Test",
+            claim="C",
+            method="M",
+            confidence=0.72,
+        )
+        assert card.confidence == 0.72
+
+    def test_confidence_invalid_string_raises(self) -> None:
+        with pytest.raises(ValueError, match="Unbekannter Confidence-Wert"):
+            EvidenceCard(
+                card_id="ec-bad",
+                paper_id="test",
+                paper_title="Test",
+                claim="C",
+                method="M",
+                confidence="invalid",
+            )
 
     def test_metrics_custom_fields(self) -> None:
         metrics = Metrics(custom={"f1_score": 0.91, "auc": 0.95})

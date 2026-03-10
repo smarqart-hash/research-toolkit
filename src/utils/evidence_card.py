@@ -6,10 +6,9 @@ extrahieren wir strukturierte Evidence Cards (Token-effizient).
 
 from __future__ import annotations
 
-import json
 from pathlib import Path
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 
 class Metrics(BaseModel):
@@ -20,6 +19,13 @@ class Metrics(BaseModel):
     confidence_interval: tuple[float, float] | None = None
     sample_size: int | None = None
     custom: dict[str, float] = Field(default_factory=dict)
+
+
+_CONFIDENCE_MAP: dict[str, float] = {
+    "low": 0.3,
+    "medium": 0.5,
+    "high": 0.8,
+}
 
 
 class EvidenceCard(BaseModel):
@@ -34,10 +40,23 @@ class EvidenceCard(BaseModel):
     method: str
     metrics: Metrics = Field(default_factory=Metrics)
     limitations: list[str] = Field(default_factory=list)
-    confidence: str = "medium"  # low, medium, high
+    confidence: float = 0.5  # 0.0 bis 1.0
     source_section: str | None = None
     tags: list[str] = Field(default_factory=list)
     funding_source: str | None = None  # Bias-Scoring (aus Adversarial Critique)
+
+    @field_validator("confidence", mode="before")
+    @classmethod
+    def _normalize_confidence(cls, v: str | float | int) -> float:
+        """Backward-Compat: 'low'/'medium'/'high' -> Float."""
+        if isinstance(v, str):
+            if v in _CONFIDENCE_MAP:
+                return _CONFIDENCE_MAP[v]
+            raise ValueError(
+                f"Unbekannter Confidence-Wert: {v!r}. "
+                f"Erlaubt: {list(_CONFIDENCE_MAP.keys())} oder Float 0.0-1.0"
+            )
+        return float(v)
 
 
 def save_evidence_cards(cards: list[EvidenceCard], directory: Path) -> list[Path]:

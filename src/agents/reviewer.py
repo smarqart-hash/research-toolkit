@@ -66,6 +66,7 @@ class DimensionResult(BaseModel):
     rating: Rating
     comment: str
     confidence: Confidence = Confidence.AUTO
+    automatable: bool = True
 
 
 class HumanFlag(BaseModel):
@@ -128,6 +129,38 @@ class ReviewResult(BaseModel):
         if critical_count >= 1 or high_count >= 3:
             return Verdict.REVISION_NEEDED
         return Verdict.READY
+
+
+_AUTOMATABLE_CONFIG_PATH = Path(__file__).resolve().parent.parent.parent / "config" / "dimensions" / "automatable.json"
+
+
+def load_automatable_config(path: Path | None = None) -> dict[str, bool]:
+    """Laedt Dimension-Automatable-Mapping aus Config. Default: alle True."""
+    config_path = path or _AUTOMATABLE_CONFIG_PATH
+    if not config_path.exists():
+        return {}
+    return json.loads(config_path.read_text(encoding="utf-8"))
+
+
+def apply_automatable_flags(
+    dimensions: list[DimensionResult],
+    config: dict[str, bool] | None = None,
+) -> list[DimensionResult]:
+    """Setzt automatable-Flag auf DimensionResults gemaess Config.
+
+    Unbekannte Dimensionen bleiben bei Default (True).
+    """
+    mapping = config if config is not None else load_automatable_config()
+    return [
+        DimensionResult(
+            name=dim.name,
+            rating=dim.rating,
+            comment=dim.comment,
+            confidence=dim.confidence,
+            automatable=mapping.get(dim.name.lower(), True),
+        )
+        for dim in dimensions
+    ]
 
 
 def compute_delta(current: ReviewResult, previous: ReviewResult) -> ReviewDelta:
