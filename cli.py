@@ -1,7 +1,7 @@
 """Research Toolkit CLI — Modular AI toolkit for academic research.
 
 Commands:
-    search  — Literature search via Semantic Scholar + OpenAlex (+ optional Exa)
+    search  — Literature search via Semantic Scholar + OpenAlex (+ optional Exa via --sources)
     draft   — Generate venue-formatted drafts
     review  — Structured 7-dimension feedback
     check   — Verify citations against databases
@@ -81,18 +81,15 @@ def search(
         "-s",
         help="Komma-separiert: ss,openalex,exa (Standard: ss,openalex)",
     ),
-    use_exa: bool = typer.Option(
-        None,
-        "--exa/--no-exa",
-        help="[DEPRECATED] Bitte --sources verwenden. Wird in Sprint 6 entfernt.",
-        hidden=True,
-    ),
     year_filter: str = typer.Option(None, "--years", "-y", help="Year range, e.g. 2020-2026"),
     refine: bool = typer.Option(
         False, "--refine", "-r", help="Smart query expansion (lokal + optional LLM)"
     ),
     no_validate: bool = typer.Option(
         False, "--no-validate", help="Skip dry-run validation of refined queries"
+    ),
+    append: bool = typer.Option(
+        False, "--append", "-a", help="Merge into existing results (akkumuliert)"
     ),
     verbose: bool = typer.Option(False, "--verbose", "-v"),
 ) -> None:
@@ -105,25 +102,14 @@ def search(
         ForschungsstandResult,
         SearchConfig,
         format_as_markdown,
+        load_forschungsstand,
+        merge_results,
         save_forschungsstand,
         search_papers,
+        slugify,
     )
 
-    # Deprecation-Warnung fuer --exa/--no-exa
-    if use_exa is not None:
-        console.print(
-            "[yellow]WARNUNG:[/yellow] --exa/--no-exa ist deprecated. "
-            "Bitte --sources verwenden (z.B. --sources ss,openalex,exa). "
-            "Wird in Sprint 6 entfernt."
-        )
-        # Backward-Compat: --exa fuegt exa zu sources hinzu, --no-exa entfernt es
-        source_list = [s.strip() for s in sources.split(",") if s.strip()]
-        if use_exa and "exa" not in source_list:
-            source_list = [*source_list, "exa"]
-        elif not use_exa:
-            source_list = [s for s in source_list if s != "exa"]
-    else:
-        source_list = [s.strip() for s in sources.split(",") if s.strip()]
+    source_list = [s.strip() for s in sources.split(",") if s.strip()]
 
     config = SearchConfig(
         top_k=max_results,
@@ -161,8 +147,20 @@ def search(
         sources_used=used_labels,
     )
 
-    # Ergebnisse speichern
+    # Ergebnis-Verzeichnis
     output_path = output_dir / "search_results.json"
+
+    # Akkumuliertes Suchen: bestehende Ergebnisse laden und mergen
+    if append:
+        existing_path = output_path / slugify(topic) / "forschungsstand.json"
+        if existing_path.exists():
+            existing = load_forschungsstand(existing_path)
+            result = merge_results(existing, result)
+            console.print(
+                f"[cyan]Merged:[/cyan] {len(result.papers)} papers total "
+                f"(vorher {len(existing.papers)})"
+            )
+
     save_forschungsstand(result, output_path)
 
     md_path = output_dir / "search_results.md"

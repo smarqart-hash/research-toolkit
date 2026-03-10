@@ -79,6 +79,33 @@ class SearchConfig:
 # --- Such-Orchestrierung ---
 
 
+def _check_source_balance(stats: dict[str, int]) -> list[str]:
+    """Prueft ob Quellen-Verteilung stark asymmetrisch ist.
+
+    Warnt wenn eine aktive Quelle <10% des Gesamtpools liefert.
+    """
+    source_counts = {
+        "Semantic Scholar": stats.get("ss_total", 0),
+        "OpenAlex": stats.get("openalex_total", 0),
+        "Exa": stats.get("exa_total", 0),
+    }
+    active = {k: v for k, v in source_counts.items() if v > 0}
+    total = sum(active.values())
+    if total == 0 or len(active) < 2:
+        return []
+
+    warnings: list[str] = []
+    for source, count in active.items():
+        ratio = count / total
+        if ratio < 0.1:
+            warnings = [
+                *warnings,
+                f"{source} lieferte nur {count}/{total} Papers ({ratio:.0%}). "
+                f"Ergebnisse koennten asymmetrisch sein.",
+            ]
+    return warnings
+
+
 async def _search_ss(
     queries: list[str],
     config: SearchConfig,
@@ -134,7 +161,18 @@ async def _search_openalex(
                 year_range=config.year_filter,
                 languages=config.languages or None,
             )
-            batch = [from_openalex(w) for w in response.results]
+            # Pre-Filter: OpenAlex-Papers unter Relevanz-Schwelle entfernen
+            min_oa_relevance = 0.3
+            relevant = [w for w in response.results if w.relevance_score >= min_oa_relevance]
+            filtered_count = len(response.results) - len(relevant)
+            if filtered_count > 0:
+                logger.info(
+                    "OpenAlex Pre-Filter: %d/%d Papers unter Relevanz-Schwelle %.1f entfernt",
+                    filtered_count,
+                    len(response.results),
+                    min_oa_relevance,
+                )
+            batch = [from_openalex(w) for w in relevant]
             papers = [*papers, *batch]
             stats["openalex_total"] += len(batch)
         except httpx.HTTPStatusError as e:
@@ -275,6 +313,12 @@ async def search_papers(
 
     # Warnung wenn alle Quellen leer
     total_found = stats["ss_total"] + stats["openalex_total"] + stats["exa_total"]
+
+    # Source-Balance pruefen
+    balance_warnings = _check_source_balance(stats)
+    for warning in balance_warnings:
+        logger.warning("Source-Balance: %s", warning)
+
     if total_found == 0:
         logger.warning(
             "Keine Papers gefunden! SS-Fehler: %d, OpenAlex-Fehler: %d, Exa-Fehler: %d. "
@@ -368,6 +412,34 @@ def load_forschungsstand(path: Path) -> ForschungsstandResult:
     return ForschungsstandResult.model_validate_json(
         path.read_text(encoding="utf-8")
     )
+
+
+def merge_results(
+    existing: ForschungsstandResult,
+    new: ForschungsstandResult,
+) -> ForschungsstandResult:
+    """Mergt neue Suchergebnisse in bestehenden Pool.
+
+    Dedupliziert ueber dedup_key. Bei Konflikten: SS > OA > Exa.
+    Akkumuliert total_found und vereinigt sources_used.
+    """
+    all_papers = [*existing.papers, *new.papers]
+    merged_papers = deduplicate(all_papers)
+
+    merged_sources = list(dict.fromkeys([*existing.sources_used, *new.sources_used]))
+
+    merged_leitfragen = list(dict.fromkeys([*existing.leitfragen, *new.leitfragen]))
+
+    return ForschungsstandResult(
+        topic=existing.topic,
+        papers=merged_papers,
+        total_found=existing.total_found + new.total_found,
+        total_after_dedup=len(merged_papers),
+        sources_used=merged_sources,
+        leitfragen=merged_leitfragen,
+    )
+
+
 
 
 def format_as_markdown(result: ForschungsstandResult) -> str:

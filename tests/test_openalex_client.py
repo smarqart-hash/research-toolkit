@@ -444,3 +444,24 @@ class TestOpenAlexClient:
             assert "filter" not in captured_params[0]
 
         asyncio.run(run())
+
+
+# --- T2: Relevanz-Score Feld ---
+
+
+class TestOpenAlexRelevanceFilter:
+    """Testet Relevanz-Score Feld."""
+
+    def test_work_has_relevance_score(self):
+        """OpenAlexWork hat relevance_score Feld."""
+        work = OpenAlexWork(
+            id="W1",
+            display_name="Test",
+            relevance_score=0.85,
+        )
+        assert work.relevance_score == 0.85
+
+    def test_work_default_relevance_zero(self):
+        """Ohne Score: Default 0.0."""
+        work = OpenAlexWork(id="W2", display_name="Test")
+        assert work.relevance_score == 0.0

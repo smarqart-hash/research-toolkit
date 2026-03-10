@@ -59,31 +59,44 @@ class UnifiedPaper(BaseModel):
     def relevance_score(self) -> float:
         """Heuristischer Relevanz-Score (0-1) fuer Ranking.
 
-        Faktoren: Zitationen, Aktualitaet, Open Access.
+        Source-aware: OpenAlex Citation-Cap bei 0.15 (statt 0.4),
+        weil breite Queries hochzitierte aber irrelevante Papers liefern.
+        Max-Scores: SS ~1.0, OA ~0.75, Exa ~0.6.
         """
+        import math
+
         score = 0.0
 
-        # Zitationen (log-skaliert, max 0.4)
+        # Source-spezifische Citation-Caps
+        _citation_caps = {
+            "semantic_scholar": 0.4,
+            "openalex": 0.15,
+            "exa": 0.05,
+        }
+        cite_cap = _citation_caps.get(self.source, 0.2)
+
+        # Zitationen (log-skaliert, source-capped)
         if self.citation_count and self.citation_count > 0:
-            import math
-            score += min(0.4, math.log10(self.citation_count + 1) / 10)
+            score += min(cite_cap, math.log10(self.citation_count + 1) / 10)
 
         # Aktualitaet (max 0.3)
         if self.year:
-            recency = max(0, self.year - 2018) / 8  # 2018-2026 normiert
+            recency = max(0, self.year - 2018) / 8
             score += min(0.3, recency * 0.3)
 
         # Open Access Bonus (0.1)
         if self.is_open_access:
             score += 0.1
 
-        # Abstract vorhanden (0.1)
+        # Abstract vorhanden (0.15 — aufgewertet, staerkstes Qualitaetssignal)
         if self.abstract:
-            score += 0.1
+            score += 0.15
 
-        # Strukturierte Metadaten: SS und OpenAlex bevorzugt (0.1)
-        if self.source in ("semantic_scholar", "openalex"):
+        # Strukturierte Metadaten: SS bevorzugt (0.1), OA neutral (0.05)
+        if self.source == "semantic_scholar":
             score += 0.1
+        elif self.source == "openalex":
+            score += 0.05
 
         return round(min(1.0, score), 3)
 

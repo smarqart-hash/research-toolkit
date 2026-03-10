@@ -10,9 +10,11 @@ from src.agents.forschungsstand import (
     ForschungsstandResult,
     SearchConfig,
     ThemeCluster,
+    _check_source_balance,
     format_as_markdown,
     generate_search_queries,
     load_forschungsstand,
+    merge_results,
     save_forschungsstand,
     search_papers,
     slugify,
@@ -314,6 +316,7 @@ class TestSearchPapersMultiSource:
             publication_year=2022,
             cited_by_count=10,
             open_access=OpenAlexOpenAccess(is_oa=True),
+            relevance_score=1.0,  # Pre-Filter passieren
         )
 
     def test_ss_only_source(self):
@@ -424,3 +427,169 @@ class TestSearchPapersMultiSource:
                 assert "openalex_errors" in stats
 
         asyncio.run(run())
+
+
+class TestOpenAlexPreFilter:
+    """Testet OpenAlex Relevanz-Vorfilterung."""
+
+    def test_low_relevance_filtered(self):
+        """Papers mit OA relevance_score < 0.3 werden vor Ranking entfernt."""
+        from src.agents.forschungsstand import _search_openalex
+        from src.agents.openalex_client import (
+            OpenAlexSearchResponse,
+            OpenAlexWork,
+        )
+
+        mock_works = [
+            OpenAlexWork(
+                id="W1",
+                display_name="Relevant Paper",
+                relevance_score=0.8,
+                publication_year=2024,
+            ),
+            OpenAlexWork(
+                id="W2",
+                display_name="Irrelevant Paper",
+                relevance_score=0.1,
+                publication_year=2024,
+            ),
+            OpenAlexWork(
+                id="W3",
+                display_name="Borderline Paper",
+                relevance_score=0.3,
+                publication_year=2024,
+            ),
+        ]
+        mock_response = OpenAlexSearchResponse(results=mock_works)
+
+        async def run():
+            with patch(
+                "src.agents.forschungsstand.OpenAlexClient"
+            ) as mock_oa_client:
+                instance = mock_oa_client.return_value
+                instance.search_works = AsyncMock(return_value=mock_response)
+
+                config = SearchConfig()
+                stats = {"openalex_total": 0, "openalex_errors": 0}
+                return await _search_openalex(["test query"], config, stats)
+
+        papers = asyncio.run(run())
+
+        # W2 (relevance_score=0.1) sollte gefiltert sein
+        assert len(papers) == 2
+        titles = [p.title for p in papers]
+        assert "Relevant Paper" in titles
+        assert "Borderline Paper" in titles
+        assert "Irrelevant Paper" not in titles
+
+
+class TestAccumulatedSearch:
+    """Testet akkumuliertes Speichern von Suchergebnissen."""
+
+    def test_save_and_load_roundtrip(self, tmp_path):
+        """Normaler Save/Load funktioniert weiterhin."""
+        result = ForschungsstandResult(topic="Test", papers=[], total_found=0)
+        path = save_forschungsstand(result, tmp_path)
+        loaded = load_forschungsstand(path)
+        assert loaded.topic == "Test"
+
+    def test_merge_results_deduplicates(self):
+        """merge_results entfernt Duplikate aus zwei Result-Sets."""
+        paper_a = UnifiedPaper(
+            paper_id="doi:10.1",
+            title="Paper A",
+            source="semantic_scholar",
+            doi="10.1",
+        )
+        paper_b = UnifiedPaper(
+            paper_id="doi:10.2",
+            title="Paper B",
+            source="openalex",
+            doi="10.2",
+        )
+        paper_a_dup = UnifiedPaper(
+            paper_id="doi:10.1",
+            title="Paper A",
+            source="openalex",
+            doi="10.1",
+        )
+        existing = ForschungsstandResult(
+            topic="Test",
+            papers=[paper_a],
+            total_found=1,
+        )
+        new = ForschungsstandResult(
+            topic="Test",
+            papers=[paper_b, paper_a_dup],
+            total_found=2,
+        )
+        merged = merge_results(existing, new)
+        assert len(merged.papers) == 2
+        # SS-Version von Paper A bleibt (bessere Metadaten)
+        paper_a_result = [p for p in merged.papers if p.doi == "10.1"][0]
+        assert paper_a_result.source == "semantic_scholar"
+
+    def test_merge_accumulates_total_found(self):
+        """merge_results addiert total_found."""
+        existing = ForschungsstandResult(topic="T", papers=[], total_found=50)
+        new = ForschungsstandResult(topic="T", papers=[], total_found=30)
+        merged = merge_results(existing, new)
+        assert merged.total_found == 80
+
+    def test_merge_unifies_sources(self):
+        """merge_results vereinigt sources_used Listen."""
+        existing = ForschungsstandResult(
+            topic="T", papers=[], total_found=10,
+            sources_used=["Semantic Scholar"],
+        )
+        new = ForschungsstandResult(
+            topic="T", papers=[], total_found=20,
+            sources_used=["OpenAlex", "Semantic Scholar"],
+        )
+        merged = merge_results(existing, new)
+        assert "Semantic Scholar" in merged.sources_used
+        assert "OpenAlex" in merged.sources_used
+        # Keine Duplikate
+        assert len(merged.sources_used) == 2
+
+    def test_merge_preserves_leitfragen(self):
+        """merge_results vereinigt Leitfragen ohne Duplikate."""
+        existing = ForschungsstandResult(
+            topic="T", papers=[], total_found=0,
+            leitfragen=["Frage 1", "Frage 2"],
+        )
+        new = ForschungsstandResult(
+            topic="T", papers=[], total_found=0,
+            leitfragen=["Frage 2", "Frage 3"],
+        )
+        merged = merge_results(existing, new)
+        assert len(merged.leitfragen) == 3
+
+
+class TestSourceBalanceWarning:
+    """Warnung wenn eine Quelle <10% des Pools liefert."""
+
+    def test_imbalanced_sources_logged(self):
+        """Warnung bei SS=2, OA=40 Papers."""
+        stats = {"ss_total": 2, "openalex_total": 40, "exa_total": 0}
+        warnings = _check_source_balance(stats)
+        assert len(warnings) >= 1
+        assert "semantic" in warnings[0].lower() or "ss" in warnings[0].lower()
+
+    def test_balanced_sources_no_warning(self):
+        """Keine Warnung bei SS=20, OA=25."""
+        stats = {"ss_total": 20, "openalex_total": 25, "exa_total": 0}
+        warnings = _check_source_balance(stats)
+        assert len(warnings) == 0
+
+    def test_single_source_no_warning(self):
+        """Keine Warnung bei nur einer aktiven Quelle."""
+        stats = {"ss_total": 0, "openalex_total": 50, "exa_total": 0}
+        warnings = _check_source_balance(stats)
+        assert len(warnings) == 0
+
+    def test_all_sources_imbalanced(self):
+        """Warnung fuer jede unterrepresentierte Quelle."""
+        stats = {"ss_total": 1, "openalex_total": 1, "exa_total": 98}
+        warnings = _check_source_balance(stats)
+        assert len(warnings) == 2  # SS und OA beide unter 10%
