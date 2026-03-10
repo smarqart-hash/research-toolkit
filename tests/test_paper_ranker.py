@@ -511,6 +511,47 @@ class TestSourceAwareRelevanceScore:
         assert paper.relevance_score > 0.0
 
 
+class TestScoreSerialization:
+    """Testet dass relevance_score im JSON-Output erscheint."""
+
+    def test_relevance_score_in_json(self):
+        """computed_field relevance_score ist im model_dump enthalten."""
+        paper = UnifiedPaper(
+            paper_id="test",
+            title="Test Paper",
+            citation_count=100,
+            source="semantic_scholar",
+            year=2024,
+            abstract="Abstract",
+        )
+        dumped = paper.model_dump()
+        assert "relevance_score" in dumped
+        assert dumped["relevance_score"] > 0.0
+
+    def test_relevance_score_in_json_string(self):
+        """relevance_score erscheint in model_dump_json."""
+        paper = UnifiedPaper(
+            paper_id="test",
+            title="Test",
+            citation_count=50,
+            source="openalex",
+            year=2024,
+        )
+        json_str = paper.model_dump_json()
+        assert '"relevance_score"' in json_str
+
+    def test_specter2_score_in_json(self):
+        """specter2_score wird serialisiert (auch wenn None)."""
+        paper = UnifiedPaper(
+            paper_id="test",
+            title="Test",
+            source="semantic_scholar",
+        )
+        dumped = paper.model_dump()
+        assert "specter2_score" in dumped
+        assert dumped["specter2_score"] is None
+
+
 class _MockSentenceTransformer:
     """Mock fuer SentenceTransformer.encode()."""
 
