@@ -10,6 +10,7 @@ from src.agents.forschungsstand import (
     ForschungsstandResult,
     SearchConfig,
     ThemeCluster,
+    _check_source_balance,
     format_as_markdown,
     generate_search_queries,
     load_forschungsstand,
@@ -563,3 +564,32 @@ class TestAccumulatedSearch:
         )
         merged = merge_results(existing, new)
         assert len(merged.leitfragen) == 3
+
+
+class TestSourceBalanceWarning:
+    """Warnung wenn eine Quelle <10% des Pools liefert."""
+
+    def test_imbalanced_sources_logged(self):
+        """Warnung bei SS=2, OA=40 Papers."""
+        stats = {"ss_total": 2, "openalex_total": 40, "exa_total": 0}
+        warnings = _check_source_balance(stats)
+        assert len(warnings) >= 1
+        assert "semantic" in warnings[0].lower() or "ss" in warnings[0].lower()
+
+    def test_balanced_sources_no_warning(self):
+        """Keine Warnung bei SS=20, OA=25."""
+        stats = {"ss_total": 20, "openalex_total": 25, "exa_total": 0}
+        warnings = _check_source_balance(stats)
+        assert len(warnings) == 0
+
+    def test_single_source_no_warning(self):
+        """Keine Warnung bei nur einer aktiven Quelle."""
+        stats = {"ss_total": 0, "openalex_total": 50, "exa_total": 0}
+        warnings = _check_source_balance(stats)
+        assert len(warnings) == 0
+
+    def test_all_sources_imbalanced(self):
+        """Warnung fuer jede unterrepresentierte Quelle."""
+        stats = {"ss_total": 1, "openalex_total": 1, "exa_total": 98}
+        warnings = _check_source_balance(stats)
+        assert len(warnings) == 2  # SS und OA beide unter 10%
