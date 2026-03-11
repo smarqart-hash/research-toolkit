@@ -25,6 +25,15 @@ Findings: F1-F21 alle geloest. Details: `docs/meta-loop/findings*.md`.
 
 ## Naechste Sprints
 
+### Quickwins: M2 + M3
+
+> Niedrighaengende Fruechte vor dem grossen Claim-Verification-Sprint.
+
+- **M2: LLM-as-Ranking-Judge** — LLM bewertet Paper-Relevanz (0-10), Vergleich mit Composite Score
+- **M3: Self-Enhancement Bias Test** — Prueft ob Review-Loop eigene Drafts bevorzugt
+- Workflow: TDD direkt (kein Spec noetig)
+- Abhaengigkeit: Keine (alle Prereqs erfuellt)
+
 ### Sprint N: Claim Verification (Roadmap-Sprint 5)
 
 > Schliesst das groesste Loch: Check verifiziert Quellen-Existenz, nicht Claim-Wahrheit.
@@ -70,6 +79,7 @@ Findings: F1-F21 alle geloest. Details: `docs/meta-loop/findings*.md`.
 | Full Knowledge Graph | L-XL | Roadmap (alt) | Evidence Relations |
 | Prompt-Versioning mit Langfuse | L | Roadmap (alt) | Prompt-Versioning |
 | DSPy-Integration | L | Roadmap (alt) | Prompt-Versioning |
+| A/B Prompt-Tests (Query Expansion) | 1 Woche | Session 11.03. | Prompt-Versioning |
 | Learned Ranking Model (V1) | Monate | Optionenlandkarte | A1 |
 | Emergente Dimensionen (V2) | Monate | Optionenlandkarte | A3 |
 | Active Learning Pipeline (V3) | Monate | Optionenlandkarte | V1 |
