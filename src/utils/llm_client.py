@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 # Defaults fuer OpenRouter Free-Tier
 _DEFAULT_BASE_URL = "https://openrouter.ai/api/v1"
-_DEFAULT_MODEL = "google/gemini-2.5-flash-lite"
+_DEFAULT_MODEL = "anthropic/claude-3.5-haiku"
 
 # Modul-Level Lazy Client fuer Connection Pooling
 _llm_client: httpx.AsyncClient | None = None

@@ -67,7 +67,7 @@ class ForschungsstandResult(BaseModel):
 class SearchConfig(BaseModel):
     """Konfiguration fuer die Paper-Suche."""
 
-    max_results_per_query: int = 100
+    max_results_per_query: int = 50
     year_filter: str | None = None  # z.B. "2020-2026"
     fields_of_study: list[str] = Field(default_factory=list)
     sources: list[str] = Field(default_factory=lambda: ["ss", "openalex"])

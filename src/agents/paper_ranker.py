@@ -261,20 +261,20 @@ def _compute_enhanced_score(
     - SS: 0.25, OA: 0.10, Exa: 0.03
 
     Gewichtung wenn SPECTER2 verfuegbar:
-    - 30% SPECTER2 Similarity
-    - 25% Citations (log-skaliert, source-capped)
+    - 40% SPECTER2 Similarity (Semantic Match dominiert)
+    - 15% Citations (log-skaliert, source-capped, reduziert gg. Survey-Bias)
     - 25% Recency
     - 10% Open Access
     - 10% Abstract vorhanden
     """
     s2_score = specter2_scores.get(paper.paper_id, 0.0)
-    score = 0.3 * s2_score
+    score = 0.4 * s2_score
 
     cite_cap = ENHANCED_CITATION_CAPS.get(paper.source, 0.15)
 
     # Zitationen (log-skaliert, source-capped)
     if paper.citation_count and paper.citation_count > 0:
-        score += min(cite_cap, math.log10(paper.citation_count + 1) / 10 * 0.625)
+        score += min(cite_cap, math.log10(paper.citation_count + 1) / 10 * 0.375)
 
     # Aktualitaet (max 0.25)
     if paper.year:

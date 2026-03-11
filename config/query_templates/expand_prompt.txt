@@ -35,21 +35,21 @@ Regeln fuer ss_queries (Semantic Scholar — Boolean-Suche):
 - Ergaenze deutsche Begriffe in Klammern wo sinnvoll fuer DACH-Forschung:
   z.B. "traffic control" OR "Verkehrssteuerung"
 - Kombiniere Teilaspekte: "topic AND (aspect1 OR aspect2)"
-- Mindestens 4 Queries, maximal 6
+- Genau 3 Queries (nicht mehr, nicht weniger)
 - JEDE Query fokussiert einen anderen Aspekt (siehe aspects_covered)
 
 Regeln fuer oa_queries (OpenAlex — Freitext-Suche):
 - Kurze Freitext-Queries OHNE Boolean-Operatoren (kein AND/OR/NOT)
 - OpenAlex nutzt eigene Relevanz-Engine — Konzepte und Synonyme genuegen
 - Fokus auf Kernbegriffe und Varianten
-- Mindestens 3 Queries, maximal 5
+- Genau 3 Queries
 - Englische Queries, bei DACH-Bezug optionale deutsche Variante
 
 Regeln fuer exa_queries (Exa — Neural Web Search):
 - Natuerliche Sprache, explorative Fragen
 - Gut fuer: Grey Literature, Blog Posts, Preprints, Konferenzberichte
 - Formulierungen: "What are recent advances in...", "Survey of...", "Comparison of..."
-- Mindestens 3 Queries, maximal 5
+- Genau 3 Queries
 - Englische Queries
 - EINE Query darf explizit nach Reviews/Surveys fragen
 
@@ -64,15 +64,12 @@ Ausgabe:
   "ss_queries": [
     "reinforcement learning AND (traffic signal control OR traffic light optimization OR Ampelsteuerung)",
     "deep learning AND urban traffic management AND (sensor data OR real-time OR Echtzeit)",
-    "multi-agent reinforcement learning AND intersection control AND scalability",
-    "adaptive traffic signal AND evaluation AND (simulation OR benchmark OR SUMO)",
-    "(traffic control OR Verkehrssteuerung) AND survey AND (deep learning OR machine learning)"
+    "(traffic control OR Verkehrssteuerung) AND (evaluation OR benchmark) AND (deep learning OR machine learning)"
   ],
   "oa_queries": [
-    "reinforcement learning traffic signal control",
-    "deep learning urban traffic management",
-    "adaptive traffic signal evaluation benchmarks",
-    "Verkehrssteuerung KI maschinelles Lernen"
+    "reinforcement learning traffic signal control optimization",
+    "deep learning urban traffic management sensor data",
+    "adaptive traffic signal evaluation benchmarks"
   ],
   "exa_queries": [
     "What are the latest advances in using reinforcement learning for traffic signal control in urban environments?",
@@ -93,7 +90,6 @@ Ausgabe:
   "ss_queries": [
     "AI-assisted AND (literature review OR systematic review) AND (automation OR tool OR toolkit)",
     "reflexivity AND (research methodology OR scientific method) AND artificial intelligence",
-    "LLM AND (academic writing OR paper summarization) AND quality assessment",
     "(research pipeline OR research workflow) AND (machine learning OR NLP) AND evaluation"
   ],
   "oa_queries": [

@@ -212,7 +212,7 @@ class TestPersistence:
 class TestSearchConfig:
     def test_defaults(self):
         config = SearchConfig()
-        assert config.max_results_per_query == 100
+        assert config.max_results_per_query == 50
         assert config.top_k == 30
         assert config.sources == ["ss", "openalex"]
         assert config.languages == ["en", "de"]
