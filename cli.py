@@ -305,6 +305,9 @@ def review(
 @app.command()
 def check(
     document: Path = typer.Argument(..., help="Path to document with citations to verify"),
+    verify: bool = typer.Option(
+        False, "--verify", help="Verify claims against paper abstracts (requires LLM_API_KEY)"
+    ),
     verbose: bool = typer.Option(False, "--verbose", "-v"),
 ) -> None:
     """Verify citations against Semantic Scholar."""
@@ -363,6 +366,54 @@ def check(
     ]
     output_path.write_text(json.dumps(refs_data, indent=2, ensure_ascii=False), encoding="utf-8")
     console.print(f"\nSaved to: [green]{output_path}[/green]")
+
+    # Claim Verification (optional)
+    if verify:
+        from src.agents.claim_verifier import format_verification_report, run_verification
+
+        def _load_paper_data(forschungsstand_path: Path) -> tuple[dict[str, str], dict[str, str]]:
+            """Laedt paper_map und abstracts aus forschungsstand.json."""
+            if not forschungsstand_path.exists():
+                return {}, {}
+            try:
+                data = json.loads(forschungsstand_path.read_text(encoding="utf-8"))
+            except (json.JSONDecodeError, OSError) as e:
+                console.print(f"[yellow]forschungsstand.json nicht lesbar:[/yellow] {e}")
+                return {}, {}
+            paper_map: dict[str, str] = {}
+            abstracts: dict[str, str] = {}
+            for p in data.get("papers", []):
+                pid = p.get("doi") or p.get("id") or p.get("title", "")[:50]
+                if not pid:
+                    continue
+                paper_map[pid] = p.get("title", "?")
+                if p.get("abstract"):
+                    abstracts[pid] = p["abstract"]
+            return paper_map, abstracts
+
+        forschungsstand_path = output_dir / "search_results.json"
+        paper_map, paper_abstracts = _load_paper_data(forschungsstand_path)
+        if not paper_map:
+            console.print(
+                "[yellow]Keine Papers in search_results.json — ueberspringe Verification.[/yellow]"
+            )
+            console.print("Fuehre zuerst 'research-toolkit search' aus.")
+        else:
+            console.print(
+                f"\n[cyan]Verifying claims against {len(paper_abstracts)} abstracts...[/cyan]"
+            )
+            ver_report = asyncio.run(run_verification(
+                draft_md=text,
+                paper_map=paper_map,
+                abstracts=paper_abstracts,
+                document_name=document.name,
+            ))
+            console.print(format_verification_report(ver_report))
+            ver_path = output_dir / "claim-verification.json"
+            ver_path.write_text(
+                ver_report.model_dump_json(indent=2), encoding="utf-8"
+            )
+            console.print(f"Saved to: [green]{ver_path}[/green]")
 
 
 @app.command()
