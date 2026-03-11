@@ -91,6 +91,10 @@ class ExaClient:
                 "acm.org",
                 "nih.gov",
                 "nasa.gov",
+                # DACH-Repositorien
+                "gesis.org",
+                "dnb.de",
+                "zbw.eu",
             ],
         }
         if start_published_date:

@@ -49,3 +49,35 @@ class TestExaClient:
     def test_available_with_key(self):
         client = ExaClient(api_key="test-key-123")
         assert client.is_available is True
+
+    def test_dach_domains_in_payload(self):
+        """Prueft dass DACH-Repositorien in include_domains enthalten sind."""
+        import asyncio
+        import unittest.mock as mock
+
+        client = ExaClient(api_key="test-key-123")
+
+        # Mock-Response vorbereiten
+        mock_response = mock.MagicMock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = {"results": []}
+        mock_response.raise_for_status = mock.MagicMock()
+
+        captured_payload: dict = {}
+
+        async def fake_post(url, **kwargs):
+            captured_payload.update(kwargs.get("json", {}))
+            return mock_response
+
+        mock_client = mock.AsyncMock()
+        mock_client.__aenter__ = mock.AsyncMock(return_value=mock_client)
+        mock_client.__aexit__ = mock.AsyncMock(return_value=False)
+        mock_client.post = fake_post
+
+        with mock.patch("src.agents.exa_client.httpx.AsyncClient", return_value=mock_client):
+            asyncio.run(client.search_papers("test query"))
+
+        domains = captured_payload.get("include_domains", [])
+        assert "gesis.org" in domains
+        assert "dnb.de" in domains
+        assert "zbw.eu" in domains
