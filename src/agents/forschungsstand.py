@@ -74,10 +74,12 @@ class SearchConfig(BaseModel):
     languages: list[str] = Field(default_factory=lambda: ["en", "de"])
     top_k: int = 30  # Max Papers nach Ranking
     papers_file: Path | None = None  # BibTeX-Import
+    min_citations: int | None = None  # Post-Ranking Filter: Papers unter N Zitationen entfernen
+    judge: bool = False  # M2 LLM-Ranking-Judge als Post-Ranking Filter
 
 
 LOW_RECALL_THRESHOLD = 15
-MIN_OA_RELEVANCE = 0.3  # OpenAlex Pre-Filter: Papers unter dieser Schwelle entfernen
+MIN_OA_RELEVANCE = 0.5  # OpenAlex Pre-Filter: Papers unter dieser Schwelle entfernen
 SOURCE_BALANCE_THRESHOLD = 0.1  # Warnung wenn Quelle <10% des Pools liefert
 
 
@@ -387,6 +389,46 @@ async def search_papers(
     stats["before_dedup"] = len(all_papers)
     stats["after_dedup"] = len(deduped)
     stats["after_ranking"] = len(ranked)
+
+    # Post-Ranking Filter: Mindest-Zitationen
+    if config.min_citations is not None and config.min_citations > 0:
+        before_filter = len(ranked)
+        ranked = [
+            p for p in ranked
+            if p.citation_count is not None and p.citation_count >= config.min_citations
+        ]
+        filtered_count = before_filter - len(ranked)
+        if filtered_count > 0:
+            logger.info(
+                "Citation-Filter: %d/%d Papers unter %d Zitationen entfernt",
+                filtered_count,
+                before_filter,
+                config.min_citations,
+            )
+        stats["citation_filtered"] = filtered_count
+
+    # M2 LLM-Ranking-Judge: Papers mit Score < 4 entfernen
+    if config.judge and ranked:
+        from src.agents.ranking_judge import judge_relevance
+
+        judgement = await judge_relevance(topic, ranked)
+        if judgement.judged_papers:
+            # Score-Map aufbauen (paper_id → llm_score)
+            llm_scores = {jp.paper_id: jp.llm_score for jp in judgement.judged_papers}
+            before_judge = len(ranked)
+            ranked = [
+                p for p in ranked
+                if llm_scores.get(p.paper_id, 5.0) >= 4.0  # Default 5.0 fuer unjudged
+            ]
+            judge_filtered = before_judge - len(ranked)
+            stats["judge_filtered"] = judge_filtered
+            stats["judge_correlation"] = judgement.rank_correlation or 0.0
+            if judge_filtered > 0:
+                logger.info(
+                    "LLM-Judge: %d/%d Papers als irrelevant bewertet (Score < 4)",
+                    judge_filtered,
+                    before_judge,
+                )
 
     # Low-Recall-Warnung
     has_exa = "exa" in config.sources

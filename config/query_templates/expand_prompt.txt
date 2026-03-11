@@ -22,6 +22,13 @@ Decke mindestens 3 verschiedene Sub-Topics ab:
 - Theorie/Frameworks/Taxonomien
 Vermeide: 4 Queries die nur Synonyme voneinander sind.
 
+KRITISCHE REGEL — Precision (Must-Contain):
+Jede Query MUSS mindestens einen Kernbegriff des Originalthemas enthalten.
+Kernbegriffe = die 2-3 spezifischsten Woerter des Themas (keine generischen Begriffe wie "AI", "research", "tool").
+Beispiel: Bei "reflexive AI-assisted research toolkits" sind Kernbegriffe: "reflexive", "research toolkit".
+VERBOTEN: Queries die nur generische Begriffe kombinieren (z.B. "AI" AND "research" ohne Toolkit-Bezug).
+Jede Query muss so spezifisch sein, dass sie NICHT auf beliebige AI-Papers passt.
+
 Regeln fuer ss_queries (Semantic Scholar — Boolean-Suche):
 - Verwende AND/OR Boolean-Operatoren
 - Nutze englische Synonyme UND Akronyme: "reinforcement learning" OR "RL"

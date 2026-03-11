@@ -100,6 +100,16 @@ def search(
     papers_file: Path = typer.Option(
         None, "--papers", "-p", help="BibTeX-Datei mit externen Papers importieren"
     ),
+    min_citations: int = typer.Option(
+        None, "--min-citations", "-c", min=0, help="Min. Zitationen (Post-Ranking Filter)"
+    ),
+    fields_of_study: str = typer.Option(
+        None, "--fields-of-study", "-f",
+        help="Komma-separiert: Computer Science,Linguistics (nur SS)",
+    ),
+    judge: bool = typer.Option(
+        False, "--judge", "-j", help="LLM-Ranking-Judge Filter (entfernt irrelevante Papers)"
+    ),
     verbose: bool = typer.Option(False, "--verbose", "-v"),
 ) -> None:
     """Search academic literature via Semantic Scholar + OpenAlex (+ optional Exa)."""
@@ -144,11 +154,21 @@ def search(
             )
             raise typer.Exit(1)
 
+    # Fields of Study parsen
+    fos_list = (
+        [f.strip() for f in fields_of_study.split(",") if f.strip()]
+        if fields_of_study
+        else []
+    )
+
     config = SearchConfig(
         top_k=max_results,
         sources=source_list,
         year_filter=year_filter,
         papers_file=papers_file,
+        min_citations=min_citations,
+        fields_of_study=fos_list,
+        judge=judge,
     )
 
     mode_label = " [cyan](smart queries)[/cyan]" if refine else ""
