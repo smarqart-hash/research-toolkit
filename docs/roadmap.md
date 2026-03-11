@@ -18,6 +18,9 @@
 | Quickwin | Doctor + SPECTER2 | `doctor` Command, Source-aware Enhanced Scoring |
 | Post-v4 | Search Quality Sprint | F19 Source-Quota, per_page Limits, Prompt-Opt |
 | Post-v4 | OA-Queries + DACH | `oa_queries` (Freitext), Exa DACH-Domains, F20 Docs |
+| Post-v4 | Code Audit | 8 CRITICAL + 27 HIGH + 28 MEDIUM gefixt |
+| Post-v4 | Claim Verification | FactScore-Pattern, `--verify` Flag, 28 Tests |
+| Quickwin | M2+M3 | LLM-as-Ranking-Judge + Self-Enhancement Bias Test, 36 Tests |
 
 Findings: F1-F21 alle geloest. Details: `docs/meta-loop/findings*.md`.
 
@@ -25,34 +28,15 @@ Findings: F1-F21 alle geloest. Details: `docs/meta-loop/findings*.md`.
 
 ## Naechste Sprints
 
-### Quickwins: M2 + M3
-
-> Niedrighaengende Fruechte vor dem grossen Claim-Verification-Sprint.
-
-- **M2: LLM-as-Ranking-Judge** — LLM bewertet Paper-Relevanz (0-10), Vergleich mit Composite Score
-- **M3: Self-Enhancement Bias Test** — Prueft ob Review-Loop eigene Drafts bevorzugt
-- Workflow: TDD direkt (kein Spec noetig)
-- Abhaengigkeit: Keine (alle Prereqs erfuellt)
-
-### Sprint N: Claim Verification (Roadmap-Sprint 5)
-
-> Schliesst das groesste Loch: Check verifiziert Quellen-Existenz, nicht Claim-Wahrheit.
-
-- Atomic Claim Extraction (FactScore-Pattern)
-- Abstract-Level NLI via LLM (SUPPORTS / REFUTES / NOT_ENOUGH_INFO)
-- Optional: SciFact Benchmark (SOTA F1: 0.72-0.88)
-- Dateien: `claim_verifier.py` NEU, `evidence_card.py` erweitern
-- Abhaengigkeit: Keine
-
-### Sprint N+1: Evidence Card Relations (Roadmap-Sprint 6)
+### Evidence Card Relations ← NAECHSTER
 
 > Armer-Mann's-Knowledge-Graph: Relationen zwischen Claims.
 
 - `supports`, `contradicts`, `extends` Felder auf EvidenceCard
 - Conflict Map als Markdown generierbar
-- Abhaengigkeit: Claim Verification
+- Abhaengigkeit: Claim Verification ✅
 
-### Sprint N+2: Prompt-Versioning (Roadmap-Sprint 7)
+### Sprint N+1: Prompt-Versioning (Roadmap-Sprint 7)
 
 > Pipeline-Prompts extrahieren nach `config/prompts/v1/`.
 
@@ -66,8 +50,8 @@ Findings: F1-F21 alle geloest. Details: `docs/meta-loop/findings*.md`.
 
 | Idee | Aufwand | Quelle | Abhaengigkeit |
 |------|---------|--------|---------------|
-| LLM-as-Ranking-Judge (M2) | 3 Tage | Optionenlandkarte | Sprint 3.5 ✅ |
-| Self-Enhancement Bias Test (M3) | 3 Tage | Optionenlandkarte | Sprint 4 ✅ |
+| ~~LLM-as-Ranking-Judge (M2)~~ | ✅ | Optionenlandkarte | Erledigt |
+| ~~Self-Enhancement Bias Test (M3)~~ | ✅ | Optionenlandkarte | Erledigt |
 | ECE-Tracking (M4) | 1 Woche | Optionenlandkarte | Sprint 3.5 ✅ |
 | CORE/Unpaywall Full-Text (M5) | 1 Woche | Optionenlandkarte | Claim Verification |
 | Gewichtungs-Optimierung (A1) | 2 Wochen | Optionenlandkarte | M2 |

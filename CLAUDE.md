@@ -25,6 +25,8 @@ CLI (Typer) → Agents (Domain-Logik) → Pipeline (State + Provenance)
 | `skills/` | LLM Instruction Files (search, draft, review, check) |
 | `config/` | Venue/Voice Profiles (JSON), Rubrics, Policy Context |
 | `src/agents/claim_verifier.py` | LLM-basierte Claim-Verifikation (FactScore) |
+| `src/agents/ranking_judge.py` | LLM-as-Ranking-Judge (M2): Relevanz-Bewertung + Korrelation |
+| `src/agents/bias_test.py` | Self-Enhancement Bias Test (M3): Blinded Scoring |
 | `src/agents/doctor.py` | Feature-Availability Check (doctor Command) |
 | `cli.py` | Typer Entry Point (6 Commands) |
 
@@ -37,6 +39,8 @@ CLI (Typer) → Agents (Domain-Logik) → Pipeline (State + Provenance)
 | Review | `reviewer.py` + `rubric_loader.py` |
 | Check | `quellen_checker.py` + `reference_extractor.py` |
 | Verify | `claim_verifier.py` (FactScore-Pattern: Claim-Extraktion + NLI) |
+| Judge (M2) | `ranking_judge.py` (LLM-Relevanz 0-10, Spearman-Korrelation) |
+| Bias (M3) | `bias_test.py` (Blinded Self-Enhancement Test) |
 | Import | `bibtex_parser.py` |
 
 ## Coding Conventions
@@ -65,7 +69,7 @@ CLI (Typer) → Agents (Domain-Logik) → Pipeline (State + Provenance)
 
 ## Tests
 
-- **Framework**: pytest (564 Tests, alle passing)
+- **Framework**: pytest (600 Tests, alle passing)
 - **Pfad**: `tests/` — pythonpath: `["src", "."]`
 - **Factories**: `_ss_paper()`, `_exa_result()`, `_openalex_work()` als lokale Helfer (kein Factory-Framework)
 - **Fixtures**: `@pytest.fixture` fuer State, tmp_path
