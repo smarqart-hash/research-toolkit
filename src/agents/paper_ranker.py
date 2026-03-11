@@ -122,13 +122,22 @@ def from_semantic_scholar(paper: PaperResult) -> UnifiedPaper:
 
 
 def from_exa(result: ExaResult) -> UnifiedPaper:
-    """Konvertiert ein Exa-Ergebnis in UnifiedPaper."""
-    # Exa liefert keine strukturierten Metadaten — nur Basics
+    """Konvertiert ein Exa-Ergebnis in UnifiedPaper.
+
+    Exa liefert keine strukturierten Metadaten (Citations, DOI).
+    Fallback: Aktuelles Jahr wenn publishedDate fehlt (Exa findet primaer aktuelle Inhalte).
+    """
+    import datetime
+
+    year = _extract_year(result.published_date)
+    if year is None:
+        year = datetime.datetime.now(tz=datetime.timezone.utc).year
+
     return UnifiedPaper(
         paper_id=hashlib.sha256(result.url.encode()).hexdigest()[:16],
         title=result.title,
         abstract=result.text,
-        year=_extract_year(result.published_date),
+        year=year,
         authors=[result.author] if result.author else [],
         citation_count=None,
         source="exa",

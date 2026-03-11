@@ -22,6 +22,24 @@ class TestExaResult:
         assert result.published_date == "2024-03-15"
         assert result.score == 0.95
 
+    def test_camel_case_alias(self):
+        """Exa API gibt publishedDate als camelCase zurueck."""
+        result = ExaResult.model_validate({
+            "url": "https://example.com",
+            "title": "CamelCase Paper",
+            "publishedDate": "2025-01-15T00:00:00.000Z",
+        })
+        assert result.published_date == "2025-01-15T00:00:00.000Z"
+
+    def test_camel_case_null(self):
+        """publishedDate: null wird korrekt als None gemappt."""
+        result = ExaResult.model_validate({
+            "url": "https://example.com",
+            "title": "No Date",
+            "publishedDate": None,
+        })
+        assert result.published_date is None
+
 
 class TestExaSearchResponse:
     def test_empty(self):

@@ -13,7 +13,7 @@ import logging
 import os
 
 import httpx
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 logger = logging.getLogger(__name__)
 
@@ -23,10 +23,12 @@ BASE_URL = "https://api.exa.ai"
 class ExaResult(BaseModel):
     """Ein Suchergebnis von Exa."""
 
+    model_config = ConfigDict(populate_by_name=True)
+
     url: str
     title: str
     text: str | None = None
-    published_date: str | None = None
+    published_date: str | None = Field(default=None, alias="publishedDate")
     author: str | None = None
     score: float | None = None
 

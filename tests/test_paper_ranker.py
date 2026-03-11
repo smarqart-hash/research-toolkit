@@ -89,10 +89,13 @@ class TestFromExa:
         assert unified.authors == ["Anna Autorin"]
         assert unified.year == 2024
 
-    def test_without_date(self):
+    def test_without_date_defaults_to_current_year(self):
+        """Exa-Papers ohne publishedDate bekommen aktuelles Jahr als Fallback."""
+        import datetime
+
         result = _exa_result(published_date=None)
         unified = from_exa(result)
-        assert unified.year is None
+        assert unified.year == datetime.datetime.now(tz=datetime.timezone.utc).year
 
     def test_without_author(self):
         result = ExaResult(url="https://example.com", title="No Author")
