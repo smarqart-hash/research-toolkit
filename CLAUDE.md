@@ -69,7 +69,7 @@ CLI (Typer) → Agents (Domain-Logik) → Pipeline (State + Provenance)
 
 ## Tests
 
-- **Framework**: pytest (600 Tests, alle passing)
+- **Framework**: pytest (573 Tests, alle passing)
 - **Pfad**: `tests/` — pythonpath: `["src", "."]`
 - **Factories**: `_ss_paper()`, `_exa_result()`, `_openalex_work()` als lokale Helfer (kein Factory-Framework)
 - **Fixtures**: `@pytest.fixture` fuer State, tmp_path
@@ -86,7 +86,7 @@ pytest tests/ --cov=src --cov-report=term-missing
 ## CLI Commands
 
 ```bash
-research-toolkit search TOPIC        # --max, --sources ss,openalex,exa, --years, --append, --papers
+research-toolkit search TOPIC        # --max, --sources, --years, --append, --papers, --min-citations, --fields-of-study, --judge, --refine
 research-toolkit draft TOPIC --venue X  # --voice, --input, --mode
 research-toolkit review DOCUMENT     # --venue
 research-toolkit check DOCUMENT      # --verify (LLM Claim-Verifikation)
@@ -103,11 +103,14 @@ Source-aware Composite Score (0-1):
 - 10% Open Access Bonus
 - Metadaten-Bonus: SS 0.1, OA 0.05, Exa 0.0
 
-**OpenAlex Pre-Filter:** Papers unter relevance_score 0.3 werden vor Ranking entfernt.
+**OpenAlex Pre-Filter:** Papers unter relevance_score 0.5 werden vor Ranking entfernt.
 **Source-Balance Warning:** Warnung wenn eine Quelle <10% des Pools liefert.
 **Akkumuliertes Suchen:** `--append` Flag merged neue Ergebnisse in bestehenden Pool.
 **Paper-Import:** `--papers refs.bib` importiert externe Papers (source="import") in den Pool.
 **Low-Recall-Warnung:** Warnung wenn < 15 Papers nach Ranking + Empfehlungen (Exa, Import).
+**Citation-Filter:** `--min-citations N` entfernt Papers unter N Zitationen (Post-Ranking).
+**Fields-of-Study:** `--fields-of-study "Computer Science"` filtert SS-Ergebnisse (nur SS).
+**LLM-Judge:** `--judge` aktiviert M2 Ranking-Judge — LLM bewertet Relevanz, Score < 4 wird entfernt.
 
 **OA-spezifische Queries:** `QuerySet.oa_queries` — Freitext ohne Boolean-Operatoren fuer OpenAlex.
 **Exa DACH-Domains:** gesis.org, dnb.de, zbw.eu in `include_domains`.

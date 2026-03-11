@@ -21,8 +21,9 @@
 | Post-v4 | Code Audit | 8 CRITICAL + 27 HIGH + 28 MEDIUM gefixt |
 | Post-v4 | Claim Verification | FactScore-Pattern, `--verify` Flag, 28 Tests |
 | Quickwin | M2+M3 | LLM-as-Ranking-Judge + Self-Enhancement Bias Test, 36 Tests |
+| Post-v5 | Search Quality Tuning | OA-PreFilter 0.5, Prompt Precision, `--min-citations`, `--fields-of-study`, `--judge` |
 
-Findings: F1-F21 alle geloest. Details: `docs/meta-loop/findings*.md`.
+Findings: F1-F21 alle geloest. F22-F25 aus v5 adressiert. Details: `docs/meta-loop/findings*.md`.
 
 ---
 
