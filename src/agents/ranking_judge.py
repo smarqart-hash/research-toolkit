@@ -11,6 +11,8 @@ import json
 import logging
 from collections.abc import Sequence
 
+import httpx
+
 from pydantic import BaseModel, Field, computed_field
 
 from src.agents.paper_ranker import UnifiedPaper
@@ -157,7 +159,10 @@ def _parse_judge_response(
         pid = item.get("paper_id", "")
         if pid not in paper_map:
             continue
-        score = float(item.get("score", 0))
+        try:
+            score = float(item.get("score", 0))
+        except (ValueError, TypeError):
+            continue
         # Clamp auf 0-10
         score = max(0.0, min(10.0, score))
         result = [
@@ -213,7 +218,7 @@ async def judge_relevance(
             )
             judged = _parse_judge_response(raw, batch)
             all_judged = [*all_judged, *judged]
-        except Exception as e:
+        except (RuntimeError, httpx.HTTPError, json.JSONDecodeError, ValueError) as e:
             logger.warning("LLM-Judge-Fehler bei Batch %d: %s", i // _BATCH_SIZE + 1, e)
 
     return JudgementResult(

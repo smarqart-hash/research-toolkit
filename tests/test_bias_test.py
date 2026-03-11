@@ -72,8 +72,8 @@ class TestBiasTestResult:
         )
         assert result.bias_detected is False
 
-    def test_negative_bias_magnitude_possible(self):
-        """Negative Magnitude = eigener Draft schlechter bewertet."""
+    def test_negative_magnitude_no_self_enhancement(self):
+        """Negative Magnitude = eigener Draft schlechter → kein Self-Enhancement."""
         result = BiasTestResult(
             own_draft_score=3.0,
             control_mean_score=7.0,
@@ -82,6 +82,7 @@ class TestBiasTestResult:
             bias_magnitude=-4.0,
         )
         assert result.bias_magnitude == -4.0
+        assert result.bias_detected is False
 
 
 # --- Prompt-Building ---

@@ -103,7 +103,10 @@ def _parse_scoring_response(
         tid = item.get("text_id", "")
         if tid not in valid_set:
             continue
-        score = float(item.get("score", 0))
+        try:
+            score = float(item.get("score", 0))
+        except (ValueError, TypeError):
+            continue
         score = max(0.0, min(10.0, score))
         result = [
             *result,
@@ -204,6 +207,6 @@ async def run_bias_test(
         own_draft_score=own_score,
         control_mean_score=control_mean,
         scorings=scorings,
-        bias_detected=abs(magnitude) > bias_threshold,
+        bias_detected=magnitude > bias_threshold,
         bias_magnitude=magnitude,
     )
