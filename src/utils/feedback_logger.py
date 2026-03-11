@@ -6,10 +6,14 @@ Sammelt menschliches Feedback fuer spaetere Ranking-Evaluation.
 
 from __future__ import annotations
 
+import json
+import logging
 from datetime import UTC, datetime
 from pathlib import Path
 
 from pydantic import BaseModel, Field
+
+logger = logging.getLogger(__name__)
 
 
 class FeedbackEntry(BaseModel):
@@ -39,14 +43,21 @@ class FeedbackLogger:
             f.write(entry.model_dump_json() + "\n")
 
     def read_feedback(self, topic: str | None = None) -> list[FeedbackEntry]:
-        """Liest alle Eintraege, optional gefiltert nach Topic."""
+        """Liest alle Eintraege, optional gefiltert nach Topic.
+
+        Korrupte Zeilen werden uebersprungen und geloggt.
+        """
         if not self._path.exists():
             return []
         entries: list[FeedbackEntry] = []
-        for line in self._path.read_text(encoding="utf-8").splitlines():
+        for line_no, line in enumerate(self._path.read_text(encoding="utf-8").splitlines(), start=1):
             if not line.strip():
                 continue
-            entry = FeedbackEntry.model_validate_json(line)
+            try:
+                entry = FeedbackEntry.model_validate_json(line)
+            except (json.JSONDecodeError, ValueError) as exc:
+                logger.warning("Korrupte Zeile %d in %s: %s", line_no, self._path, exc)
+                continue
             if topic is None or entry.topic == topic:
-                entries = [*entries, entry]
+                entries.append(entry)
         return entries

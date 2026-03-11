@@ -69,13 +69,12 @@ class TestExaClient:
             captured_payload.update(kwargs.get("json", {}))
             return mock_response
 
-        mock_client = mock.AsyncMock()
-        mock_client.__aenter__ = mock.AsyncMock(return_value=mock_client)
-        mock_client.__aexit__ = mock.AsyncMock(return_value=False)
-        mock_client.post = fake_post
+        # Internes _client-Objekt mocken (Connection Pooling)
+        client._client = mock.MagicMock()
+        client._client.post = fake_post
+        client._client.aclose = mock.AsyncMock()
 
-        with mock.patch("src.agents.exa_client.httpx.AsyncClient", return_value=mock_client):
-            asyncio.run(client.search_papers("test query"))
+        asyncio.run(client.search_papers("test query"))
 
         domains = captured_payload.get("include_domains", [])
         assert "gesis.org" in domains

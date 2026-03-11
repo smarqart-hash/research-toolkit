@@ -6,6 +6,7 @@ Checkpointet nach jeder Phase. Resume nach Absturz.
 from __future__ import annotations
 
 import json
+import os
 from datetime import datetime, timezone
 from enum import Enum
 from pathlib import Path
@@ -79,15 +80,33 @@ class ResearchState(BaseModel):
     })
 
     def start_phase(self, phase: Phase) -> None:
-        """Markiert eine Phase als gestartet."""
+        """Markiert eine Phase als gestartet.
+
+        Raises:
+            ValueError: Wenn Phase bereits IN_PROGRESS ist.
+        """
         record = self.phases[phase.value]
+        if record.status == PhaseStatus.IN_PROGRESS:
+            raise ValueError(
+                f"Phase {phase.value} ist bereits IN_PROGRESS — "
+                f"zuerst complete_phase() oder fail_phase() aufrufen"
+            )
         record.status = PhaseStatus.IN_PROGRESS
         record.started_at = datetime.now(timezone.utc).isoformat()
         self.current_phase = phase
 
     def complete_phase(self, phase: Phase, artifacts: list[str] | None = None) -> None:
-        """Markiert eine Phase als abgeschlossen."""
+        """Markiert eine Phase als abgeschlossen.
+
+        Raises:
+            ValueError: Wenn Phase nicht IN_PROGRESS ist.
+        """
         record = self.phases[phase.value]
+        if record.status != PhaseStatus.IN_PROGRESS:
+            raise ValueError(
+                f"Phase {phase.value} kann nicht abgeschlossen werden — "
+                f"Status ist {record.status.value}, erwartet: in_progress"
+            )
         record.status = PhaseStatus.COMPLETED
         record.completed_at = datetime.now(timezone.utc).isoformat()
         if artifacts:
@@ -109,17 +128,32 @@ class ResearchState(BaseModel):
         record.status = PhaseStatus.IN_PROGRESS
 
     def fail_phase(self, phase: Phase, error: str) -> None:
-        """Markiert eine Phase als fehlgeschlagen."""
+        """Markiert eine Phase als fehlgeschlagen.
+
+        Raises:
+            ValueError: Wenn Phase nicht IN_PROGRESS ist.
+        """
         record = self.phases[phase.value]
+        if record.status != PhaseStatus.IN_PROGRESS:
+            raise ValueError(
+                f"Phase {phase.value} kann nicht als fehlgeschlagen markiert werden — "
+                f"Status ist {record.status.value}, erwartet: in_progress"
+            )
         record.status = PhaseStatus.FAILED
         record.error = error
 
 
 def save_state(state: ResearchState, path: Path) -> None:
-    """Speichert State atomar auf Festplatte."""
+    """Speichert State atomar auf Festplatte.
+
+    Fallback auf os.replace() bei PermissionError (Windows-Kompatibilitaet).
+    """
     tmp_path = path.with_suffix(".tmp")
     tmp_path.write_text(state.model_dump_json(indent=2), encoding="utf-8")
-    tmp_path.replace(path)
+    try:
+        tmp_path.replace(path)
+    except PermissionError:
+        os.replace(str(tmp_path), str(path))
 
 
 def load_state(path: Path) -> ResearchState | None:

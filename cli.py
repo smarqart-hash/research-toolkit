@@ -27,6 +27,8 @@ app = typer.Typer(
 )
 console = Console()
 
+VALID_SOURCES = {"ss", "openalex", "exa"}
+
 
 def _load_env() -> None:
     """Lade .env Datei falls vorhanden."""
@@ -74,7 +76,7 @@ def _available_venues() -> list[str]:
 @app.command()
 def search(
     topic: str = typer.Argument(..., help="Research topic to search for"),
-    max_results: int = typer.Option(30, "--max", "-m", help="Max papers after ranking"),
+    max_results: int = typer.Option(30, "--max", "-m", min=1, help="Max papers after ranking"),
     sources: str = typer.Option(
         "ss,openalex",
         "--sources",
@@ -119,6 +121,14 @@ def search(
 
     source_list = [s.strip() for s in sources.split(",") if s.strip()]
 
+    invalid_sources = set(source_list) - VALID_SOURCES
+    if invalid_sources:
+        console.print(
+            f"[red]Ungueltige Quellen:[/red] {', '.join(sorted(invalid_sources))}\n"
+            f"Erlaubt: {', '.join(sorted(VALID_SOURCES))}"
+        )
+        raise typer.Exit(1)
+
     config = SearchConfig(
         top_k=max_results,
         sources=source_list,
@@ -161,7 +171,7 @@ def search(
 
     # Akkumuliertes Suchen: bestehende Ergebnisse laden und mergen
     if append:
-        existing_path = output_path / slugify(topic) / "forschungsstand.json"
+        existing_path = output_dir / slugify(topic) / "forschungsstand.json"
         if existing_path.exists():
             existing = load_forschungsstand(existing_path)
             result = merge_results(existing, result)
@@ -258,8 +268,7 @@ def review(
         console.print(f"[red]File not found:[/red] {document}")
         raise typer.Exit(1)
 
-    from src.agents.reviewer import ReviewConfig
-    from src.utils.rubric_loader import find_rubric_for_venue, load_all_rubrics
+    from src.utils.rubric_loader import find_rubric_for_venue
 
     console.print(Panel(f"Reviewing: [bold]{document.name}[/bold]", style="blue"))
 
@@ -268,11 +277,10 @@ def review(
     console.print(f"Document: {word_count} words")
 
     if venue:
-        rubrics = load_all_rubrics()
-        matched = find_rubric_for_venue(venue, rubrics=rubrics)
-        if matched:
+        try:
+            matched = find_rubric_for_venue(venue)
             console.print(f"Rubric: [green]{matched.name}[/green]")
-        else:
+        except FileNotFoundError:
             console.print(f"[yellow]No rubric found for venue '{venue}'[/yellow]")
 
     console.print(f"\n[yellow]Note:[/yellow] Full review requires an LLM backend (not included).")
@@ -293,12 +301,12 @@ def check(
         console.print(f"[red]File not found:[/red] {document}")
         raise typer.Exit(1)
 
-    from src.agents.reference_extractor import extract_references
+    from src.agents.reference_extractor import extract_all_references
 
     console.print(Panel(f"Checking citations: [bold]{document.name}[/bold]", style="blue"))
 
     text = document.read_text(encoding="utf-8")
-    references = extract_references(text)
+    references = extract_all_references(text)
 
     console.print(f"Found [cyan]{len(references)}[/cyan] citation candidates")
 

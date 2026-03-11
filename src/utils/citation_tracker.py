@@ -9,7 +9,7 @@ from __future__ import annotations
 import logging
 import re
 
-from utils.evidence_card import EvidenceCard
+from src.utils.evidence_card import EvidenceCard
 
 logger = logging.getLogger(__name__)
 

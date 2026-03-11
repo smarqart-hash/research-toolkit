@@ -600,7 +600,7 @@ def save_draft(
 
     # Citation Tracking (optional)
     if evidence_cards and provenance_logger is not None:
-        from utils.citation_tracker import track_citations
+        from src.utils.citation_tracker import track_citations
 
         cited_ids = track_citations(draft_md, evidence_cards)
         for paper_id in cited_ids:

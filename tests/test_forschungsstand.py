@@ -560,6 +560,9 @@ class TestOpenAlexPreFilter:
             ) as mock_oa_client:
                 instance = mock_oa_client.return_value
                 instance.search_works = AsyncMock(return_value=mock_response)
+                # Context Manager Support (Connection Pooling)
+                instance.__aenter__ = AsyncMock(return_value=instance)
+                instance.__aexit__ = AsyncMock(return_value=None)
 
                 config = SearchConfig()
                 stats = {"openalex_total": 0, "openalex_errors": 0}
@@ -782,6 +785,9 @@ class TestHigherLimits:
                 instance = mock_exa_cls.return_value
                 instance.is_available = True
                 instance.search_papers = AsyncMock(side_effect=mock_search_papers)
+                # Context Manager Support (Connection Pooling)
+                instance.__aenter__ = AsyncMock(return_value=instance)
+                instance.__aexit__ = AsyncMock(return_value=None)
 
                 config = SearchConfig(max_results_per_query=75)
                 stats = {"exa_total": 0, "exa_errors": 0}

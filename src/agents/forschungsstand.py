@@ -103,11 +103,10 @@ def _check_source_balance(stats: dict[str, int]) -> list[str]:
     for source, count in active.items():
         ratio = count / total
         if ratio < 0.1:
-            warnings = [
-                *warnings,
+            warnings.append(
                 f"{source} lieferte nur {count}/{total} Papers ({ratio:.0%}). "
-                f"Ergebnisse koennten asymmetrisch sein.",
-            ]
+                f"Ergebnisse koennten asymmetrisch sein."
+            )
     return warnings
 
 
@@ -130,15 +129,13 @@ def _check_low_recall(
     ]
 
     if not has_exa:
-        warnings = [
-            *warnings,
-            "Empfehlung: Exa aktivieren fuer Web-Suche (export EXA_API_KEY=<key>).",
-        ]
+        warnings.append(
+            "Empfehlung: Exa aktivieren fuer Web-Suche (export EXA_API_KEY=<key>)."
+        )
     if not has_import:
-        warnings = [
-            *warnings,
-            "Empfehlung: Externe Papers importieren (--papers refs.bib).",
-        ]
+        warnings.append(
+            "Empfehlung: Externe Papers importieren (--papers refs.bib)."
+        )
 
     return warnings
 
@@ -152,31 +149,31 @@ async def _search_ss(
 
     Aktualisiert stats in-place fuer ss_total/ss_errors.
     """
-    ss_client = SemanticScholarClient()
-    papers: list[UnifiedPaper] = []
-    for query in queries:
-        try:
-            response = await ss_client.search_papers(
-                query,
-                limit=config.max_results_per_query,
-                year=config.year_filter,
-                fields_of_study=config.fields_of_study or None,
-            )
-            batch = [from_semantic_scholar(p) for p in response.data]
-            papers = [*papers, *batch]
-            stats["ss_total"] += len(batch)
-        except httpx.HTTPStatusError as e:
-            stats["ss_errors"] += 1
-            logger.warning(
-                "Semantic Scholar HTTP %d fuer Query '%s': %s",
-                e.response.status_code,
-                query,
-                e.response.text[:200],
-            )
-        except httpx.TimeoutException:
-            stats["ss_errors"] += 1
-            logger.warning("Semantic Scholar Timeout fuer Query '%s'", query)
-    return papers
+    async with SemanticScholarClient() as ss_client:
+        papers: list[UnifiedPaper] = []
+        for query in queries:
+            try:
+                response = await ss_client.search_papers(
+                    query,
+                    limit=config.max_results_per_query,
+                    year=config.year_filter,
+                    fields_of_study=config.fields_of_study or None,
+                )
+                batch = [from_semantic_scholar(p) for p in response.data]
+                papers.extend(batch)
+                stats["ss_total"] += len(batch)
+            except httpx.HTTPStatusError as e:
+                stats["ss_errors"] += 1
+                logger.warning(
+                    "Semantic Scholar HTTP %d fuer Query '%s': %s",
+                    e.response.status_code,
+                    query,
+                    e.response.text[:200],
+                )
+            except httpx.TimeoutException:
+                stats["ss_errors"] += 1
+                logger.warning("Semantic Scholar Timeout fuer Query '%s'", query)
+        return papers
 
 
 async def _search_openalex(
@@ -188,42 +185,45 @@ async def _search_openalex(
 
     Aktualisiert stats in-place fuer openalex_total/openalex_errors.
     """
-    oa_client = OpenAlexClient()
-    papers: list[UnifiedPaper] = []
-    for query in queries:
-        try:
-            response = await oa_client.search_works(
-                query,
-                per_page=config.max_results_per_query,
-                year_range=config.year_filter,
-                languages=config.languages or None,
-            )
-            # Pre-Filter: OpenAlex-Papers unter Relevanz-Schwelle entfernen
-            min_oa_relevance = 0.3
-            relevant = [w for w in response.results if w.relevance_score >= min_oa_relevance]
-            filtered_count = len(response.results) - len(relevant)
-            if filtered_count > 0:
-                logger.info(
-                    "OpenAlex Pre-Filter: %d/%d Papers unter Relevanz-Schwelle %.1f entfernt",
-                    filtered_count,
-                    len(response.results),
-                    min_oa_relevance,
+    async with OpenAlexClient() as oa_client:
+        papers: list[UnifiedPaper] = []
+        for query in queries:
+            try:
+                response = await oa_client.search_works(
+                    query,
+                    per_page=config.max_results_per_query,
+                    year_range=config.year_filter,
+                    languages=config.languages or None,
                 )
-            batch = [from_openalex(w) for w in relevant]
-            papers = [*papers, *batch]
-            stats["openalex_total"] += len(batch)
-        except httpx.HTTPStatusError as e:
-            stats["openalex_errors"] += 1
-            logger.warning(
-                "OpenAlex HTTP %d fuer Query '%s': %s",
-                e.response.status_code,
-                query,
-                e.response.text[:200],
-            )
-        except httpx.TimeoutException:
-            stats["openalex_errors"] += 1
-            logger.warning("OpenAlex Timeout fuer Query '%s'", query)
-    return papers
+                # Pre-Filter: OpenAlex-Papers unter Relevanz-Schwelle entfernen
+                min_oa_relevance = 0.3
+                relevant = [
+                    w for w in response.results
+                    if w.relevance_score <= 0 or w.relevance_score >= min_oa_relevance
+                ]
+                filtered_count = len(response.results) - len(relevant)
+                if filtered_count > 0:
+                    logger.info(
+                        "OpenAlex Pre-Filter: %d/%d Papers unter Relevanz-Schwelle %.1f entfernt",
+                        filtered_count,
+                        len(response.results),
+                        min_oa_relevance,
+                    )
+                batch = [from_openalex(w) for w in relevant]
+                papers.extend(batch)
+                stats["openalex_total"] += len(batch)
+            except httpx.HTTPStatusError as e:
+                stats["openalex_errors"] += 1
+                logger.warning(
+                    "OpenAlex HTTP %d fuer Query '%s': %s",
+                    e.response.status_code,
+                    query,
+                    e.response.text[:200],
+                )
+            except httpx.TimeoutException:
+                stats["openalex_errors"] += 1
+                logger.warning("OpenAlex Timeout fuer Query '%s'", query)
+        return papers
 
 
 async def _search_exa(
@@ -235,31 +235,31 @@ async def _search_exa(
 
     Aktualisiert stats in-place fuer exa_total/exa_errors.
     """
-    exa_client = ExaClient()
-    if not exa_client.is_available:
-        logger.info("Exa nicht verfuegbar (EXA_API_KEY nicht gesetzt)")
-        return []
-    papers: list[UnifiedPaper] = []
-    for query in queries:
-        try:
-            exa_response = await exa_client.search_papers(
-                query, num_results=min(config.max_results_per_query, 50),
-            )
-            batch = [from_exa(r) for r in exa_response.results]
-            papers = [*papers, *batch]
-            stats["exa_total"] += len(batch)
-        except httpx.HTTPStatusError as e:
-            stats["exa_errors"] += 1
-            logger.warning(
-                "Exa HTTP %d fuer Query '%s': %s",
-                e.response.status_code,
-                query,
-                e.response.text[:200],
-            )
-        except httpx.TimeoutException:
-            stats["exa_errors"] += 1
-            logger.warning("Exa Timeout fuer Query '%s'", query)
-    return papers
+    async with ExaClient() as exa_client:
+        if not exa_client.is_available:
+            logger.info("Exa nicht verfuegbar (EXA_API_KEY nicht gesetzt)")
+            return []
+        papers: list[UnifiedPaper] = []
+        for query in queries:
+            try:
+                exa_response = await exa_client.search_papers(
+                    query, num_results=min(config.max_results_per_query, 50),
+                )
+                batch = [from_exa(r) for r in exa_response.results]
+                papers.extend(batch)
+                stats["exa_total"] += len(batch)
+            except httpx.HTTPStatusError as e:
+                stats["exa_errors"] += 1
+                logger.warning(
+                    "Exa HTTP %d fuer Query '%s': %s",
+                    e.response.status_code,
+                    query,
+                    e.response.text[:200],
+                )
+            except httpx.TimeoutException:
+                stats["exa_errors"] += 1
+                logger.warning("Exa Timeout fuer Query '%s'", query)
+        return papers
 
 
 async def search_papers(
@@ -355,12 +355,12 @@ async def search_papers(
         if isinstance(result, Exception):
             logger.warning("Quelle fehlgeschlagen: %s", result)
             continue
-        all_papers = [*all_papers, *result]
+        all_papers.extend(result)
 
     # Paper-Import aus BibTeX-Datei
     if config.papers_file is not None:
         imported = parse_bibtex_file(config.papers_file)
-        all_papers = [*all_papers, *imported]
+        all_papers.extend(imported)
         stats["import_total"] = len(imported)
         logger.info("Paper-Import: %d Papers aus %s", len(imported), config.papers_file.name)
 
@@ -423,7 +423,7 @@ def generate_search_queries(topic: str, leitfragen: list[str]) -> list[str]:
             if cleaned.startswith(prefix):
                 cleaned = cleaned[len(prefix):]
                 break
-        queries = [*queries, f"{topic} {cleaned}"]
+        queries.append(f"{topic} {cleaned}")
     return queries
 
 

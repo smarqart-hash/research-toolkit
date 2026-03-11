@@ -7,10 +7,13 @@ Format: JSON Lines (append-only).
 from __future__ import annotations
 
 import json
+import logging
 from datetime import datetime, timezone
 from pathlib import Path
 
 from pydantic import BaseModel, Field
+
+logger = logging.getLogger(__name__)
 
 
 class ProvenanceEntry(BaseModel):
@@ -62,13 +65,22 @@ class ProvenanceLogger:
         self.log(entry)
 
     def read_all(self) -> list[ProvenanceEntry]:
-        """Liest alle Eintraege. Fuer Citation Verifier und Audit."""
+        """Liest alle Eintraege. Fuer Citation Verifier und Audit.
+
+        Korrupte Zeilen werden uebersprungen und geloggt.
+        """
         if not self._path.exists():
             return []
-        entries = []
-        for line in self._path.read_text(encoding="utf-8").strip().split("\n"):
-            if line:
-                entries = [*entries, ProvenanceEntry.model_validate_json(line)]
+        entries: list[ProvenanceEntry] = []
+        for line_no, line in enumerate(
+            self._path.read_text(encoding="utf-8").strip().split("\n"), start=1
+        ):
+            if not line:
+                continue
+            try:
+                entries.append(ProvenanceEntry.model_validate_json(line))
+            except (json.JSONDecodeError, ValueError) as exc:
+                logger.warning("Korrupte Zeile %d in %s: %s", line_no, self._path, exc)
         return entries
 
     def filter_by_phase(self, phase: str) -> list[ProvenanceEntry]:

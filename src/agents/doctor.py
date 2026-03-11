@@ -81,15 +81,19 @@ def check_dependencies() -> list[DependencyStatus]:
         ),
     ]
 
-    # Smart Query Expansion (LLM)
-    llm_key = os.environ.get("OPENROUTER_API_KEY") or os.environ.get("OPENAI_API_KEY")
+    # Smart Query Expansion (LLM) — LLM_API_KEY ist primaer (siehe llm_client.py)
+    llm_key = (
+        os.environ.get("LLM_API_KEY")
+        or os.environ.get("OPENROUTER_API_KEY")
+        or os.environ.get("OPENAI_API_KEY")
+    )
     deps = [
         *deps,
         DependencyStatus(
             name="Smart Query Expansion",
             available=bool(llm_key),
-            note="" if llm_key else "OPENROUTER_API_KEY oder OPENAI_API_KEY nicht gesetzt",
-            env_var="OPENROUTER_API_KEY",
+            note="" if llm_key else "LLM_API_KEY, OPENROUTER_API_KEY oder OPENAI_API_KEY nicht gesetzt",
+            env_var="LLM_API_KEY",
         ),
     ]
 
@@ -99,8 +103,8 @@ def check_dependencies() -> list[DependencyStatus]:
         DependencyStatus(
             name="Draft/Review/Revise",
             available=bool(llm_key),
-            note="" if llm_key else "LLM Key noetig (OPENROUTER_API_KEY)",
-            env_var="OPENROUTER_API_KEY",
+            note="" if llm_key else "LLM Key noetig (LLM_API_KEY oder OPENROUTER_API_KEY)",
+            env_var="LLM_API_KEY",
         ),
     ]
 
