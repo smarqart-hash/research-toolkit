@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 # Defaults fuer OpenRouter Free-Tier
 _DEFAULT_BASE_URL = "https://openrouter.ai/api/v1"
-_DEFAULT_MODEL = "google/gemini-2.0-flash-exp:free"
+_DEFAULT_MODEL = "google/gemini-2.5-flash-lite"
 
 
 class LLMConfig(BaseModel):

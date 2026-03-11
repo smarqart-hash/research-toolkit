@@ -189,9 +189,16 @@ async def _expand_llm(
 
     raw_response = await llm_complete(system_prompt, user_message)
 
+    # Markdown-JSON-Wrapper entfernen (```json ... ```)
+    cleaned = raw_response.strip()
+    if cleaned.startswith("```"):
+        cleaned = cleaned.split("\n", 1)[1] if "\n" in cleaned else cleaned[3:]
+        if cleaned.endswith("```"):
+            cleaned = cleaned[:-3].strip()
+
     # JSON parsen
     try:
-        data = json.loads(raw_response)
+        data = json.loads(cleaned)
     except json.JSONDecodeError as e:
         preview = raw_response[:200] if raw_response else "(leer)"
         raise ValueError(
