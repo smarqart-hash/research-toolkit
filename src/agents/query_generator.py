@@ -16,10 +16,12 @@ from pathlib import Path
 
 from pydantic import BaseModel, Field
 
+from src.utils import CONFIG_DIR
+
 logger = logging.getLogger(__name__)
 
 # Pfad zu Config-Templates
-_CONFIG_DIR = Path(__file__).resolve().parent.parent.parent / "config" / "query_templates"
+_QUERY_TEMPLATES_DIR = CONFIG_DIR / "query_templates"
 
 
 # --- Datenmodelle ---
@@ -49,7 +51,7 @@ class QuerySet(BaseModel):
 
 def _load_synonyms() -> dict[str, list[str]]:
     """Laedt die Synonym-Map aus config/query_templates/synonyms.json."""
-    path = _CONFIG_DIR / "synonyms.json"
+    path = _QUERY_TEMPLATES_DIR / "synonyms.json"
     if not path.exists():
         logger.warning("Synonym-Map nicht gefunden: %s", path)
         return {}
@@ -159,7 +161,7 @@ def _expand_local(
 
 def _load_expand_prompt() -> str:
     """Laedt den System-Prompt fuer LLM-Expansion."""
-    path = _CONFIG_DIR / "expand_prompt.txt"
+    path = _QUERY_TEMPLATES_DIR / "expand_prompt.txt"
     if not path.exists():
         logger.warning("Expand-Prompt nicht gefunden: %s", path)
         return "Generate search queries for academic literature search. Respond in JSON."

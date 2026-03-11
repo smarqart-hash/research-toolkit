@@ -43,7 +43,11 @@ def _load_env() -> None:
             continue
         if "=" in line:
             key, _, value = line.partition("=")
-            os.environ.setdefault(key.strip(), value.strip())
+            val = value.strip()
+            # Quotes entfernen: "value" oder 'value' → value
+            if len(val) >= 2 and val[0] == val[-1] and val[0] in ('"', "'"):
+                val = val[1:-1]
+            os.environ.setdefault(key.strip(), val)
 
 
 def _setup_logging(verbose: bool) -> None:
@@ -128,6 +132,17 @@ def search(
             f"Erlaubt: {', '.join(sorted(VALID_SOURCES))}"
         )
         raise typer.Exit(1)
+
+    # year_filter Format validieren
+    if year_filter is not None:
+        import re as _re
+
+        if not _re.match(r"^\d{4}(-\d{4})?$", year_filter):
+            console.print(
+                f"[red]Ungueltiges Jahresformat:[/red] {year_filter}\n"
+                "Erlaubt: YYYY oder YYYY-YYYY (z.B. 2020 oder 2020-2026)"
+            )
+            raise typer.Exit(1)
 
     config = SearchConfig(
         top_k=max_results,
@@ -367,7 +382,8 @@ def venues() -> None:
             if isinstance(pages, list):
                 pages = f"{pages[0]}-{pages[1]}"
             table.add_row(venue_id, data.get("name", "?"), data.get("type", "?"), str(pages))
-        except Exception:
+        except (json.JSONDecodeError, KeyError, OSError) as e:
+            logging.getLogger(__name__).warning("Venue-Profil %s fehlerhaft: %s", venue_id, e)
             table.add_row(venue_id, "?", "?", "?")
 
     console.print(table)

@@ -112,14 +112,16 @@ class SemanticScholarClient:
 
     MAX_RETRIES = 1
     RETRY_DELAY_S = 2.0
+    _warned_no_key = False
 
     def __init__(self, api_key: str | None = None) -> None:
         self._api_key = api_key or os.environ.get("S2_API_KEY")
         self._headers: dict[str, str] = {}
         if self._api_key:
             self._headers["x-api-key"] = self._api_key
-        else:
+        elif not SemanticScholarClient._warned_no_key:
             logger.warning("S2_API_KEY nicht gesetzt — Rate Limits sind strenger")
+            SemanticScholarClient._warned_no_key = True
         self._client = httpx.AsyncClient(timeout=30, headers=self._headers)
 
     async def close(self) -> None:

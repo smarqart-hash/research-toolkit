@@ -149,7 +149,7 @@ class TestLoadSynonyms:
         assert isinstance(result, dict)
         assert len(result) > 0
 
-    @patch("src.agents.query_generator._CONFIG_DIR", Path("/nonexistent"))
+    @patch("src.agents.query_generator._QUERY_TEMPLATES_DIR", Path("/nonexistent"))
     def test_returns_empty_on_missing_file(self) -> None:
         result = _load_synonyms()
         assert result == {}
@@ -161,7 +161,7 @@ class TestLoadExpandPrompt:
         assert "JSON" in result
         assert len(result) > 50
 
-    @patch("src.agents.query_generator._CONFIG_DIR", Path("/nonexistent"))
+    @patch("src.agents.query_generator._QUERY_TEMPLATES_DIR", Path("/nonexistent"))
     def test_returns_fallback_on_missing_file(self) -> None:
         result = _load_expand_prompt()
         assert "JSON" in result
