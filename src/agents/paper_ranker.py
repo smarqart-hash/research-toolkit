@@ -28,6 +28,10 @@ logger = logging.getLogger(__name__)
 HEURISTIC_CITATION_CAPS = {"semantic_scholar": 0.4, "openalex": 0.15, "exa": 0.05}
 ENHANCED_CITATION_CAPS = {"semantic_scholar": 0.25, "openalex": 0.10, "exa": 0.03}
 
+# Recency-Berechnung: Papers vor RECENCY_BASELINE_YEAR bekommen 0 Punkte
+RECENCY_BASELINE_YEAR = 2018
+RECENCY_WINDOW_YEARS = 8
+
 class UnifiedPaper(BaseModel):
     """Vereinheitlichtes Paper-Format nach Deduplizierung."""
 
@@ -79,7 +83,7 @@ class UnifiedPaper(BaseModel):
 
         # Aktualitaet (max 0.3)
         if self.year:
-            recency = max(0, self.year - 2018) / 8
+            recency = max(0, self.year - RECENCY_BASELINE_YEAR) / RECENCY_WINDOW_YEARS
             score += min(0.3, recency * 0.3)
 
         # Open Access Bonus (0.1)

@@ -81,8 +81,8 @@ def load_local_papers(forschungsstand_path: Path) -> dict[str, UnifiedPaper]:
     try:
         data = json.loads(forschungsstand_path.read_text(encoding="utf-8"))
         papers = [UnifiedPaper.model_validate(p) for p in data.get("papers", [])]
-    except Exception:
-        logger.warning("Konnte forschungsstand.json nicht laden: %s", forschungsstand_path)
+    except (json.JSONDecodeError, ValueError, OSError) as e:
+        logger.warning("Konnte forschungsstand.json nicht laden: %s — %s", forschungsstand_path, e)
         return {}
 
     lookup: dict[str, UnifiedPaper] = {}

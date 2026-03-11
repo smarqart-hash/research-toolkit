@@ -14,14 +14,13 @@ from pathlib import Path
 from pydantic import BaseModel, Field, computed_field
 
 from src.agents.reviewer import Severity
+from src.utils import CONFIG_DIR
 
 logger = logging.getLogger(__name__)
 
 # --- Config-Pfade ---
 
-_SUB_QUESTIONS_PATH = (
-    Path(__file__).resolve().parent.parent.parent / "config" / "dimensions" / "sub_questions.json"
-)
+_SUB_QUESTIONS_PATH = CONFIG_DIR / "dimensions" / "sub_questions.json"
 
 _MAX_REVISIONS_CAP = 2  # Hart, nicht konfigurierbar ueber diesen Wert
 
@@ -255,15 +254,19 @@ def _parse_review_response(raw: str, sub_questions: list[SubQuestion]) -> Compac
         severity_str = item.get("severity", "HIGH").upper()
         if severity_str not in ("CRITICAL", "HIGH"):
             continue
-        issues = [
-            *issues,
+        try:
+            severity = Severity(severity_str)
+        except ValueError:
+            logger.warning("Unbekannter Severity-Wert: %s — uebersprungen", severity_str)
+            continue
+        issues.append(
             CompactIssue(
                 section=item.get("section", ""),
                 problem=item.get("problem", ""),
                 suggestion=item.get("suggestion", ""),
-                severity=Severity(severity_str),
+                severity=severity,
             ),
-        ]
+        )
 
     score = compute_score(sq_results)
     return CompactReview(
@@ -329,15 +332,14 @@ async def self_consistency_probe(
     *,
     config: object | None = None,
 ) -> list[ConsistencyResult]:
-    """3x Review mit T=0.3/0.7/1.0, Agreement pro Dimension messen."""
-    temperatures = [0.3, 0.7, 1.0]
-    reviews: list[CompactReview] = []
+    """3x Review mit T=0.3/0.7/1.0 parallel, Agreement pro Dimension messen."""
+    import asyncio
 
-    for temp in temperatures:
-        review = await review_for_revision(
-            draft_md, sub_questions, config=config, temperature=temp
-        )
-        reviews = [*reviews, review]
+    temperatures = [0.3, 0.7, 1.0]
+    reviews = await asyncio.gather(*(
+        review_for_revision(draft_md, sub_questions, config=config, temperature=temp)
+        for temp in temperatures
+    ))
 
     # Agreement pro Dimension berechnen
     dimensions = {q.dimension for q in sub_questions}
@@ -347,24 +349,22 @@ async def self_consistency_probe(
         ratings: list[str] = []
         for review in reviews:
             dim_results = [r for r in review.sub_question_results if r.question.dimension == dim]
-            # Aggregiere: Mehrheit True → "erfuellt", sonst "nicht_erfuellt"
             if dim_results:
                 fulfilled = sum(1 for r in dim_results if r.answer)
                 rating = "erfuellt" if fulfilled > len(dim_results) / 2 else "nicht_erfuellt"
             else:
                 rating = "keine_daten"
-            ratings = [*ratings, rating]
+            ratings.append(rating)
 
         agreement = compute_agreement(ratings)
-        results = [
-            *results,
+        results.append(
             ConsistencyResult(
                 dimension=dim,
                 ratings=ratings,
                 agreement_pct=agreement,
                 flagged_for_human=agreement < 60.0,
             ),
-        ]
+        )
 
     return results
 

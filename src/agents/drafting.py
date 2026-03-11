@@ -19,6 +19,8 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger(__name__)
 
+WORDS_PER_PAGE = 250  # Schaetzung fuer Seitenzahl-Berechnung
+
 
 # --- Enums ---
 
@@ -353,8 +355,7 @@ def self_check_draft(
 
     # --- Gesamtlaenge pruefen ---
     total_words = sum(len(s.content.split()) for s in sections)
-    # Schaetzung: ~250 Woerter pro Seite
-    estimated_pages = total_words / 250
+    estimated_pages = total_words / WORDS_PER_PAGE
     page_range = venue.page_range
     if page_range and estimated_pages < page_range[0] * 0.5:
         findings = [

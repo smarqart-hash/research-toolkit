@@ -15,7 +15,6 @@ import asyncio
 import logging
 import re
 import unicodedata
-from dataclasses import dataclass, field
 from pathlib import Path
 
 import httpx
@@ -65,20 +64,21 @@ class ForschungsstandResult(BaseModel):
     sources_used: list[str] = Field(default_factory=list)
 
 
-@dataclass
-class SearchConfig:
+class SearchConfig(BaseModel):
     """Konfiguration fuer die Paper-Suche."""
 
     max_results_per_query: int = 100
     year_filter: str | None = None  # z.B. "2020-2026"
-    fields_of_study: list[str] = field(default_factory=list)
-    sources: list[str] = field(default_factory=lambda: ["ss", "openalex"])
-    languages: list[str] = field(default_factory=lambda: ["en", "de"])
+    fields_of_study: list[str] = Field(default_factory=list)
+    sources: list[str] = Field(default_factory=lambda: ["ss", "openalex"])
+    languages: list[str] = Field(default_factory=lambda: ["en", "de"])
     top_k: int = 30  # Max Papers nach Ranking
     papers_file: Path | None = None  # BibTeX-Import
 
 
 LOW_RECALL_THRESHOLD = 15
+MIN_OA_RELEVANCE = 0.3  # OpenAlex Pre-Filter: Papers unter dieser Schwelle entfernen
+SOURCE_BALANCE_THRESHOLD = 0.1  # Warnung wenn Quelle <10% des Pools liefert
 
 
 # --- Such-Orchestrierung ---
@@ -102,7 +102,7 @@ def _check_source_balance(stats: dict[str, int]) -> list[str]:
     warnings: list[str] = []
     for source, count in active.items():
         ratio = count / total
-        if ratio < 0.1:
+        if ratio < SOURCE_BALANCE_THRESHOLD:
             warnings.append(
                 f"{source} lieferte nur {count}/{total} Papers ({ratio:.0%}). "
                 f"Ergebnisse koennten asymmetrisch sein."
@@ -196,10 +196,9 @@ async def _search_openalex(
                     languages=config.languages or None,
                 )
                 # Pre-Filter: OpenAlex-Papers unter Relevanz-Schwelle entfernen
-                min_oa_relevance = 0.3
                 relevant = [
                     w for w in response.results
-                    if w.relevance_score <= 0 or w.relevance_score >= min_oa_relevance
+                    if w.relevance_score <= 0 or w.relevance_score >= MIN_OA_RELEVANCE
                 ]
                 filtered_count = len(response.results) - len(relevant)
                 if filtered_count > 0:
@@ -207,7 +206,7 @@ async def _search_openalex(
                         "OpenAlex Pre-Filter: %d/%d Papers unter Relevanz-Schwelle %.1f entfernt",
                         filtered_count,
                         len(response.results),
-                        min_oa_relevance,
+                        MIN_OA_RELEVANCE,
                     )
                 batch = [from_openalex(w) for w in relevant]
                 papers.extend(batch)

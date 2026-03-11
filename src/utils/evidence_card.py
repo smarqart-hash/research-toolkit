@@ -56,7 +56,12 @@ class EvidenceCard(BaseModel):
                 f"Unbekannter Confidence-Wert: {v!r}. "
                 f"Erlaubt: {list(_CONFIDENCE_MAP.keys())} oder Float 0.0-1.0"
             )
-        return float(v)
+        val = float(v)
+        if not 0.0 <= val <= 1.0:
+            raise ValueError(
+                f"Confidence muss zwischen 0.0 und 1.0 liegen, war: {val}"
+            )
+        return val
 
 
 def save_evidence_cards(cards: list[EvidenceCard], directory: Path) -> list[Path]:

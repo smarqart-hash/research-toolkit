@@ -14,6 +14,8 @@ from pathlib import Path
 
 from pydantic import BaseModel, Field, computed_field
 
+from src.utils import CONFIG_DIR
+
 
 class Rating(str, Enum):
     """Ordinale Bewertungslabels statt numerischer Scores."""
@@ -131,7 +133,7 @@ class ReviewResult(BaseModel):
         return Verdict.READY
 
 
-_AUTOMATABLE_CONFIG_PATH = Path(__file__).resolve().parent.parent.parent / "config" / "dimensions" / "automatable.json"
+_AUTOMATABLE_CONFIG_PATH = CONFIG_DIR / "dimensions" / "automatable.json"
 
 
 def load_automatable_config(path: Path | None = None) -> dict[str, bool]:

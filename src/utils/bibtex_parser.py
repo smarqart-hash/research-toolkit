@@ -68,5 +68,9 @@ def parse_bibtex_file(path: Path) -> list[UnifiedPaper]:
     if not path.exists():
         raise FileNotFoundError(f"BibTeX-Datei nicht gefunden: {path}")
 
-    bib_string = path.read_text(encoding="utf-8")
+    try:
+        bib_string = path.read_text(encoding="utf-8")
+    except UnicodeDecodeError:
+        logger.warning("BibTeX-Datei nicht UTF-8, versuche latin-1: %s", path)
+        bib_string = path.read_text(encoding="latin-1")
     return parse_bibtex_string(bib_string)
