@@ -10,6 +10,7 @@ Ranking-Modi:
 
 from __future__ import annotations
 
+import functools
 import hashlib
 import logging
 import math
@@ -26,10 +27,6 @@ logger = logging.getLogger(__name__)
 # Source-spezifische Citation-Caps (Modul-Konstanten)
 HEURISTIC_CITATION_CAPS = {"semantic_scholar": 0.4, "openalex": 0.15, "exa": 0.05}
 ENHANCED_CITATION_CAPS = {"semantic_scholar": 0.25, "openalex": 0.10, "exa": 0.03}
-
-# SPECTER2 Model-Cache (Lazy Loading)
-_specter2_model = None
-
 
 class UnifiedPaper(BaseModel):
     """Vereinheitlichtes Paper-Format nach Deduplizierung."""
@@ -187,19 +184,16 @@ def deduplicate(papers: Sequence[UnifiedPaper]) -> list[UnifiedPaper]:
 # --- SPECTER2 ---
 
 
+@functools.lru_cache(maxsize=1)
 def _load_specter2_model():
-    """Laedt SPECTER2 Model (Lazy, gecacht).
+    """Laedt SPECTER2 Model (Lazy, gecacht via lru_cache).
 
     Raises:
         ImportError: Wenn sentence-transformers nicht installiert.
     """
-    global _specter2_model
-    if _specter2_model is not None:
-        return _specter2_model
     from sentence_transformers import SentenceTransformer
 
-    _specter2_model = SentenceTransformer("allenai/specter2_base")
-    return _specter2_model
+    return SentenceTransformer("allenai/specter2_base")
 
 
 def compute_specter2_similarity(
