@@ -102,6 +102,8 @@ Source-aware Composite Score (0-1):
 **Paper-Import:** `--papers refs.bib` importiert externe Papers (source="import") in den Pool.
 **Low-Recall-Warnung:** Warnung wenn < 15 Papers nach Ranking + Empfehlungen (Exa, Import).
 
+**OA-spezifische Queries:** `QuerySet.oa_queries` — Freitext ohne Boolean-Operatoren fuer OpenAlex.
+**Exa DACH-Domains:** gesis.org, dnb.de, zbw.eu in `include_domains`.
 **SPECTER2** optional (`[nlp]`). Enhanced Score ebenfalls source-aware (SS: 0.25, OA: 0.10, Exa: 0.03).
 Deduplication via DOI oder Title-Hash (SHA256).
 
@@ -119,4 +121,4 @@ Deduplication via DOI oder Title-Hash (SHA256).
 
 Reflexiver Feedback-Loop: Toolkit generiert Paper ueber sich selbst, leitet Findings ab.
 Abgeschlossen: Sprint 1-7 + Quickwin (Details: `docs/plans/sprint-*-handover.md`).
-Offen: F19 (Exa-Verdraengung), F20 (Query-Divergenz), F21 (SS Rate Limits).
+Offen: Keine aktiven Findings. F19-F21 geloest (Details: Memory).
