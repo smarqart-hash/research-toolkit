@@ -258,8 +258,7 @@ def review(
         console.print(f"[red]File not found:[/red] {document}")
         raise typer.Exit(1)
 
-    from src.agents.reviewer import ReviewConfig
-    from src.utils.rubric_loader import find_rubric_for_venue, load_all_rubrics
+    from src.utils.rubric_loader import find_rubric_for_venue
 
     console.print(Panel(f"Reviewing: [bold]{document.name}[/bold]", style="blue"))
 
@@ -268,11 +267,10 @@ def review(
     console.print(f"Document: {word_count} words")
 
     if venue:
-        rubrics = load_all_rubrics()
-        matched = find_rubric_for_venue(venue, rubrics=rubrics)
-        if matched:
+        try:
+            matched = find_rubric_for_venue(venue)
             console.print(f"Rubric: [green]{matched.name}[/green]")
-        else:
+        except FileNotFoundError:
             console.print(f"[yellow]No rubric found for venue '{venue}'[/yellow]")
 
     console.print(f"\n[yellow]Note:[/yellow] Full review requires an LLM backend (not included).")
@@ -293,12 +291,12 @@ def check(
         console.print(f"[red]File not found:[/red] {document}")
         raise typer.Exit(1)
 
-    from src.agents.reference_extractor import extract_references
+    from src.agents.reference_extractor import extract_all_references
 
     console.print(Panel(f"Checking citations: [bold]{document.name}[/bold]", style="blue"))
 
     text = document.read_text(encoding="utf-8")
-    references = extract_references(text)
+    references = extract_all_references(text)
 
     console.print(f"Found [cyan]{len(references)}[/cyan] citation candidates")
 
