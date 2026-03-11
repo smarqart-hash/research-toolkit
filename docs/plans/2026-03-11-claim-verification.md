@@ -10,6 +10,18 @@
 
 ---
 
+## Adversarial Review Fixes (eingearbeitet)
+
+1. **(CRITICAL) Draft-Laenge / Extraction-Batching** — `extract_claims` splittet Draft an
+   Markdown-Headings (`## ...`) und extrahiert Claims pro Sektion. Konstante `_MAX_SECTION_CHARS = 12000`
+   (~3K Tokens). Zu lange Sektionen werden gewarnt und trotzdem verarbeitet (kein Abbruch).
+2. **(HIGH) CLI Data Flow** — Task 5 enthaelt konkreten Code fuer `_load_paper_data()`:
+   Laedt `forschungsstand.json`, baut `paper_map` (DOI/ID → Titel) und `abstracts` (DOI/ID → Abstract).
+3. **(MEDIUM) Extraction max_tokens** — `extract_claims()` nutzt `_EXTRACTION_MAX_TOKENS = 2048`
+   als Override statt den LLMConfig-Default (1024).
+
+---
+
 ## Kontext
 
 ### Bestehende Dateien (lesen vor Implementation)
@@ -297,6 +309,26 @@ class TestParseExtractionResponse:
         assert result == []
 
 
+class TestSplitDraftSections:
+    def test_splits_on_headings(self):
+        from src.agents.claim_verifier import _split_draft_sections
+        draft = "## Intro\nText A.\n## Methods\nText B."
+        sections = _split_draft_sections(draft)
+        assert len(sections) == 2
+        assert "Text A" in sections[0]
+        assert "Text B" in sections[1]
+
+    def test_no_headings_returns_whole(self):
+        from src.agents.claim_verifier import _split_draft_sections
+        sections = _split_draft_sections("Just text.")
+        assert len(sections) == 1
+
+    def test_short_draft_single_section(self):
+        from src.agents.claim_verifier import _split_draft_sections
+        sections = _split_draft_sections("## A\nShort.")
+        assert len(sections) == 1
+
+
 class TestExtractClaims:
     @pytest.mark.asyncio
     async def test_basic_flow(self):
@@ -312,12 +344,44 @@ class TestExtractClaims:
         assert len(result) == 1
 
     @pytest.mark.asyncio
+    async def test_long_draft_batched_by_sections(self):
+        """Langer Draft wird in Sektionen aufgeteilt (je ein LLM-Call)."""
+        section_a = "## Intro\n" + "A " * 3000  # ~6000 chars
+        section_b = "## Methods\n" + "B " * 3000
+        draft = f"{section_a}\n{section_b}"
+        response_a = json.dumps({"claims": [
+            {"claim": "Claim A", "cited_paper_id": "p1", "source_sentence": "S"},
+        ]})
+        response_b = json.dumps({"claims": [
+            {"claim": "Claim B", "cited_paper_id": "p1", "source_sentence": "S"},
+        ]})
+        config = _llm_config()
+        with patch("src.agents.claim_verifier.llm_complete", new_callable=AsyncMock) as mock:
+            mock.side_effect = [response_a, response_b]
+            result = await extract_claims(draft, {"p1": "Paper A"}, config=config)
+        assert len(result) == 2
+        assert mock.call_count == 2
+
+    @pytest.mark.asyncio
     async def test_llm_error_returns_empty(self):
         config = _llm_config()
         with patch("src.agents.claim_verifier.llm_complete", new_callable=AsyncMock) as mock:
             mock.side_effect = RuntimeError("API down")
             result = await extract_claims("Draft.", {"p1": "A"}, config=config)
         assert result == []
+
+    @pytest.mark.asyncio
+    async def test_uses_higher_max_tokens(self):
+        """extract_claims nutzt 2048 max_tokens statt Default 1024."""
+        llm_response = json.dumps({"claims": []})
+        config = _llm_config()
+        with patch("src.agents.claim_verifier.llm_complete", new_callable=AsyncMock) as mock:
+            mock.return_value = llm_response
+            await extract_claims("Draft.", {"p1": "A"}, config=config)
+            call_kwargs = mock.call_args
+            # Config wird als Keyword-Arg uebergeben
+            used_config = call_kwargs.kwargs.get("config") or call_kwargs[1].get("config")
+            assert used_config.max_tokens == 2048
 ```
 
 **Step 2: Run to verify fail**
@@ -330,7 +394,12 @@ Expected: `ImportError` (Funktionen existieren noch nicht)
 Add to `claim_verifier.py`:
 
 ```python
+import re
+
 from src.utils.llm_client import LLMConfig, llm_complete, load_llm_config
+
+_MAX_SECTION_CHARS = 12_000  # ~3K Tokens — sicher unter Context-Limit
+_EXTRACTION_MAX_TOKENS = 2048  # Extraction-Response braucht mehr als Default 1024
 
 _EXTRACTION_SYSTEM_PROMPT = """\
 Du bist ein wissenschaftlicher Claim-Analyst. Extrahiere alle atomaren \
@@ -353,6 +422,35 @@ REGELN:
 - Ein Claim pro Eintrag (atomarisieren!)
 - cited_paper_id MUSS aus der gegebenen Paper-Liste stammen
 - Keine Markdown-Formatierung, nur reines JSON"""
+
+
+def _split_draft_sections(draft_md: str) -> list[str]:
+    """Splittet Draft an Markdown-Headings (## ...) fuer Batched Extraction.
+
+    Kurze Drafts (<= _MAX_SECTION_CHARS) werden als einzelne Sektion zurueckgegeben.
+    """
+    if len(draft_md) <= _MAX_SECTION_CHARS:
+        return [draft_md]
+
+    parts = re.split(r"(?=^## )", draft_md, flags=re.MULTILINE)
+    sections: list[str] = [p.strip() for p in parts if p.strip()]
+
+    if not sections:
+        return [draft_md]
+
+    # Zu kurze Sektionen zusammenfassen
+    merged: list[str] = []
+    current = ""
+    for section in sections:
+        if current and len(current) + len(section) > _MAX_SECTION_CHARS:
+            merged = [*merged, current]
+            current = section
+        else:
+            current = f"{current}\n\n{section}" if current else section
+    if current:
+        merged = [*merged, current]
+
+    return merged if merged else [draft_md]
 
 
 def _build_extraction_prompt(draft_md: str, paper_map: dict[str, str]) -> str:
@@ -399,6 +497,9 @@ async def extract_claims(
 ) -> list[AtomicClaim]:
     """Extrahiert atomare Claims aus Draft via LLM.
 
+    Grosse Drafts werden an Markdown-Headings gesplittet
+    und in Sektionen verarbeitet (je ein LLM-Call).
+
     Args:
         draft_md: Draft-Text (Markdown).
         paper_map: Dict von paper_id -> Titel (bekannte Papers).
@@ -411,14 +512,23 @@ async def extract_claims(
         return []
 
     llm_config = config or load_llm_config()
+    # Extraction braucht mehr Tokens als Default
+    extraction_config = llm_config.model_copy(update={"max_tokens": _EXTRACTION_MAX_TOKENS})
 
-    try:
-        user_msg = _build_extraction_prompt(draft_md, paper_map)
-        raw = await llm_complete(_EXTRACTION_SYSTEM_PROMPT, user_msg, config=llm_config)
-        return _parse_extraction_response(raw, set(paper_map.keys()))
-    except Exception as e:
-        logger.warning("Claim-Extraktion fehlgeschlagen: %s", e)
-        return []
+    sections = _split_draft_sections(draft_md)
+    valid_ids = set(paper_map.keys())
+    all_claims: list[AtomicClaim] = []
+
+    for section in sections:
+        try:
+            user_msg = _build_extraction_prompt(section, paper_map)
+            raw = await llm_complete(_EXTRACTION_SYSTEM_PROMPT, user_msg, config=extraction_config)
+            claims = _parse_extraction_response(raw, valid_ids)
+            all_claims = [*all_claims, *claims]
+        except Exception as e:
+            logger.warning("Claim-Extraktion fehlgeschlagen fuer Sektion: %s", e)
+
+    return all_claims
 ```
 
 **Step 4: Run tests**
@@ -903,8 +1013,44 @@ After existing reference check, add verification block:
 ```python
 if verify:
     from src.agents.claim_verifier import run_verification, format_verification_report
-    # ... load abstracts from forschungsstand.json, run verification
-    console.print(format_verification_report(report))
+
+    def _load_paper_data(forschungsstand_path: Path) -> tuple[dict[str, str], dict[str, str]]:
+        """Laedt paper_map und abstracts aus forschungsstand.json."""
+        if not forschungsstand_path.exists():
+            return {}, {}
+        try:
+            data = json.loads(forschungsstand_path.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError) as e:
+            console.print(f"[yellow]forschungsstand.json nicht lesbar:[/yellow] {e}")
+            return {}, {}
+        paper_map: dict[str, str] = {}
+        abstracts: dict[str, str] = {}
+        for p in data.get("papers", []):
+            pid = p.get("doi") or p.get("id") or p.get("title", "")[:50]
+            if not pid:
+                continue
+            paper_map[pid] = p.get("title", "?")
+            if p.get("abstract"):
+                abstracts[pid] = p["abstract"]
+        return paper_map, abstracts
+
+    forschungsstand_path = output_dir / "search_results.json"
+    paper_map, paper_abstracts = _load_paper_data(forschungsstand_path)
+    if not paper_map:
+        console.print("[yellow]Keine Papers in search_results.json — ueberspringe Verification.[/yellow]")
+        console.print("Fuehre zuerst 'research-toolkit search' aus.")
+    else:
+        console.print(f"\n[cyan]Verifying claims against {len(paper_abstracts)} abstracts...[/cyan]")
+        ver_report = asyncio.run(run_verification(
+            draft_md=text,
+            paper_map=paper_map,
+            abstracts=paper_abstracts,
+            document_name=document.name,
+        ))
+        console.print(format_verification_report(ver_report))
+        ver_path = output_dir / "claim-verification.json"
+        ver_path.write_text(ver_report.model_dump_json(indent=2), encoding="utf-8")
+        console.print(f"Saved to: [green]{ver_path}[/green]")
 ```
 
 **Step 5: Run full test suite**
@@ -926,10 +1072,10 @@ git commit -m "feat: integrate claim verification into check command (--verify)"
 | Task | Tests | Dateien |
 |------|-------|---------|
 | 1: Datenmodelle | 8 | claim_verifier.py, test_claim_verifier.py |
-| 2: Claim-Extraktion | 7 | claim_verifier.py |
+| 2: Claim-Extraktion | 11 | claim_verifier.py (+_split_draft_sections) |
 | 3: Claim-Verification | 4 | claim_verifier.py |
 | 4: Report-Formatting | 2 | claim_verifier.py |
 | 5: CLI-Integration | 1 | claim_verifier.py, cli.py |
-| **Total** | **~22** | **2 neue, 1 modifiziert** |
+| **Total** | **~26** | **2 neue, 1 modifiziert** |
 
 **Nach Implementation:** Adversarial Review dispatchen.

@@ -17,12 +17,14 @@ CLI (Typer) → Agents (Domain-Logik) → Pipeline (State + Provenance)
 | `src/agents/` | Domain-Logik: Search, Draft, Review, Check, Ranking |
 | `src/pipeline/state.py` | State Machine (6 Phasen + HITL Gates) |
 | `src/pipeline/provenance.py` | Append-only JSONL Audit Trail |
+| `src/utils/__init__.py` | PROJECT_ROOT, CONFIG_DIR Konstanten |
 | `src/utils/evidence_card.py` | Strukturierte Paper-Extrakte |
 | `src/utils/rubric_loader.py` | Venue-Rubrics + Policy Context |
 | `src/utils/document_splitter.py` | Dokument-Splitting |
 | `src/utils/bibtex_parser.py` | BibTeX-Import zu UnifiedPaper |
 | `skills/` | LLM Instruction Files (search, draft, review, check) |
 | `config/` | Venue/Voice Profiles (JSON), Rubrics, Policy Context |
+| `src/agents/claim_verifier.py` | LLM-basierte Claim-Verifikation (FactScore) |
 | `src/agents/doctor.py` | Feature-Availability Check (doctor Command) |
 | `cli.py` | Typer Entry Point (6 Commands) |
 
@@ -34,6 +36,7 @@ CLI (Typer) → Agents (Domain-Logik) → Pipeline (State + Provenance)
 | Draft | `drafting.py` + `config/venue_profiles/` + `config/voice_profiles/` |
 | Review | `reviewer.py` + `rubric_loader.py` |
 | Check | `quellen_checker.py` + `reference_extractor.py` |
+| Verify | `claim_verifier.py` (FactScore-Pattern: Claim-Extraktion + NLI) |
 | Import | `bibtex_parser.py` |
 
 ## Coding Conventions
@@ -62,7 +65,7 @@ CLI (Typer) → Agents (Domain-Logik) → Pipeline (State + Provenance)
 
 ## Tests
 
-- **Framework**: pytest (467+ Tests, alle passing)
+- **Framework**: pytest (564 Tests, alle passing)
 - **Pfad**: `tests/` — pythonpath: `["src", "."]`
 - **Factories**: `_ss_paper()`, `_exa_result()`, `_openalex_work()` als lokale Helfer (kein Factory-Framework)
 - **Fixtures**: `@pytest.fixture` fuer State, tmp_path
@@ -82,7 +85,7 @@ pytest tests/ --cov=src --cov-report=term-missing
 research-toolkit search TOPIC        # --max, --sources ss,openalex,exa, --years, --append, --papers
 research-toolkit draft TOPIC --venue X  # --voice, --input, --mode
 research-toolkit review DOCUMENT     # --venue
-research-toolkit check DOCUMENT
+research-toolkit check DOCUMENT      # --verify (LLM Claim-Verifikation)
 research-toolkit venues              # Liste Venue-Profile
 research-toolkit doctor              # Feature-Availability Check
 ```
@@ -120,5 +123,7 @@ Deduplication via DOI oder Title-Hash (SHA256).
 ## Meta-Loop
 
 Reflexiver Feedback-Loop: Toolkit generiert Paper ueber sich selbst, leitet Findings ab.
-Abgeschlossen: Sprint 1-7 + Quickwin (Details: `docs/plans/sprint-*-handover.md`).
+Abgeschlossen: Sprint 1-7 + Quickwin + Code Audit + Claim Verification (Details: `docs/plans/`).
+Code Audit 2026-03-11: CRITICAL(8)+HIGH(27)+MEDIUM(28) gefixt, LOW(15) als Backlog.
+Claim Verification: FactScore-Pattern (Extraktion + NLI), 28 Tests, `--verify` Flag im check-Command.
 Offen: Keine aktiven Findings. F19-F21 geloest (Details: Memory).
