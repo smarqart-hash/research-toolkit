@@ -78,10 +78,42 @@ class SearchConfig:
     papers_file: Path | None = None  # BibTeX-Import
 
 
-# --- Such-Orchestrierung ---
-
-
 LOW_RECALL_THRESHOLD = 15
+
+
+def _check_low_recall(
+    paper_count: int,
+    *,
+    has_exa: bool,
+    has_import: bool,
+) -> list[str]:
+    """Warnt wenn wenige Papers gefunden — empfiehlt weitere Quellen.
+
+    Schwelle: < 15 Papers nach Ranking.
+    """
+    if paper_count >= LOW_RECALL_THRESHOLD:
+        return []
+
+    warnings: list[str] = [
+        f"Niedriger Recall: nur {paper_count} Papers gefunden "
+        f"(Schwelle: {LOW_RECALL_THRESHOLD})."
+    ]
+
+    if not has_exa:
+        warnings = [
+            *warnings,
+            "Empfehlung: Exa aktivieren fuer Web-Suche (export EXA_API_KEY=<key>).",
+        ]
+    if not has_import:
+        warnings = [
+            *warnings,
+            "Empfehlung: Externe Papers importieren (--papers refs.bib).",
+        ]
+
+    return warnings
+
+
+# --- Such-Orchestrierung ---
 
 
 def _check_source_balance(stats: dict[str, int]) -> list[str]:
