@@ -35,6 +35,7 @@ from src.agents.paper_ranker import (
 )
 from src.agents.screener import PrismaFlow, ScreeningCriteria, screen_papers
 from src.agents.semantic_scholar import SemanticScholarClient
+from src.utils.bibtex_parser import parse_bibtex_file
 from src.utils.evidence_card import EvidenceCard
 
 
@@ -74,6 +75,42 @@ class SearchConfig:
     sources: list[str] = field(default_factory=lambda: ["ss", "openalex"])
     languages: list[str] = field(default_factory=lambda: ["en", "de"])
     top_k: int = 30  # Max Papers nach Ranking
+    papers_file: Path | None = None  # BibTeX-Import
+
+
+LOW_RECALL_THRESHOLD = 15
+
+
+def _check_low_recall(
+    paper_count: int,
+    *,
+    has_exa: bool,
+    has_import: bool,
+) -> list[str]:
+    """Warnt wenn wenige Papers gefunden — empfiehlt weitere Quellen.
+
+    Schwelle: < 15 Papers nach Ranking.
+    """
+    if paper_count >= LOW_RECALL_THRESHOLD:
+        return []
+
+    warnings: list[str] = [
+        f"Niedriger Recall: nur {paper_count} Papers gefunden "
+        f"(Schwelle: {LOW_RECALL_THRESHOLD})."
+    ]
+
+    if not has_exa:
+        warnings = [
+            *warnings,
+            "Empfehlung: Exa aktivieren fuer Web-Suche (export EXA_API_KEY=<key>).",
+        ]
+    if not has_import:
+        warnings = [
+            *warnings,
+            "Empfehlung: Externe Papers importieren (--papers refs.bib).",
+        ]
+
+    return warnings
 
 
 # --- Such-Orchestrierung ---
@@ -103,6 +140,38 @@ def _check_source_balance(stats: dict[str, int]) -> list[str]:
                 f"{source} lieferte nur {count}/{total} Papers ({ratio:.0%}). "
                 f"Ergebnisse koennten asymmetrisch sein.",
             ]
+    return warnings
+
+
+def _check_low_recall(
+    paper_count: int,
+    *,
+    has_exa: bool,
+    has_import: bool,
+) -> list[str]:
+    """Warnt wenn wenige Papers gefunden — empfiehlt weitere Quellen.
+
+    Schwelle: < 15 Papers nach Ranking.
+    """
+    if paper_count >= LOW_RECALL_THRESHOLD:
+        return []
+
+    warnings: list[str] = [
+        f"Niedriger Recall: nur {paper_count} Papers gefunden "
+        f"(Schwelle: {LOW_RECALL_THRESHOLD})."
+    ]
+
+    if not has_exa:
+        warnings = [
+            *warnings,
+            "Empfehlung: Exa aktivieren fuer Web-Suche (export EXA_API_KEY=<key>).",
+        ]
+    if not has_import:
+        warnings = [
+            *warnings,
+            "Empfehlung: Externe Papers importieren (--papers refs.bib).",
+        ]
+
     return warnings
 
 
@@ -255,6 +324,7 @@ async def search_papers(
         "exa_errors": 0,
         "openalex_total": 0,
         "openalex_errors": 0,
+        "import_total": 0,
     }
 
     # Queries zusammenstellen — mit oder ohne Smart Expansion
@@ -311,6 +381,13 @@ async def search_papers(
             continue
         all_papers = [*all_papers, *result]
 
+    # Paper-Import aus BibTeX-Datei
+    if config.papers_file is not None:
+        imported = parse_bibtex_file(config.papers_file)
+        all_papers = [*all_papers, *imported]
+        stats["import_total"] = len(imported)
+        logger.info("Paper-Import: %d Papers aus %s", len(imported), config.papers_file.name)
+
     # Warnung wenn alle Quellen leer
     total_found = stats["ss_total"] + stats["openalex_total"] + stats["exa_total"]
 
@@ -335,6 +412,13 @@ async def search_papers(
     stats["before_dedup"] = len(all_papers)
     stats["after_dedup"] = len(deduped)
     stats["after_ranking"] = len(ranked)
+
+    # Low-Recall-Warnung
+    has_exa = "exa" in config.sources
+    has_import = config.papers_file is not None
+    recall_warnings = _check_low_recall(len(ranked), has_exa=has_exa, has_import=has_import)
+    for warning in recall_warnings:
+        logger.warning("Low-Recall: %s", warning)
 
     # Optionales Screening
     prisma_flow: PrismaFlow | None = None
@@ -438,8 +522,6 @@ def merge_results(
         sources_used=merged_sources,
         leitfragen=merged_leitfragen,
     )
-
-
 
 
 def format_as_markdown(result: ForschungsstandResult) -> str:
