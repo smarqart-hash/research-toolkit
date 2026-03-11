@@ -112,10 +112,12 @@ Deduplication via DOI oder Title-Hash (SHA256).
 |----------|-------|----------|
 | `S2_API_KEY` | Semantic Scholar API | Nein (funktioniert ohne, aber Rate Limits) |
 | `EXA_API_KEY` | Exa Search API | Nein (Exa wird uebersprungen) |
-| `OPENALEX_MAILTO` | OpenAlex Polite Pool (hoehere Rate Limits) | Nein (funktioniert ohne) |
+| `OPENALEX_API_KEY` | OpenAlex Premium API Key | Nein (hoehere Rate Limits) |
+| `OPENALEX_MAILTO` | OpenAlex Polite Pool (Alternative zu API Key) | Nein (funktioniert ohne) |
 | `OUTPUT_DIR` | Output-Verzeichnis | Nein (default: ./output) |
 
 ## Meta-Loop
 
 Reflexiver Feedback-Loop: Toolkit generiert Paper ueber sich selbst, leitet Findings ab.
-Abgeschlossen: Sprint 1-6 + Quickwin + F17 (Details: `docs/plans/sprint-*-handover.md`).
+Abgeschlossen: Sprint 1-7 + Quickwin (Details: `docs/plans/sprint-*-handover.md`).
+Offen: F19 (Exa-Verdraengung), F20 (Query-Divergenz), F21 (SS Rate Limits).

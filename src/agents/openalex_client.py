@@ -97,8 +97,9 @@ class OpenAlexClient:
     MAX_RETRIES = 1
     RETRY_DELAY_S = 2.0
 
-    def __init__(self, mailto: str | None = None) -> None:
+    def __init__(self, mailto: str | None = None, api_key: str | None = None) -> None:
         self._mailto = mailto or os.environ.get("OPENALEX_MAILTO")
+        self._api_key = api_key or os.environ.get("OPENALEX_API_KEY")
 
     async def search_works(
         self,
@@ -120,7 +121,9 @@ class OpenAlexClient:
             "search": query,
             "per_page": min(per_page, 200),
         }
-        if self._mailto:
+        if self._api_key:
+            params["api_key"] = self._api_key
+        elif self._mailto:
             params["mailto"] = self._mailto
 
         # Filter zusammenbauen
