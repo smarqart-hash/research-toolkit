@@ -51,6 +51,7 @@ class TestQuerySet:
         qs = QuerySet(research_question="test topic")
         assert qs.ss_queries == []
         assert qs.exa_queries == []
+        assert qs.oa_queries == []
         assert qs.source == "local"
 
     def test_with_queries(self) -> None:
@@ -58,9 +59,11 @@ class TestQuerySet:
             research_question="How does RL optimize traffic?",
             ss_queries=["RL AND traffic"],
             exa_queries=["Recent advances in RL traffic"],
+            oa_queries=["RL traffic optimization"],
             source="llm",
         )
         assert len(qs.ss_queries) == 1
+        assert len(qs.oa_queries) == 1
         assert qs.source == "llm"
 
     def test_serialization_roundtrip(self) -> None:
@@ -68,6 +71,7 @@ class TestQuerySet:
             research_question="test",
             ss_queries=["q1", "q2"],
             exa_queries=["e1"],
+            oa_queries=["oa1"],
             scope=SearchScope(year_range=(2020, 2026)),
         )
         data = qs.model_dump()
@@ -205,6 +209,19 @@ class TestExpandLocal:
         qs = _expand_local("machine learning applications")
         assert any("ML" in q or "deep learning" in q for q in qs.ss_queries)
 
+    def test_generates_oa_queries(self) -> None:
+        """Lokale Expansion erzeugt OA-Queries ohne Boolean-Operatoren."""
+        qs = _expand_local("machine learning fairness")
+        assert len(qs.oa_queries) >= 2
+        for q in qs.oa_queries:
+            assert " AND " not in q
+            assert " OR " not in q
+
+    def test_oa_queries_contain_topic(self) -> None:
+        """OA-Queries enthalten das Topic."""
+        qs = _expand_local("reinforcement learning")
+        assert any("reinforcement learning" in q for q in qs.oa_queries)
+
 
 # --- Stufe 2: LLM-Enhanced ---
 
@@ -229,6 +246,34 @@ class TestExpandLLM:
         mock_llm.return_value = "not valid json"
         with pytest.raises(ValueError, match="(?s)kein valides JSON.*Preview.*not valid"):
             await _expand_llm("test")
+
+    @pytest.mark.asyncio
+    @patch("src.utils.llm_client.llm_complete")
+    async def test_llm_expansion_includes_oa_queries(self, mock_llm: AsyncMock) -> None:
+        mock_llm.return_value = json.dumps({
+            "research_question": "How does RL optimize traffic?",
+            "ss_queries": ["RL AND traffic signal"],
+            "exa_queries": ["Recent RL traffic advances"],
+            "oa_queries": ["reinforcement learning traffic optimization"],
+        })
+        qs = await _expand_llm("RL Verkehrssteuerung")
+        assert len(qs.oa_queries) == 1
+        assert "reinforcement learning" in qs.oa_queries[0]
+
+    @pytest.mark.asyncio
+    @patch("src.utils.llm_client.llm_complete")
+    async def test_llm_fallback_strips_boolean_from_ss(self, mock_llm: AsyncMock) -> None:
+        """Wenn LLM keine oa_queries liefert, Boolean aus SS-Queries entfernen."""
+        mock_llm.return_value = json.dumps({
+            "research_question": "test",
+            "ss_queries": ["topic AND aspect", "foo OR bar"],
+            "exa_queries": ["what is topic"],
+        })
+        qs = await _expand_llm("test")
+        assert len(qs.oa_queries) >= 1
+        for q in qs.oa_queries:
+            assert " AND " not in q
+            assert " OR " not in q
 
     @pytest.mark.asyncio
     @patch("src.utils.llm_client.llm_complete")
@@ -353,6 +398,19 @@ class TestValidateQueries:
         ss_client = self._mock_ss_client({"q1": 5})
         result = await validate_queries(qs, ss_client, exa_client=None)
         assert result.exa_queries == ["exa1", "exa2"]
+
+    @pytest.mark.asyncio
+    async def test_preserves_oa_queries(self) -> None:
+        """validate_queries reicht oa_queries unveraendert durch."""
+        qs = QuerySet(
+            research_question="test",
+            ss_queries=["q1"],
+            exa_queries=["exa1"],
+            oa_queries=["oa1", "oa2"],
+        )
+        ss_client = self._mock_ss_client({"q1": 5})
+        result = await validate_queries(qs, ss_client)
+        assert result.oa_queries == ["oa1", "oa2"]
 
 
 # --- LLM Client ---

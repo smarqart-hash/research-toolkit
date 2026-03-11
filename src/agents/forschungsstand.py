@@ -304,6 +304,7 @@ async def search_papers(
         query_set = await expand_queries(topic, queries)
         ss_queries = query_set.ss_queries
         exa_queries = query_set.exa_queries
+        oa_queries = query_set.oa_queries
         stats["query_source"] = 1 if query_set.source == "llm" else 0
 
         # Optionale Dry-Run-Validierung
@@ -315,11 +316,13 @@ async def search_papers(
             )
             ss_queries = query_set.ss_queries
             exa_queries = query_set.exa_queries
+            oa_queries = query_set.oa_queries
 
         logger.info(
-            "Smart Query Expansion (%s): %d SS-Queries, %d Exa-Queries",
+            "Smart Query Expansion (%s): %d SS, %d OA, %d Exa Queries",
             query_set.source,
             len(ss_queries),
+            len(oa_queries),
             len(exa_queries),
         )
     else:
@@ -327,6 +330,7 @@ async def search_papers(
         if queries:
             ss_queries = [*ss_queries, *queries]
         exa_queries = ss_queries[:2]
+        oa_queries = ss_queries  # Ohne --refine: gleiche Queries (kein Boolean)
 
     # Parallele Suche ueber alle konfigurierten Quellen
     search_tasks = []
@@ -336,7 +340,9 @@ async def search_papers(
         search_tasks.append(_search_ss(ss_queries, config, stats))
         sources_used.append("Semantic Scholar")
     if "openalex" in config.sources:
-        search_tasks.append(_search_openalex(ss_queries, config, stats))
+        # OA-Queries bevorzugen (Freitext ohne Boolean), Fallback auf SS-Queries
+        openalex_queries = oa_queries if oa_queries else ss_queries
+        search_tasks.append(_search_openalex(openalex_queries, config, stats))
         sources_used.append("OpenAlex")
     if "exa" in config.sources:
         search_tasks.append(_search_exa(exa_queries, config, stats))

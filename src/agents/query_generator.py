@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 from pathlib import Path
 
 from pydantic import BaseModel, Field
@@ -38,6 +39,7 @@ class QuerySet(BaseModel):
     research_question: str
     ss_queries: list[str] = Field(default_factory=list)
     exa_queries: list[str] = Field(default_factory=list)
+    oa_queries: list[str] = Field(default_factory=list)
     scope: SearchScope = Field(default_factory=SearchScope)
     source: str = "local"  # "local" | "llm"
 
@@ -134,10 +136,19 @@ def _expand_local(
     for kw in keywords[:2]:
         exa_queries = [*exa_queries, f"How does {topic} relate to {kw}?"]
 
+    # OA-Queries: Freitext ohne Boolean-Operatoren (OpenAlex nutzt eigene Relevanz-Engine)
+    all_synonyms = [syn for _, syns in matches for syn in syns[:2]]
+    oa_queries: list[str] = [
+        topic,
+        f"{topic} survey",
+        *[f"{topic} {syn}" for syn in all_synonyms[:2]],
+    ]
+
     return QuerySet(
         research_question=topic,
         ss_queries=ss_queries,
         exa_queries=exa_queries,
+        oa_queries=oa_queries,
         scope=scope or SearchScope(),
         source="local",
     )
@@ -199,10 +210,17 @@ async def _expand_llm(
         n = len(exa_queries) if isinstance(exa_queries, list) else 0
         raise ValueError(f"LLM gab {n} Exa-Queries (min. 1)")
 
+    # OA-Queries: Freitext ohne Boolean-Operatoren
+    oa_queries = data.get("oa_queries", [])
+    if not isinstance(oa_queries, list) or not oa_queries:
+        # Fallback: Boolean-Operatoren aus SS-Queries entfernen
+        oa_queries = [re.sub(r"\s+(AND|OR|NOT)\s+", " ", q) for q in ss_queries]
+
     return QuerySet(
         research_question=research_question,
         ss_queries=ss_queries,
         exa_queries=exa_queries,
+        oa_queries=oa_queries,
         scope=scope or SearchScope(),
         source="llm",
     )
@@ -315,6 +333,7 @@ async def validate_queries(
         research_question=query_set.research_question,
         ss_queries=valid_ss,
         exa_queries=valid_exa,
+        oa_queries=query_set.oa_queries,
         scope=query_set.scope,
         source=query_set.source,
     )

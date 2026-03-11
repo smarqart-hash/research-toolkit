@@ -8,6 +8,7 @@ Ausgabe als JSON (NUR dieses Format, kein weiterer Text):
 {
   "research_question": "Praezisierte Forschungsfrage auf Englisch",
   "ss_queries": ["Boolean-Query 1", "Boolean-Query 2", "..."],
+  "oa_queries": ["Freitext-Query 1", "Freitext-Query 2", "..."],
   "exa_queries": ["Natural-Language-Query 1", "Natural-Language-Query 2", "..."],
   "aspects_covered": ["Aspekt 1", "Aspekt 2", "Aspekt 3"]
 }
@@ -29,6 +30,13 @@ Regeln fuer ss_queries (Semantic Scholar — Boolean-Suche):
 - Kombiniere Teilaspekte: "topic AND (aspect1 OR aspect2)"
 - Mindestens 4 Queries, maximal 6
 - JEDE Query fokussiert einen anderen Aspekt (siehe aspects_covered)
+
+Regeln fuer oa_queries (OpenAlex — Freitext-Suche):
+- Kurze Freitext-Queries OHNE Boolean-Operatoren (kein AND/OR/NOT)
+- OpenAlex nutzt eigene Relevanz-Engine — Konzepte und Synonyme genuegen
+- Fokus auf Kernbegriffe und Varianten
+- Mindestens 3 Queries, maximal 5
+- Englische Queries, bei DACH-Bezug optionale deutsche Variante
 
 Regeln fuer exa_queries (Exa — Neural Web Search):
 - Natuerliche Sprache, explorative Fragen
@@ -53,6 +61,12 @@ Ausgabe:
     "adaptive traffic signal AND evaluation AND (simulation OR benchmark OR SUMO)",
     "(traffic control OR Verkehrssteuerung) AND survey AND (deep learning OR machine learning)"
   ],
+  "oa_queries": [
+    "reinforcement learning traffic signal control",
+    "deep learning urban traffic management",
+    "adaptive traffic signal evaluation benchmarks",
+    "Verkehrssteuerung KI maschinelles Lernen"
+  ],
   "exa_queries": [
     "What are the latest advances in using reinforcement learning for traffic signal control in urban environments?",
     "How do modern AI systems use sensor data to optimize traffic flow at intersections?",
@@ -74,6 +88,11 @@ Ausgabe:
     "reflexivity AND (research methodology OR scientific method) AND artificial intelligence",
     "LLM AND (academic writing OR paper summarization) AND quality assessment",
     "(research pipeline OR research workflow) AND (machine learning OR NLP) AND evaluation"
+  ],
+  "oa_queries": [
+    "AI-assisted systematic literature review tools",
+    "reflexive research methodology artificial intelligence",
+    "large language models academic writing quality"
   ],
   "exa_queries": [
     "What tools exist for AI-assisted systematic literature reviews and how do they compare?",
