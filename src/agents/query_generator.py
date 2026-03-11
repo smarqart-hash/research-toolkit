@@ -213,8 +213,11 @@ async def _expand_llm(
     # OA-Queries: Freitext ohne Boolean-Operatoren
     oa_queries = data.get("oa_queries", [])
     if not isinstance(oa_queries, list) or not oa_queries:
-        # Fallback: Boolean-Operatoren aus SS-Queries entfernen
-        oa_queries = [re.sub(r"\s+(AND|OR|NOT)\s+", " ", q) for q in ss_queries]
+        # Fallback: Boolean-Operatoren + Klammern entfernen, Whitespace normalisieren
+        oa_queries = [
+            re.sub(r"\s+", " ", re.sub(r"\s*(AND|OR|NOT)\s*|[()]", " ", q)).strip()
+            for q in ss_queries
+        ]
 
     return QuerySet(
         research_question=research_question,
@@ -333,7 +336,7 @@ async def validate_queries(
         research_question=query_set.research_question,
         ss_queries=valid_ss,
         exa_queries=valid_exa,
-        oa_queries=query_set.oa_queries,
+        oa_queries=query_set.oa_queries,  # OA-Queries nicht validiert — Freitext-Suche ist fehlertolerant
         scope=query_set.scope,
         source=query_set.source,
     )

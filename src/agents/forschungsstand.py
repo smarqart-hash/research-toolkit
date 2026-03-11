@@ -330,7 +330,7 @@ async def search_papers(
         if queries:
             ss_queries = [*ss_queries, *queries]
         exa_queries = ss_queries[:2]
-        oa_queries = ss_queries  # Ohne --refine: gleiche Queries (kein Boolean)
+        oa_queries = ss_queries  # Ohne --refine: SS-Queries als OA-Fallback (ggf. mit Boolean)
 
     # Parallele Suche ueber alle konfigurierten Quellen
     search_tasks = []

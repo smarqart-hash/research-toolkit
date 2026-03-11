@@ -429,6 +429,98 @@ class TestSearchPapersMultiSource:
         asyncio.run(run())
 
 
+class TestOaQueriesIntegration:
+    """Testet dass OpenAlex oa_queries statt ss_queries erhaelt bei --refine."""
+
+    def test_openalex_receives_oa_queries_with_refine(self):
+        """Bei refine=True muss OpenAlex die oa_queries bekommen, nicht ss_queries."""
+        from unittest.mock import MagicMock
+
+        from src.agents.query_generator import QuerySet, SearchScope
+
+        config = SearchConfig(sources=["ss", "openalex"])
+        captured_oa_queries: list[str] = []
+
+        mock_query_set = QuerySet(
+            research_question="test topic",
+            ss_queries=["topic AND boolean"],
+            exa_queries=["what is topic"],
+            oa_queries=["topic freitext", "topic survey"],
+            scope=SearchScope(),
+            source="local",
+        )
+
+        async def mock_ss_search(*args, **kwargs):
+            resp = MagicMock()
+            resp.data = []
+            return resp
+
+        async def mock_oa_search(query, **kwargs):
+            from src.agents.openalex_client import OpenAlexSearchResponse
+
+            captured_oa_queries.append(query)
+            return OpenAlexSearchResponse(results=[])
+
+        async def mock_expand(*args, **kwargs):
+            return mock_query_set
+
+        async def run():
+            with (
+                patch(
+                    "src.agents.forschungsstand.SemanticScholarClient.search_papers",
+                    side_effect=mock_ss_search,
+                ),
+                patch(
+                    "src.agents.forschungsstand.OpenAlexClient.search_works",
+                    side_effect=mock_oa_search,
+                ),
+                patch(
+                    "src.agents.query_generator.expand_queries",
+                    side_effect=mock_expand,
+                ),
+            ):
+                await search_papers("test topic", config=config, refine=True)
+
+        asyncio.run(run())
+        # OpenAlex muss die oa_queries erhalten haben, nicht die ss_queries
+        assert captured_oa_queries == ["topic freitext", "topic survey"]
+
+    def test_openalex_fallback_without_refine(self):
+        """Ohne refine nutzt OpenAlex ss_queries als Fallback."""
+        from unittest.mock import MagicMock
+
+        config = SearchConfig(sources=["ss", "openalex"])
+        captured_queries: list[str] = []
+
+        async def mock_ss_search(*args, **kwargs):
+            resp = MagicMock()
+            resp.data = []
+            return resp
+
+        async def mock_oa_search(query, **kwargs):
+            from src.agents.openalex_client import OpenAlexSearchResponse
+
+            captured_queries.append(query)
+            return OpenAlexSearchResponse(results=[])
+
+        async def run():
+            with (
+                patch(
+                    "src.agents.forschungsstand.SemanticScholarClient.search_papers",
+                    side_effect=mock_ss_search,
+                ),
+                patch(
+                    "src.agents.forschungsstand.OpenAlexClient.search_works",
+                    side_effect=mock_oa_search,
+                ),
+            ):
+                await search_papers("my topic", config=config)
+
+        asyncio.run(run())
+        # Ohne refine: OpenAlex erhaelt ss_queries (= topic)
+        assert "my topic" in captured_queries
+
+
 class TestOpenAlexPreFilter:
     """Testet OpenAlex Relevanz-Vorfilterung."""
 

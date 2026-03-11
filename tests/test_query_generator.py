@@ -262,18 +262,24 @@ class TestExpandLLM:
 
     @pytest.mark.asyncio
     @patch("src.utils.llm_client.llm_complete")
-    async def test_llm_fallback_strips_boolean_from_ss(self, mock_llm: AsyncMock) -> None:
-        """Wenn LLM keine oa_queries liefert, Boolean aus SS-Queries entfernen."""
+    async def test_llm_fallback_strips_boolean_and_parens(self, mock_llm: AsyncMock) -> None:
+        """Wenn LLM keine oa_queries liefert, Boolean + Klammern entfernen."""
         mock_llm.return_value = json.dumps({
             "research_question": "test",
-            "ss_queries": ["topic AND aspect", "foo OR bar"],
+            "ss_queries": [
+                "(traffic control OR Verkehrssteuerung) AND survey",
+                "foo OR bar",
+            ],
             "exa_queries": ["what is topic"],
         })
         qs = await _expand_llm("test")
-        assert len(qs.oa_queries) >= 1
+        assert len(qs.oa_queries) == 2
         for q in qs.oa_queries:
             assert " AND " not in q
             assert " OR " not in q
+            assert "(" not in q
+            assert ")" not in q
+            assert "  " not in q  # Kein doppeltes Leerzeichen
 
     @pytest.mark.asyncio
     @patch("src.utils.llm_client.llm_complete")
