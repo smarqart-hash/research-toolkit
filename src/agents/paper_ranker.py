@@ -47,9 +47,12 @@ class UnifiedPaper(BaseModel):
     @computed_field
     @property
     def dedup_key(self) -> str:
-        """Stabiler Key fuer Deduplizierung (DOI > Titel-Hash)."""
+        """Stabiler Key fuer Deduplizierung (DOI > Titel-Hash > ID-Fallback)."""
         if self.doi:
             return f"doi:{self.doi.lower()}"
+        # Fallback bei leerem Titel: paper_id verwenden
+        if not self.title or not self.title.strip():
+            return f"id:{self.paper_id}"
         # Titel normalisieren: lowercase, keine Sonderzeichen
         normalized = "".join(c for c in self.title.lower() if c.isalnum() or c == " ")
         normalized = " ".join(normalized.split())

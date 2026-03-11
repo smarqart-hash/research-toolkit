@@ -200,7 +200,10 @@ async def _search_openalex(
                 )
                 # Pre-Filter: OpenAlex-Papers unter Relevanz-Schwelle entfernen
                 min_oa_relevance = 0.3
-                relevant = [w for w in response.results if w.relevance_score >= min_oa_relevance]
+                relevant = [
+                    w for w in response.results
+                    if w.relevance_score <= 0 or w.relevance_score >= min_oa_relevance
+                ]
                 filtered_count = len(response.results) - len(relevant)
                 if filtered_count > 0:
                     logger.info(

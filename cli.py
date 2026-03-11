@@ -27,6 +27,8 @@ app = typer.Typer(
 )
 console = Console()
 
+VALID_SOURCES = {"ss", "openalex", "exa"}
+
 
 def _load_env() -> None:
     """Lade .env Datei falls vorhanden."""
@@ -74,7 +76,7 @@ def _available_venues() -> list[str]:
 @app.command()
 def search(
     topic: str = typer.Argument(..., help="Research topic to search for"),
-    max_results: int = typer.Option(30, "--max", "-m", help="Max papers after ranking"),
+    max_results: int = typer.Option(30, "--max", "-m", min=1, help="Max papers after ranking"),
     sources: str = typer.Option(
         "ss,openalex",
         "--sources",
@@ -119,6 +121,14 @@ def search(
 
     source_list = [s.strip() for s in sources.split(",") if s.strip()]
 
+    invalid_sources = set(source_list) - VALID_SOURCES
+    if invalid_sources:
+        console.print(
+            f"[red]Ungueltige Quellen:[/red] {', '.join(sorted(invalid_sources))}\n"
+            f"Erlaubt: {', '.join(sorted(VALID_SOURCES))}"
+        )
+        raise typer.Exit(1)
+
     config = SearchConfig(
         top_k=max_results,
         sources=source_list,
@@ -161,7 +171,7 @@ def search(
 
     # Akkumuliertes Suchen: bestehende Ergebnisse laden und mergen
     if append:
-        existing_path = output_path / slugify(topic) / "forschungsstand.json"
+        existing_path = output_dir / slugify(topic) / "forschungsstand.json"
         if existing_path.exists():
             existing = load_forschungsstand(existing_path)
             result = merge_results(existing, result)

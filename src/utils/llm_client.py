@@ -114,4 +114,10 @@ async def llm_complete(
     if not choices:
         raise RuntimeError("LLM-Antwort enthaelt keine choices")
 
-    return choices[0]["message"]["content"]
+    message = choices[0].get("message") if isinstance(choices[0], dict) else None
+    content = message.get("content") if isinstance(message, dict) else None
+    if content is None:
+        raise RuntimeError(
+            f"LLM-Antwort hat unerwartete Struktur: choices[0]={choices[0]!r}"
+        )
+    return content
