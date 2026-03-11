@@ -69,7 +69,7 @@ CLI (Typer) → Agents (Domain-Logik) → Pipeline (State + Provenance)
 
 ## Tests
 
-- **Framework**: pytest (573 Tests, alle passing)
+- **Framework**: pytest (575 Tests, alle passing)
 - **Pfad**: `tests/` — pythonpath: `["src", "."]`
 - **Factories**: `_ss_paper()`, `_exa_result()`, `_openalex_work()` als lokale Helfer (kein Factory-Framework)
 - **Fixtures**: `@pytest.fixture` fuer State, tmp_path
@@ -94,7 +94,7 @@ research-toolkit venues              # Liste Venue-Profile
 research-toolkit doctor              # Feature-Availability Check
 ```
 
-## Ranking (Aktueller Stand — Sprint 6)
+## Ranking (Aktueller Stand — Search Quality Tuning v2)
 
 Source-aware Composite Score (0-1):
 - Citations (log-skaliert, **source-capped**: SS max 0.4, OA max 0.15, Exa max 0.05)
@@ -102,6 +102,7 @@ Source-aware Composite Score (0-1):
 - 15% Abstract vorhanden (aufgewertet als Qualitaetssignal)
 - 10% Open Access Bonus
 - Metadaten-Bonus: SS 0.1, OA 0.05, Exa 0.0
+- **SPECTER2 Enhanced**: 40% Semantic, 15% Citations, 25% Recency, 10% OA, 10% Abstract
 
 **OpenAlex Pre-Filter:** Papers unter relevance_score 0.5 werden vor Ranking entfernt.
 **Source-Balance Warning:** Warnung wenn eine Quelle <10% des Pools liefert.
@@ -114,7 +115,11 @@ Source-aware Composite Score (0-1):
 
 **OA-spezifische Queries:** `QuerySet.oa_queries` — Freitext ohne Boolean-Operatoren fuer OpenAlex.
 **Exa DACH-Domains:** gesis.org, dnb.de, zbw.eu in `include_domains`.
+**Exa publishedDate:** camelCase-Alias fuer Pydantic v2, Year-Fallback auf aktuelles Jahr.
 **SPECTER2** optional (`[nlp]`). Enhanced Score ebenfalls source-aware (SS: 0.25, OA: 0.10, Exa: 0.03).
+**Default LLM:** `anthropic/claude-3.5-haiku` via OpenRouter (Query-Expansion, Judge, Bias-Test).
+**Query-Count:** 3 Queries pro Quelle (SS/OA/Exa) bei `--refine`.
+**Per-Page:** SS 100, OA 200, Exa 50 (max_results_per_query default: 50).
 Deduplication via DOI oder Title-Hash (SHA256).
 
 ## Environment Variables
