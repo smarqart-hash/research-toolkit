@@ -310,7 +310,14 @@ class TestOpenAlexClient:
         captured_params: list[dict] = []
 
         async def run():
-            with patch("httpx.AsyncClient") as mock_client_cls:
+            with (
+                patch("httpx.AsyncClient") as mock_client_cls,
+                patch.dict("os.environ", {}, clear=False),
+            ):
+                # Env-Var entfernen damit mailto genutzt wird
+                import os
+                os.environ.pop("OPENALEX_API_KEY", None)
+
                 mock_cm = AsyncMock()
                 mock_cm.__aenter__ = AsyncMock(return_value=mock_cm)
                 mock_cm.__aexit__ = AsyncMock(return_value=None)

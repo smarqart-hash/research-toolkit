@@ -212,7 +212,7 @@ class TestPersistence:
 class TestSearchConfig:
     def test_defaults(self):
         config = SearchConfig()
-        assert config.max_results_per_query == 50
+        assert config.max_results_per_query == 100
         assert config.top_k == 30
         assert config.sources == ["ss", "openalex"]
         assert config.languages == ["en", "de"]
@@ -667,3 +667,33 @@ class TestLowRecallWarning:
 
         warnings = _check_low_recall(5, has_exa=True, has_import=True)
         assert len(warnings) == 1  # Nur Hauptwarnung, keine Empfehlungen
+
+
+class TestHigherLimits:
+    """Testet dass per_page/num_results aus Config stammt."""
+
+    def test_exa_num_results_matches_config(self):
+        """Exa num_results kommt aus config.max_results_per_query, nicht hardcoded."""
+        from src.agents.forschungsstand import _search_exa
+        from src.agents.exa_client import ExaSearchResponse
+
+        captured: dict = {}
+
+        async def mock_search_papers(query, *, num_results):
+            captured["num_results"] = num_results
+            return ExaSearchResponse(results=[])
+
+        async def run():
+            with patch(
+                "src.agents.forschungsstand.ExaClient"
+            ) as mock_exa_cls:
+                instance = mock_exa_cls.return_value
+                instance.is_available = True
+                instance.search_papers = AsyncMock(side_effect=mock_search_papers)
+
+                config = SearchConfig(max_results_per_query=75)
+                stats = {"exa_total": 0, "exa_errors": 0}
+                await _search_exa(["test query"], config, stats)
+
+        asyncio.run(run())
+        assert captured.get("num_results") == 75

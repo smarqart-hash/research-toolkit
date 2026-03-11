@@ -606,6 +606,123 @@ class TestEnhancedScoreSourceAware:
         assert ss_score > exa_score
 
 
+class TestSourceQuota:
+    """Testet Source-Quota im Ranking (F19 Fix)."""
+
+    def test_exa_papers_preserved_with_quota(self):
+        """20 SS + 5 Exa, top_k=15 → mindestens 3 Exa im Ergebnis."""
+        ss_papers = [
+            UnifiedPaper(
+                paper_id=f"ss{i}",
+                title=f"SS Paper {i}",
+                source="semantic_scholar",
+                citation_count=1000,
+                year=2025,
+                abstract="Abstract",
+                is_open_access=True,
+            )
+            for i in range(20)
+        ]
+        exa_papers = [
+            UnifiedPaper(
+                paper_id=f"exa{i}",
+                title=f"Exa Paper {i}",
+                source="exa",
+                year=2024,
+            )
+            for i in range(5)
+        ]
+        ranked = rank_papers([*ss_papers, *exa_papers], top_k=15)
+        exa_count = sum(1 for p in ranked if p.source == "exa")
+        assert len(ranked) == 15
+        assert exa_count >= 3
+
+    def test_quota_does_not_exceed_available(self):
+        """20 SS + 1 Exa, top_k=15 → genau 1 Exa (nicht mehr als vorhanden)."""
+        ss_papers = [
+            UnifiedPaper(
+                paper_id=f"ss{i}",
+                title=f"SS Paper {i}",
+                source="semantic_scholar",
+                citation_count=1000,
+                year=2025,
+                abstract="Abstract",
+            )
+            for i in range(20)
+        ]
+        exa_papers = [
+            UnifiedPaper(
+                paper_id="exa0",
+                title="Exa Paper 0",
+                source="exa",
+                year=2024,
+            )
+        ]
+        ranked = rank_papers([*ss_papers, *exa_papers], top_k=15)
+        exa_count = sum(1 for p in ranked if p.source == "exa")
+        assert len(ranked) == 15
+        assert exa_count == 1
+
+    def test_quota_respects_top_k(self):
+        """30 Papers (10 pro Quelle), top_k=10 → genau 10 zurueck."""
+        papers = []
+        for src in ("semantic_scholar", "openalex", "exa"):
+            for i in range(10):
+                papers.append(
+                    UnifiedPaper(
+                        paper_id=f"{src}{i}",
+                        title=f"{src} Paper {i}",
+                        source=src,
+                        year=2024,
+                    )
+                )
+        ranked = rank_papers(papers, top_k=10)
+        assert len(ranked) == 10
+
+    def test_no_quota_without_top_k(self):
+        """Kein top_k → alle Papers zurueck, keine Quota-Filterung."""
+        papers = [
+            UnifiedPaper(
+                paper_id=f"p{i}",
+                title=f"Paper {i}",
+                source="semantic_scholar",
+                year=2024,
+            )
+            for i in range(5)
+        ]
+        ranked = rank_papers(papers)
+        assert len(ranked) == 5
+
+
+class TestLanguageField:
+    """Testet das language-Feld in UnifiedPaper."""
+
+    def test_unified_paper_has_language(self):
+        """UnifiedPaper akzeptiert language-Feld."""
+        paper = UnifiedPaper(
+            paper_id="lang1",
+            title="Deutsches Paper",
+            source="openalex",
+            language="de",
+        )
+        assert paper.language == "de"
+
+    def test_unified_paper_language_default_none(self):
+        """language ist standardmaessig None."""
+        paper = UnifiedPaper(paper_id="1", title="No Language", source="semantic_scholar")
+        assert paper.language is None
+
+    def test_from_openalex_passes_language(self):
+        """from_openalex() uebertraegt language aus OpenAlexWork."""
+        work = OpenAlexWork(
+            id="https://openalex.org/W1",
+            display_name="German Paper",
+            language="de",
+        )
+        unified = from_openalex(work)
+        assert unified.language == "de"
+
+
 class _MockSentenceTransformer:
     """Mock fuer SentenceTransformer.encode()."""
 

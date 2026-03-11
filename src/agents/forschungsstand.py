@@ -69,7 +69,7 @@ class ForschungsstandResult(BaseModel):
 class SearchConfig:
     """Konfiguration fuer die Paper-Suche."""
 
-    max_results_per_query: int = 50
+    max_results_per_query: int = 100
     year_filter: str | None = None  # z.B. "2020-2026"
     fields_of_study: list[str] = field(default_factory=list)
     sources: list[str] = field(default_factory=lambda: ["ss", "openalex"])
@@ -242,7 +242,7 @@ async def _search_exa(
     papers: list[UnifiedPaper] = []
     for query in queries:
         try:
-            exa_response = await exa_client.search_papers(query, num_results=20)
+            exa_response = await exa_client.search_papers(query, num_results=config.max_results_per_query)
             batch = [from_exa(r) for r in exa_response.results]
             papers = [*papers, *batch]
             stats["exa_total"] += len(batch)

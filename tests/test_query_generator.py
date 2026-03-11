@@ -382,9 +382,10 @@ class TestLoadLLMConfig:
 
     @patch.dict("os.environ", {}, clear=False)
     def test_defaults_without_env(self) -> None:
-        # Entferne LLM_API_KEY falls gesetzt
+        # Entferne alle LLM-Keys falls gesetzt
         import os
         os.environ.pop("LLM_API_KEY", None)
+        os.environ.pop("OPENROUTER_API_KEY", None)
         os.environ.pop("LLM_MODEL", None)
         os.environ.pop("LLM_BASE_URL", None)
         config = load_llm_config()

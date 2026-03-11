@@ -39,7 +39,7 @@ def load_llm_config() -> LLMConfig:
     """Laedt LLM-Config aus Environment-Variablen."""
     return LLMConfig(
         base_url=os.environ.get("LLM_BASE_URL", _DEFAULT_BASE_URL),
-        api_key=os.environ.get("LLM_API_KEY", ""),
+        api_key=os.environ.get("LLM_API_KEY", "") or os.environ.get("OPENROUTER_API_KEY", ""),
         model=os.environ.get("LLM_MODEL", _DEFAULT_MODEL),
     )
 

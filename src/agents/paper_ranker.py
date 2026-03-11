@@ -42,6 +42,7 @@ class UnifiedPaper(BaseModel):
     is_open_access: bool = False
     tags: list[str] = Field(default_factory=list)
     specter2_score: float | None = None  # None wenn nicht berechnet
+    language: str | None = None  # ISO 639-1 Sprachcode, z.B. "de", "en"
 
     @computed_field
     @property
@@ -156,6 +157,7 @@ def from_openalex(work: OpenAlexWork) -> UnifiedPaper:
         doi=doi,
         url=work.id,  # OpenAlex URL als Referenz
         is_open_access=work.open_access.is_oa,
+        language=work.language,
     )
 
 
@@ -195,6 +197,7 @@ def _load_specter2_model():
     if _specter2_model is not None:
         return _specter2_model
     from sentence_transformers import SentenceTransformer
+
     _specter2_model = SentenceTransformer("allenai/specter2_base")
     return _specter2_model
 
@@ -295,6 +298,55 @@ def _compute_enhanced_score(
     return round(min(1.0, score), 3)
 
 
+def _apply_source_quota(
+    ranked: list[UnifiedPaper],
+    top_k: int,
+    *,
+    min_per_source: int = 3,
+) -> list[UnifiedPaper]:
+    """Wendet Source-Quota an: reserviert Mindestplaetze pro aktiver Quelle.
+
+    Phase 1: Reserviert min(min_per_source, verfuegbare) Plaetze pro Quelle.
+    Phase 2: Fuellt restliche Plaetze nach Score auf.
+    Ergebnis wird nach Score neu sortiert und auf top_k beschnitten.
+
+    Args:
+        ranked: Nach Score absteigend sortierte Papers.
+        top_k: Maximale Anzahl zurueckzugebender Papers.
+        min_per_source: Mindestanzahl reservierter Plaetze pro Quelle.
+    """
+    # Quellen sammeln
+    sources = {p.source for p in ranked}
+    if len(sources) <= 1:
+        return ranked[:top_k]
+
+    # Phase 1: Top-N pro Quelle reservieren
+    reserved: list[UnifiedPaper] = []
+    reserved_ids: set[str] = set()
+    for source in sources:
+        source_papers = [p for p in ranked if p.source == source]
+        quota = min(min_per_source, len(source_papers))
+        for paper in source_papers[:quota]:
+            if paper.paper_id not in reserved_ids:
+                reserved.append(paper)
+                reserved_ids.add(paper.paper_id)
+
+    # Phase 2: Restliche Plaetze nach Score auffuellen
+    remaining_slots = top_k - len(reserved)
+    if remaining_slots > 0:
+        for paper in ranked:
+            if paper.paper_id not in reserved_ids:
+                reserved.append(paper)
+                reserved_ids.add(paper.paper_id)
+                remaining_slots -= 1
+                if remaining_slots == 0:
+                    break
+
+    # Nach Score neu sortieren und auf top_k beschneiden
+    result = sorted(reserved, key=lambda p: p.relevance_score, reverse=True)
+    return result[:top_k]
+
+
 def rank_papers(
     papers: Sequence[UnifiedPaper],
     *,
@@ -322,11 +374,11 @@ def rank_papers(
             }
             ranked = sorted(updated, key=lambda p: enhanced_scores[p.paper_id], reverse=True)
             if top_k:
-                return ranked[:top_k]
+                return _apply_source_quota(ranked, top_k)
             return ranked
 
     # Fallback: heuristisches Ranking
     ranked = sorted(papers, key=lambda p: p.relevance_score, reverse=True)
     if top_k:
-        return ranked[:top_k]
+        return _apply_source_quota(ranked, top_k)
     return ranked
