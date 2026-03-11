@@ -104,7 +104,11 @@ class SearchResponse(BaseModel):
 
 
 class SemanticScholarClient:
-    """Client fuer die Semantic Scholar Academic Graph API."""
+    """Client fuer die Semantic Scholar Academic Graph API.
+
+    Nutzt Connection Pooling: ein httpx.AsyncClient wird wiederverwendet.
+    Unterstuetzt async Context Manager (async with SemanticScholarClient() as client).
+    """
 
     MAX_RETRIES = 1
     RETRY_DELAY_S = 2.0
@@ -116,6 +120,17 @@ class SemanticScholarClient:
             self._headers["x-api-key"] = self._api_key
         else:
             logger.warning("S2_API_KEY nicht gesetzt — Rate Limits sind strenger")
+        self._client = httpx.AsyncClient(timeout=30, headers=self._headers)
+
+    async def close(self) -> None:
+        """Schliesst den HTTP-Client und gibt Verbindungen frei."""
+        await self._client.aclose()
+
+    async def __aenter__(self) -> SemanticScholarClient:
+        return self
+
+    async def __aexit__(self, *exc: object) -> None:
+        await self.close()
 
     async def _request(
         self,
@@ -126,10 +141,7 @@ class SemanticScholarClient:
     ) -> httpx.Response:
         """HTTP-Request mit Retry bei 429 Rate Limit."""
         for attempt in range(self.MAX_RETRIES + 1):
-            async with httpx.AsyncClient(timeout=30) as client:
-                response = await client.request(
-                    method, url, params=params, headers=self._headers
-                )
+            response = await self._client.request(method, url, params=params)
             if response.status_code == 429 and attempt < self.MAX_RETRIES:
                 logger.warning(
                     "S2 Rate Limit (429), warte %.1fs (Versuch %d/%d)",

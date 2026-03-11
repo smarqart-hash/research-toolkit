@@ -18,6 +18,9 @@ logger = logging.getLogger(__name__)
 _DEFAULT_BASE_URL = "https://openrouter.ai/api/v1"
 _DEFAULT_MODEL = "google/gemini-2.5-flash-lite"
 
+# Modul-Level Lazy Client fuer Connection Pooling
+_llm_client: httpx.AsyncClient | None = None
+
 
 class LLMConfig(BaseModel):
     """Konfiguration fuer den LLM-Client."""
@@ -33,6 +36,14 @@ class LLMConfig(BaseModel):
     def is_available(self) -> bool:
         """Prueft ob ein API-Key konfiguriert ist."""
         return bool(self.api_key)
+
+
+def _get_llm_client(timeout: float = 30.0) -> httpx.AsyncClient:
+    """Gibt den Modul-Level HTTP-Client zurueck (Lazy Init)."""
+    global _llm_client  # noqa: PLW0603
+    if _llm_client is None:
+        _llm_client = httpx.AsyncClient(timeout=timeout)
+    return _llm_client
 
 
 def load_llm_config() -> LLMConfig:
@@ -90,12 +101,12 @@ async def llm_complete(
     # response_format nicht setzen — nicht alle Provider unterstuetzen es
     # (z.B. Gemini Flash via OpenRouter). Stattdessen im Prompt erzwingen.
 
-    async with httpx.AsyncClient(timeout=config.timeout_s) as client:
-        response = await client.post(
-            f"{config.base_url}/chat/completions",
-            headers=headers,
-            json=payload,
-        )
+    client = _get_llm_client(timeout=config.timeout_s)
+    response = await client.post(
+        f"{config.base_url}/chat/completions",
+        headers=headers,
+        json=payload,
+    )
     response.raise_for_status()
 
     data = response.json()

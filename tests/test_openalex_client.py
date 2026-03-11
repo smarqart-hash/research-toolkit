@@ -204,15 +204,12 @@ class TestOpenAlexClient:
         mock_resp = _mock_response([work])
 
         async def run():
-            with patch("httpx.AsyncClient") as mock_client_cls:
-                mock_cm = AsyncMock()
-                mock_cm.__aenter__ = AsyncMock(return_value=mock_cm)
-                mock_cm.__aexit__ = AsyncMock(return_value=None)
-                mock_cm.get = AsyncMock(return_value=mock_resp)
-                mock_client_cls.return_value = mock_cm
+            client = OpenAlexClient()
+            client._client = MagicMock()
+            client._client.get = AsyncMock(return_value=mock_resp)
+            client._client.aclose = AsyncMock()
 
-                client = OpenAlexClient()
-                result = await client.search_works("machine learning")
+            result = await client.search_works("machine learning")
 
             assert isinstance(result, OpenAlexSearchResponse)
             assert len(result.results) == 1
@@ -226,21 +223,17 @@ class TestOpenAlexClient:
         mock_resp = _mock_response([work])
         captured_params: list[dict] = []
 
+        async def mock_get(url, params=None, **kwargs):
+            captured_params.append(params or {})
+            return mock_resp
+
         async def run():
-            with patch("httpx.AsyncClient") as mock_client_cls:
-                mock_cm = AsyncMock()
-                mock_cm.__aenter__ = AsyncMock(return_value=mock_cm)
-                mock_cm.__aexit__ = AsyncMock(return_value=None)
+            client = OpenAlexClient()
+            client._client = MagicMock()
+            client._client.get = mock_get
+            client._client.aclose = AsyncMock()
 
-                async def mock_get(url, params=None, **kwargs):
-                    captured_params.append(params or {})
-                    return mock_resp
-
-                mock_cm.get = mock_get
-                mock_client_cls.return_value = mock_cm
-
-                client = OpenAlexClient()
-                await client.search_works("test", year_range="2020-2026")
+            await client.search_works("test", year_range="2020-2026")
 
             assert "filter" in captured_params[0]
             assert "publication_year:2020-2026" in captured_params[0]["filter"]
@@ -253,21 +246,17 @@ class TestOpenAlexClient:
         mock_resp = _mock_response([work])
         captured_params: list[dict] = []
 
+        async def mock_get(url, params=None, **kwargs):
+            captured_params.append(params or {})
+            return mock_resp
+
         async def run():
-            with patch("httpx.AsyncClient") as mock_client_cls:
-                mock_cm = AsyncMock()
-                mock_cm.__aenter__ = AsyncMock(return_value=mock_cm)
-                mock_cm.__aexit__ = AsyncMock(return_value=None)
+            client = OpenAlexClient()
+            client._client = MagicMock()
+            client._client.get = mock_get
+            client._client.aclose = AsyncMock()
 
-                async def mock_get(url, params=None, **kwargs):
-                    captured_params.append(params or {})
-                    return mock_resp
-
-                mock_cm.get = mock_get
-                mock_client_cls.return_value = mock_cm
-
-                client = OpenAlexClient()
-                await client.search_works("test", languages=["en", "de"])
+            await client.search_works("test", languages=["en", "de"])
 
             assert "language:en|de" in captured_params[0]["filter"]
 
@@ -279,23 +268,19 @@ class TestOpenAlexClient:
         mock_resp = _mock_response([work])
         captured_params: list[dict] = []
 
+        async def mock_get(url, params=None, **kwargs):
+            captured_params.append(params or {})
+            return mock_resp
+
         async def run():
-            with patch("httpx.AsyncClient") as mock_client_cls:
-                mock_cm = AsyncMock()
-                mock_cm.__aenter__ = AsyncMock(return_value=mock_cm)
-                mock_cm.__aexit__ = AsyncMock(return_value=None)
+            client = OpenAlexClient()
+            client._client = MagicMock()
+            client._client.get = mock_get
+            client._client.aclose = AsyncMock()
 
-                async def mock_get(url, params=None, **kwargs):
-                    captured_params.append(params or {})
-                    return mock_resp
-
-                mock_cm.get = mock_get
-                mock_client_cls.return_value = mock_cm
-
-                client = OpenAlexClient()
-                await client.search_works(
-                    "test", year_range="2020-2026", languages=["en", "de"]
-                )
+            await client.search_works(
+                "test", year_range="2020-2026", languages=["en", "de"]
+            )
 
             filter_val = captured_params[0]["filter"]
             assert "publication_year:2020-2026" in filter_val
@@ -309,27 +294,20 @@ class TestOpenAlexClient:
         mock_resp = _mock_response([work])
         captured_params: list[dict] = []
 
+        async def mock_get(url, params=None, **kwargs):
+            captured_params.append(params or {})
+            return mock_resp
+
         async def run():
-            with (
-                patch("httpx.AsyncClient") as mock_client_cls,
-                patch.dict("os.environ", {}, clear=False),
-            ):
-                # Env-Var entfernen damit mailto genutzt wird
+            with patch.dict("os.environ", {}, clear=False):
                 import os
                 os.environ.pop("OPENALEX_API_KEY", None)
 
-                mock_cm = AsyncMock()
-                mock_cm.__aenter__ = AsyncMock(return_value=mock_cm)
-                mock_cm.__aexit__ = AsyncMock(return_value=None)
-
-                async def mock_get(url, params=None, **kwargs):
-                    captured_params.append(params or {})
-                    return mock_resp
-
-                mock_cm.get = mock_get
-                mock_client_cls.return_value = mock_cm
-
                 client = OpenAlexClient(mailto="user@example.com")
+                client._client = MagicMock()
+                client._client.get = mock_get
+                client._client.aclose = AsyncMock()
+
                 await client.search_works("test")
 
             assert captured_params[0]["mailto"] == "user@example.com"
@@ -342,21 +320,17 @@ class TestOpenAlexClient:
         mock_resp = _mock_response([work])
         captured_params: list[dict] = []
 
+        async def mock_get(url, params=None, **kwargs):
+            captured_params.append(params or {})
+            return mock_resp
+
         async def run():
-            with patch("httpx.AsyncClient") as mock_client_cls:
-                mock_cm = AsyncMock()
-                mock_cm.__aenter__ = AsyncMock(return_value=mock_cm)
-                mock_cm.__aexit__ = AsyncMock(return_value=None)
+            client = OpenAlexClient()
+            client._client = MagicMock()
+            client._client.get = mock_get
+            client._client.aclose = AsyncMock()
 
-                async def mock_get(url, params=None, **kwargs):
-                    captured_params.append(params or {})
-                    return mock_resp
-
-                mock_cm.get = mock_get
-                mock_client_cls.return_value = mock_cm
-
-                client = OpenAlexClient()
-                await client.search_works("test", per_page=999)
+            await client.search_works("test", per_page=999)
 
             assert captured_params[0]["per_page"] == 200
 
@@ -374,25 +348,19 @@ class TestOpenAlexClient:
 
         call_count = [0]
 
+        async def mock_get(url, params=None, **kwargs):
+            call_count[0] += 1
+            if call_count[0] == 1:
+                return rate_limit_resp
+            return success_resp
+
         async def run():
-            with (
-                patch("httpx.AsyncClient") as mock_client_cls,
-                patch("asyncio.sleep", new_callable=AsyncMock) as mock_sleep,
-            ):
-                mock_cm = AsyncMock()
-                mock_cm.__aenter__ = AsyncMock(return_value=mock_cm)
-                mock_cm.__aexit__ = AsyncMock(return_value=None)
-
-                async def mock_get(url, params=None, **kwargs):
-                    call_count[0] += 1
-                    if call_count[0] == 1:
-                        return rate_limit_resp
-                    return success_resp
-
-                mock_cm.get = mock_get
-                mock_client_cls.return_value = mock_cm
-
+            with patch("asyncio.sleep", new_callable=AsyncMock) as mock_sleep:
                 client = OpenAlexClient()
+                client._client = MagicMock()
+                client._client.get = mock_get
+                client._client.aclose = AsyncMock()
+
                 result = await client.search_works("test")
 
             assert call_count[0] == 2  # Erster Versuch + 1 Retry
@@ -413,16 +381,13 @@ class TestOpenAlexClient:
         )
 
         async def run():
-            with patch("httpx.AsyncClient") as mock_client_cls:
-                mock_cm = AsyncMock()
-                mock_cm.__aenter__ = AsyncMock(return_value=mock_cm)
-                mock_cm.__aexit__ = AsyncMock(return_value=None)
-                mock_cm.get = AsyncMock(return_value=error_resp)
-                mock_client_cls.return_value = mock_cm
+            client = OpenAlexClient()
+            client._client = MagicMock()
+            client._client.get = AsyncMock(return_value=error_resp)
+            client._client.aclose = AsyncMock()
 
-                client = OpenAlexClient()
-                with pytest.raises(httpx.HTTPStatusError):
-                    await client.search_works("test")
+            with pytest.raises(httpx.HTTPStatusError):
+                await client.search_works("test")
 
         asyncio.run(run())
 
@@ -432,21 +397,17 @@ class TestOpenAlexClient:
         mock_resp = _mock_response([work])
         captured_params: list[dict] = []
 
+        async def mock_get(url, params=None, **kwargs):
+            captured_params.append(params or {})
+            return mock_resp
+
         async def run():
-            with patch("httpx.AsyncClient") as mock_client_cls:
-                mock_cm = AsyncMock()
-                mock_cm.__aenter__ = AsyncMock(return_value=mock_cm)
-                mock_cm.__aexit__ = AsyncMock(return_value=None)
+            client = OpenAlexClient()
+            client._client = MagicMock()
+            client._client.get = mock_get
+            client._client.aclose = AsyncMock()
 
-                async def mock_get(url, params=None, **kwargs):
-                    captured_params.append(params or {})
-                    return mock_resp
-
-                mock_cm.get = mock_get
-                mock_client_cls.return_value = mock_cm
-
-                client = OpenAlexClient()
-                await client.search_works("test")
+            await client.search_works("test")
 
             assert "filter" not in captured_params[0]
 

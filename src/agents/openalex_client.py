@@ -92,6 +92,7 @@ class OpenAlexClient:
 
     Immer verfuegbar (kein API Key noetig).
     Polite Pool: mailto-Parameter fuer hoehere Rate Limits.
+    Nutzt Connection Pooling: ein httpx.AsyncClient wird wiederverwendet.
     """
 
     MAX_RETRIES = 1
@@ -100,6 +101,17 @@ class OpenAlexClient:
     def __init__(self, mailto: str | None = None, api_key: str | None = None) -> None:
         self._mailto = mailto or os.environ.get("OPENALEX_MAILTO")
         self._api_key = api_key or os.environ.get("OPENALEX_API_KEY")
+        self._client = httpx.AsyncClient(timeout=30)
+
+    async def close(self) -> None:
+        """Schliesst den HTTP-Client und gibt Verbindungen frei."""
+        await self._client.aclose()
+
+    async def __aenter__(self) -> OpenAlexClient:
+        return self
+
+    async def __aexit__(self, *exc: object) -> None:
+        await self.close()
 
     async def search_works(
         self,
@@ -138,11 +150,10 @@ class OpenAlexClient:
 
         response: httpx.Response | None = None
         for attempt in range(self.MAX_RETRIES + 1):
-            async with httpx.AsyncClient(timeout=30) as client:
-                response = await client.get(
-                    f"{BASE_URL}/works",
-                    params=params,
-                )
+            response = await self._client.get(
+                f"{BASE_URL}/works",
+                params=params,
+            )
             if response.status_code == 429 and attempt < self.MAX_RETRIES:
                 logger.warning(
                     "OpenAlex Rate Limit (429), warte %.1fs (Versuch %d/%d)",
