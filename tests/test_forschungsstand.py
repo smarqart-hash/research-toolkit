@@ -593,3 +593,77 @@ class TestSourceBalanceWarning:
         stats = {"ss_total": 1, "openalex_total": 1, "exa_total": 98}
         warnings = _check_source_balance(stats)
         assert len(warnings) == 2  # SS und OA beide unter 10%
+
+
+class TestPaperImport:
+    """Tests fuer --papers Import-Integration."""
+
+    def test_search_config_papers_file_default_none(self):
+        config = SearchConfig()
+        assert config.papers_file is None
+
+    def test_imported_papers_merged_into_results(self, tmp_path):
+        """Importierte Papers werden in den Ergebnis-Pool gemerged."""
+        import textwrap
+
+        bib_content = textwrap.dedent("""\
+            @article{test2023,
+                author = {Test, Author},
+                title = {Imported Paper Title},
+                year = {2023},
+                doi = {10.9999/test},
+            }
+        """)
+        bib_file = tmp_path / "refs.bib"
+        bib_file.write_text(bib_content, encoding="utf-8")
+
+        config = SearchConfig(papers_file=bib_file, sources=[])
+        papers, stats, _ = asyncio.run(
+            search_papers("test topic", config=config)
+        )
+        assert len(papers) == 1
+        assert papers[0].source == "import"
+        assert stats["import_total"] == 1
+
+    def test_import_total_stat_default_zero(self):
+        """import_total ist 0 wenn kein Import."""
+        config = SearchConfig(sources=[])
+        papers, stats, _ = asyncio.run(
+            search_papers("test topic", config=config)
+        )
+        assert stats["import_total"] == 0
+
+
+class TestLowRecallWarning:
+    """Tests fuer Low-Recall-Warnung."""
+
+    def test_no_warning_above_threshold(self):
+        from src.agents.forschungsstand import _check_low_recall
+
+        warnings = _check_low_recall(20, has_exa=True, has_import=True)
+        assert warnings == []
+
+    def test_warning_below_threshold(self):
+        from src.agents.forschungsstand import _check_low_recall
+
+        warnings = _check_low_recall(8, has_exa=True, has_import=False)
+        assert len(warnings) >= 1
+        assert "8" in warnings[0]
+
+    def test_warning_suggests_exa_when_missing(self):
+        from src.agents.forschungsstand import _check_low_recall
+
+        warnings = _check_low_recall(5, has_exa=False, has_import=False)
+        assert any("EXA_API_KEY" in w for w in warnings)
+
+    def test_warning_suggests_import_when_missing(self):
+        from src.agents.forschungsstand import _check_low_recall
+
+        warnings = _check_low_recall(5, has_exa=True, has_import=False)
+        assert any("--papers" in w for w in warnings)
+
+    def test_no_suggestions_when_all_active(self):
+        from src.agents.forschungsstand import _check_low_recall
+
+        warnings = _check_low_recall(5, has_exa=True, has_import=True)
+        assert len(warnings) == 1  # Nur Hauptwarnung, keine Empfehlungen

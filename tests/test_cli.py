@@ -54,3 +54,39 @@ class TestDoctor:
         for dep in result:
             assert dep.name
             assert isinstance(dep.available, bool)
+
+
+class TestPapersImportFlag:
+    """Tests fuer --papers CLI Flag."""
+
+    def test_papers_flag_file_not_found(self):
+        """CLI gibt Fehler bei nicht-existenter .bib Datei."""
+        from typer.testing import CliRunner
+
+        from cli import app
+
+        runner = CliRunner()
+        result = runner.invoke(app, ["search", "test", "--papers", "/nonexistent.bib"])
+        assert result.exit_code != 0
+        assert "nicht gefunden" in result.output or "not found" in result.output.lower()
+
+    def test_papers_flag_passes_to_config(self, tmp_path, monkeypatch):
+        """--papers wird korrekt an SearchConfig weitergegeben."""
+        bib = tmp_path / "refs.bib"
+        bib.write_text("@article{x, author={A}, title={Test}, year={2024}}", encoding="utf-8")
+
+        captured_config = {}
+
+        async def mock_search(topic, *, config=None, **kwargs):
+            captured_config["papers_file"] = config.papers_file if config else None
+            return [], {"ss_total": 0, "openalex_total": 0, "exa_total": 0, "import_total": 0}, None
+
+        monkeypatch.setattr("src.agents.forschungsstand.search_papers", mock_search)
+
+        from typer.testing import CliRunner
+
+        from cli import app
+
+        runner = CliRunner()
+        result = runner.invoke(app, ["search", "test", "--papers", str(bib)])
+        assert captured_config.get("papers_file") == bib

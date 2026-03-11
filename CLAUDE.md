@@ -22,6 +22,7 @@ CLI (Typer) → Agents (Domain-Logik) → Pipeline (State + Provenance)
 | `src/utils/document_splitter.py` | Dokument-Splitting |
 | `skills/` | LLM Instruction Files (search, draft, review, check) |
 | `config/` | Venue/Voice Profiles (JSON), Rubrics, Policy Context |
+| `src/utils/bibtex_parser.py` | BibTeX-Import zu UnifiedPaper |
 | `src/agents/doctor.py` | Feature-Availability Check (doctor Command) |
 | `cli.py` | Typer Entry Point (6 Commands) |
 
@@ -77,7 +78,7 @@ pytest tests/ --cov=src --cov-report=term-missing
 ## CLI Commands
 
 ```bash
-research-toolkit search TOPIC        # --max, --sources ss,openalex,exa, --years, --append
+research-toolkit search TOPIC        # --max, --sources ss,openalex,exa, --years, --append, --papers
 research-toolkit draft TOPIC --venue X  # --voice, --input, --mode
 research-toolkit review DOCUMENT     # --venue
 research-toolkit check DOCUMENT
@@ -97,6 +98,8 @@ Source-aware Composite Score (0-1):
 **OpenAlex Pre-Filter:** Papers unter relevance_score 0.3 werden vor Ranking entfernt.
 **Source-Balance Warning:** Warnung wenn eine Quelle <10% des Pools liefert.
 **Akkumuliertes Suchen:** `--append` Flag merged neue Ergebnisse in bestehenden Pool.
+**Paper-Import:** `--papers refs.bib` importiert externe Papers (source="import") in den Pool.
+**Low-Recall-Warnung:** Warnung wenn < 15 Papers nach Ranking + Empfehlungen (Exa, Import).
 
 **SPECTER2** optional (`[nlp]`). Enhanced Score ebenfalls source-aware (SS: 0.25, OA: 0.10, Exa: 0.03).
 Deduplication via DOI oder Title-Hash (SHA256).

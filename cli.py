@@ -91,12 +91,20 @@ def search(
     append: bool = typer.Option(
         False, "--append", "-a", help="Merge into existing results (akkumuliert)"
     ),
+    papers_file: Path = typer.Option(
+        None, "--papers", "-p", help="BibTeX-Datei mit externen Papers importieren"
+    ),
     verbose: bool = typer.Option(False, "--verbose", "-v"),
 ) -> None:
     """Search academic literature via Semantic Scholar + OpenAlex (+ optional Exa)."""
     _load_env()
     _setup_logging(verbose)
     output_dir = _check_output_dir()
+
+    # Paper-Import validieren
+    if papers_file is not None and not papers_file.exists():
+        console.print(f"[red]BibTeX-Datei nicht gefunden:[/red] {papers_file}")
+        raise typer.Exit(1)
 
     from src.agents.forschungsstand import (
         ForschungsstandResult,
@@ -115,6 +123,7 @@ def search(
         top_k=max_results,
         sources=source_list,
         year_filter=year_filter,
+        papers_file=papers_file,
     )
 
     mode_label = " [cyan](smart queries)[/cyan]" if refine else ""
