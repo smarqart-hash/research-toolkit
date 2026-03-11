@@ -12,7 +12,7 @@ import logging
 import random
 from collections.abc import Sequence
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field
 
 from src.utils.llm_client import LLMConfig, llm_complete, load_llm_config
 
@@ -28,11 +28,6 @@ class TextScoring(BaseModel):
     label: str  # "own_draft" oder "control_N"
     score: float = Field(ge=0.0, le=10.0)
     reasoning: str = ""
-
-    @field_validator("score", mode="before")
-    @classmethod
-    def _clamp(cls, v: float) -> float:
-        return float(v)
 
 
 class BiasTestResult(BaseModel):
@@ -151,13 +146,17 @@ async def run_bias_test(
 
     llm_config = config or load_llm_config()
 
-    # Blinded: Neutrale IDs vergeben, eigenen Draft zufaellig einordnen
-    all_texts: list[tuple[str, str, str]] = [("own_draft", "t1", own_draft)]
-    for i, text in enumerate(control_texts):
-        tid = f"t{i + 2}"
-        all_texts = [*all_texts, (f"control_{i}", tid, text)]
+    # Blinded: Neutrale IDs randomisiert vergeben
+    labels = ["own_draft", *[f"control_{i}" for i in range(len(control_texts))]]
+    contents = [own_draft, *control_texts]
+    # IDs shufflen damit own_draft nicht immer t1 ist
+    ids = [f"t{i + 1}" for i in range(len(labels))]
+    random.shuffle(ids)
+    all_texts: list[tuple[str, str, str]] = [
+        (label, tid, content) for label, tid, content in zip(labels, ids, contents)
+    ]
 
-    # Shuffle fuer Reihenfolge-Blindheit
+    # Reihenfolge-Blindheit
     shuffled = list(all_texts)
     random.shuffle(shuffled)
 

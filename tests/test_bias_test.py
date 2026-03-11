@@ -167,20 +167,38 @@ class TestParseScoringResponse:
 
 
 class TestSelfEnhancement:
+    def _make_dynamic_response(self, mock_llm, own_score: float, control_score: float):
+        """Erzeugt LLM-Response die IDs aus dem Prompt extrahiert."""
+
+        async def _dynamic_response(system_prompt, user_msg, *, config=None):
+            # IDs aus dem Prompt extrahieren (Format: "--- Text tN ---")
+            import re
+
+            ids = re.findall(r"--- Text (t\d+) ---", user_msg)
+            # Erster Text im Prompt bekommt own_score, Rest control_score
+            # Aber wir wissen nicht welcher own ist — geben allen control_score,
+            # ausser dem mit dem own_draft-Inhalt
+            scorings = []
+            for tid in ids:
+                # Pruefe ob der eigene Draft-Text in diesem Abschnitt steht
+                pattern = f"--- Text {tid} ---\n(.*?)(?:--- Text|$)"
+                match = re.search(pattern, user_msg, re.DOTALL)
+                text_content = match.group(1).strip() if match else ""
+                if _OWN_DRAFT[:30] in text_content:
+                    scorings.append({"text_id": tid, "score": own_score, "reasoning": "Own"})
+                else:
+                    scorings.append({"text_id": tid, "score": control_score, "reasoning": "Ctrl"})
+            return json.dumps({"scorings": scorings})
+
+        mock_llm.side_effect = _dynamic_response
+
     @pytest.mark.asyncio
     async def test_basic_flow(self):
         """Grundlegender Flow: eigener Draft + Kontrolle → BiasTestResult."""
-        llm_response = json.dumps({
-            "scorings": [
-                {"text_id": "t1", "score": 8, "reasoning": "Sehr gut"},
-                {"text_id": "t2", "score": 5, "reasoning": "Durchschnitt"},
-                {"text_id": "t3", "score": 4, "reasoning": "Unterdurchschnitt"},
-            ]
-        })
         config = _llm_config()
 
         with patch("src.agents.bias_test.llm_complete", new_callable=AsyncMock) as mock_llm:
-            mock_llm.return_value = llm_response
+            self._make_dynamic_response(mock_llm, own_score=8.0, control_score=4.5)
             result = await run_bias_test(
                 topic="ML",
                 own_draft=_OWN_DRAFT,
@@ -190,23 +208,17 @@ class TestSelfEnhancement:
 
         assert isinstance(result, BiasTestResult)
         assert result.own_draft_score == 8.0
-        assert result.control_mean_score == 4.5  # (5 + 4) / 2
-        assert result.bias_magnitude == 3.5  # 8.0 - 4.5
-        assert result.bias_detected is True  # > 2.0 Threshold
+        assert result.control_mean_score == 4.5
+        assert result.bias_magnitude == 3.5
+        assert result.bias_detected is True
 
     @pytest.mark.asyncio
     async def test_no_bias(self):
         """Kein Bias wenn Scores aehnlich."""
-        llm_response = json.dumps({
-            "scorings": [
-                {"text_id": "t1", "score": 6, "reasoning": "Ok"},
-                {"text_id": "t2", "score": 6, "reasoning": "Ok"},
-            ]
-        })
         config = _llm_config()
 
         with patch("src.agents.bias_test.llm_complete", new_callable=AsyncMock) as mock_llm:
-            mock_llm.return_value = llm_response
+            self._make_dynamic_response(mock_llm, own_score=6.0, control_score=6.0)
             result = await run_bias_test(
                 topic="ML",
                 own_draft=_OWN_DRAFT,
@@ -252,15 +264,9 @@ class TestSelfEnhancement:
     async def test_blinded_text_ids(self):
         """LLM sieht nur neutrale IDs (t1, t2, ...), nicht 'own_draft'."""
         config = _llm_config()
-        llm_response = json.dumps({
-            "scorings": [
-                {"text_id": "t1", "score": 5, "reasoning": ""},
-                {"text_id": "t2", "score": 5, "reasoning": ""},
-            ]
-        })
 
         with patch("src.agents.bias_test.llm_complete", new_callable=AsyncMock) as mock_llm:
-            mock_llm.return_value = llm_response
+            self._make_dynamic_response(mock_llm, own_score=5.0, control_score=5.0)
             await run_bias_test(
                 topic="ML",
                 own_draft=_OWN_DRAFT,

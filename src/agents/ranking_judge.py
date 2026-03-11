@@ -11,7 +11,7 @@ import json
 import logging
 from collections.abc import Sequence
 
-from pydantic import BaseModel, Field, computed_field, field_validator
+from pydantic import BaseModel, Field, computed_field
 
 from src.agents.paper_ranker import UnifiedPaper
 from src.utils.llm_client import LLMConfig, llm_complete, load_llm_config
@@ -28,12 +28,6 @@ class JudgedPaper(BaseModel):
     title: str
     llm_score: float = Field(ge=0.0, le=10.0)
     reasoning: str = ""
-
-    @field_validator("llm_score", mode="before")
-    @classmethod
-    def _clamp_score(cls, v: float) -> float:
-        """Clampt Score auf 0-10 bei Validation via parse (nicht Konstruktor)."""
-        return float(v)
 
 
 class JudgementResult(BaseModel):
@@ -71,11 +65,10 @@ class JudgementResult(BaseModel):
         """Mittlere absolute Differenz zwischen LLM (normalisiert 0-1) und Heuristik."""
         if not self.judged_papers:
             return 0.0
-        deltas = []
-        for jp in self.judged_papers:
-            llm_norm = jp.llm_score / 10.0
-            heur = self.heuristic_scores.get(jp.paper_id, 0.0)
-            deltas = [*deltas, abs(llm_norm - heur)]
+        deltas = [
+            abs(jp.llm_score / 10.0 - self.heuristic_scores.get(jp.paper_id, 0.0))
+            for jp in self.judged_papers
+        ]
         return round(sum(deltas) / len(deltas), 4)
 
 
