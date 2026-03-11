@@ -665,19 +665,40 @@ class TestSourceQuota:
 
     def test_quota_respects_top_k(self):
         """30 Papers (10 pro Quelle), top_k=10 → genau 10 zurueck."""
-        papers = []
+        papers: list[UnifiedPaper] = []
         for src in ("semantic_scholar", "openalex", "exa"):
             for i in range(10):
-                papers.append(
+                papers = [
+                    *papers,
                     UnifiedPaper(
                         paper_id=f"{src}{i}",
                         title=f"{src} Paper {i}",
                         source=src,
                         year=2024,
-                    )
-                )
+                    ),
+                ]
         ranked = rank_papers(papers, top_k=10)
         assert len(ranked) == 10
+
+    def test_small_top_k_does_not_overflow(self):
+        """top_k=5 mit 3 Quellen → genau 5 Papers, kein Overflow."""
+        papers = []
+        for src in ("semantic_scholar", "openalex", "exa"):
+            for i in range(10):
+                papers = [
+                    *papers,
+                    UnifiedPaper(
+                        paper_id=f"{src}{i}",
+                        title=f"{src} Paper {i}",
+                        source=src,
+                        year=2024,
+                    ),
+                ]
+        ranked = rank_papers(papers, top_k=5)
+        assert len(ranked) == 5
+        # Jede Quelle hat mindestens 1 Paper (effective_min = 5//3 = 1)
+        sources_in_result = {p.source for p in ranked}
+        assert len(sources_in_result) >= 2  # Mindestens 2 Quellen vertreten
 
     def test_no_quota_without_top_k(self):
         """Kein top_k → alle Papers zurueck, keine Quota-Filterung."""

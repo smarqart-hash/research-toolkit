@@ -303,10 +303,11 @@ def _apply_source_quota(
     top_k: int,
     *,
     min_per_source: int = 3,
+    scores: dict[str, float] | None = None,
 ) -> list[UnifiedPaper]:
     """Wendet Source-Quota an: reserviert Mindestplaetze pro aktiver Quelle.
 
-    Phase 1: Reserviert min(min_per_source, verfuegbare) Plaetze pro Quelle.
+    Phase 1: Reserviert min(effective_min, verfuegbare) Plaetze pro Quelle.
     Phase 2: Fuellt restliche Plaetze nach Score auf.
     Ergebnis wird nach Score neu sortiert und auf top_k beschnitten.
 
@@ -314,36 +315,41 @@ def _apply_source_quota(
         ranked: Nach Score absteigend sortierte Papers.
         top_k: Maximale Anzahl zurueckzugebender Papers.
         min_per_source: Mindestanzahl reservierter Plaetze pro Quelle.
+        scores: Optionales Score-Dict (z.B. enhanced_scores bei SPECTER2).
+            Falls None, wird relevance_score verwendet.
     """
     # Quellen sammeln
-    sources = {p.source for p in ranked}
+    sources = list(dict.fromkeys(p.source for p in ranked))
     if len(sources) <= 1:
         return ranked[:top_k]
+
+    # Effektives Minimum: bei kleinem top_k anteilig reduzieren
+    effective_min = min(min_per_source, max(1, top_k // len(sources)))
+
+    # Score-Funktion: SPECTER2-enhanced oder heuristisch
+    sort_key = (
+        (lambda p: scores.get(p.paper_id, 0.0))
+        if scores is not None
+        else (lambda p: p.relevance_score)
+    )
 
     # Phase 1: Top-N pro Quelle reservieren
     reserved: list[UnifiedPaper] = []
     reserved_ids: set[str] = set()
     for source in sources:
         source_papers = [p for p in ranked if p.source == source]
-        quota = min(min_per_source, len(source_papers))
+        quota = min(effective_min, len(source_papers))
         for paper in source_papers[:quota]:
             if paper.paper_id not in reserved_ids:
-                reserved.append(paper)
-                reserved_ids.add(paper.paper_id)
+                reserved = [*reserved, paper]
+                reserved_ids = {*reserved_ids, paper.paper_id}
 
     # Phase 2: Restliche Plaetze nach Score auffuellen
-    remaining_slots = top_k - len(reserved)
-    if remaining_slots > 0:
-        for paper in ranked:
-            if paper.paper_id not in reserved_ids:
-                reserved.append(paper)
-                reserved_ids.add(paper.paper_id)
-                remaining_slots -= 1
-                if remaining_slots == 0:
-                    break
+    remaining_slots = max(0, top_k - len(reserved))
+    fill = [p for p in ranked if p.paper_id not in reserved_ids][:remaining_slots]
 
-    # Nach Score neu sortieren und auf top_k beschneiden
-    result = sorted(reserved, key=lambda p: p.relevance_score, reverse=True)
+    # Zusammenfuehren, nach Score sortieren, auf top_k beschneiden
+    result = sorted([*reserved, *fill], key=sort_key, reverse=True)
     return result[:top_k]
 
 
@@ -374,7 +380,7 @@ def rank_papers(
             }
             ranked = sorted(updated, key=lambda p: enhanced_scores[p.paper_id], reverse=True)
             if top_k:
-                return _apply_source_quota(ranked, top_k)
+                return _apply_source_quota(ranked, top_k, scores=enhanced_scores)
             return ranked
 
     # Fallback: heuristisches Ranking

@@ -574,7 +574,7 @@ class TestSourceBalanceWarning:
         stats = {"ss_total": 2, "openalex_total": 40, "exa_total": 0}
         warnings = _check_source_balance(stats)
         assert len(warnings) >= 1
-        assert "semantic" in warnings[0].lower() or "ss" in warnings[0].lower()
+        assert "Semantic Scholar" in warnings[0]
 
     def test_balanced_sources_no_warning(self):
         """Keine Warnung bei SS=20, OA=25."""
@@ -696,4 +696,5 @@ class TestHigherLimits:
                 await _search_exa(["test query"], config, stats)
 
         asyncio.run(run())
-        assert captured.get("num_results") == 75
+        # Exa-Cap: min(config.max_results_per_query, 50)
+        assert captured.get("num_results") == 50

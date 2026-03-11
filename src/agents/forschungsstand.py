@@ -242,7 +242,9 @@ async def _search_exa(
     papers: list[UnifiedPaper] = []
     for query in queries:
         try:
-            exa_response = await exa_client.search_papers(query, num_results=config.max_results_per_query)
+            exa_response = await exa_client.search_papers(
+                query, num_results=min(config.max_results_per_query, 50),
+            )
             batch = [from_exa(r) for r in exa_response.results]
             papers = [*papers, *batch]
             stats["exa_total"] += len(batch)

@@ -23,7 +23,6 @@ CLI (Typer) → Agents (Domain-Logik) → Pipeline (State + Provenance)
 | `src/utils/bibtex_parser.py` | BibTeX-Import zu UnifiedPaper |
 | `skills/` | LLM Instruction Files (search, draft, review, check) |
 | `config/` | Venue/Voice Profiles (JSON), Rubrics, Policy Context |
-| `src/utils/bibtex_parser.py` | BibTeX-Import zu UnifiedPaper |
 | `src/agents/doctor.py` | Feature-Availability Check (doctor Command) |
 | `cli.py` | Typer Entry Point (6 Commands) |
 
