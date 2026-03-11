@@ -20,6 +20,7 @@ CLI (Typer) → Agents (Domain-Logik) → Pipeline (State + Provenance)
 | `src/utils/evidence_card.py` | Strukturierte Paper-Extrakte |
 | `src/utils/rubric_loader.py` | Venue-Rubrics + Policy Context |
 | `src/utils/document_splitter.py` | Dokument-Splitting |
+| `src/utils/bibtex_parser.py` | BibTeX-Import zu UnifiedPaper |
 | `skills/` | LLM Instruction Files (search, draft, review, check) |
 | `config/` | Venue/Voice Profiles (JSON), Rubrics, Policy Context |
 | `src/utils/bibtex_parser.py` | BibTeX-Import zu UnifiedPaper |
@@ -34,6 +35,7 @@ CLI (Typer) → Agents (Domain-Logik) → Pipeline (State + Provenance)
 | Draft | `drafting.py` + `config/venue_profiles/` + `config/voice_profiles/` |
 | Review | `reviewer.py` + `rubric_loader.py` |
 | Check | `quellen_checker.py` + `reference_extractor.py` |
+| Import | `bibtex_parser.py` |
 
 ## Coding Conventions
 
@@ -61,7 +63,7 @@ CLI (Typer) → Agents (Domain-Logik) → Pipeline (State + Provenance)
 
 ## Tests
 
-- **Framework**: pytest (447 Tests, alle passing)
+- **Framework**: pytest (467+ Tests, alle passing)
 - **Pfad**: `tests/` — pythonpath: `["src", "."]`
 - **Factories**: `_ss_paper()`, `_exa_result()`, `_openalex_work()` als lokale Helfer (kein Factory-Framework)
 - **Fixtures**: `@pytest.fixture` fuer State, tmp_path
@@ -116,5 +118,4 @@ Deduplication via DOI oder Title-Hash (SHA256).
 ## Meta-Loop
 
 Reflexiver Feedback-Loop: Toolkit generiert Paper ueber sich selbst, leitet Findings ab.
-Abgeschlossen: Sprint 1-6 + Quickwin (Details: `docs/plans/sprint-*-handover.md`).
-Offen: F17 (Web Research Reproduzierbarkeit).
+Abgeschlossen: Sprint 1-6 + Quickwin + F17 (Details: `docs/plans/sprint-*-handover.md`).
