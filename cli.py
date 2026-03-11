@@ -371,14 +371,14 @@ def check(
     if verify:
         from src.agents.claim_verifier import format_verification_report, run_verification
 
-        def _load_paper_data(forschungsstand_path: Path) -> tuple[dict[str, str], dict[str, str]]:
-            """Laedt paper_map und abstracts aus forschungsstand.json."""
-            if not forschungsstand_path.exists():
+        def _load_paper_data(search_results_path: Path) -> tuple[dict[str, str], dict[str, str]]:
+            """Laedt paper_map und abstracts aus search_results.json."""
+            if not search_results_path.exists():
                 return {}, {}
             try:
-                data = json.loads(forschungsstand_path.read_text(encoding="utf-8"))
+                data = json.loads(search_results_path.read_text(encoding="utf-8"))
             except (json.JSONDecodeError, OSError) as e:
-                console.print(f"[yellow]forschungsstand.json nicht lesbar:[/yellow] {e}")
+                console.print(f"[yellow]search_results.json nicht lesbar:[/yellow] {e}")
                 return {}, {}
             paper_map: dict[str, str] = {}
             abstracts: dict[str, str] = {}
@@ -391,8 +391,8 @@ def check(
                     abstracts[pid] = p["abstract"]
             return paper_map, abstracts
 
-        forschungsstand_path = output_dir / "search_results.json"
-        paper_map, paper_abstracts = _load_paper_data(forschungsstand_path)
+        search_results_path = output_dir / "search_results.json"
+        paper_map, paper_abstracts = _load_paper_data(search_results_path)
         if not paper_map:
             console.print(
                 "[yellow]Keine Papers in search_results.json — ueberspringe Verification.[/yellow]"

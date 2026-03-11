@@ -12,6 +12,8 @@ import logging
 import re
 from enum import Enum
 
+import httpx
+
 from pydantic import BaseModel, Field, computed_field
 
 logger = logging.getLogger(__name__)
@@ -209,7 +211,7 @@ async def extract_claims(
             )
             claims = _parse_extraction_response(raw, valid_ids)
             all_claims = [*all_claims, *claims]
-        except Exception as e:
+        except (RuntimeError, httpx.HTTPError, json.JSONDecodeError, OSError) as e:
             logger.warning("Claim-Extraktion fehlgeschlagen fuer Sektion: %s", e)
 
     return all_claims
@@ -373,7 +375,7 @@ async def verify_claims(
             raw = await llm_complete(_VERIFY_SYSTEM_PROMPT, user_msg, config=llm_config)
             verified = _parse_verify_response(raw, batch, abstracts)
             all_verified = [*all_verified, *verified]
-        except Exception as e:
+        except (RuntimeError, httpx.HTTPError, json.JSONDecodeError, OSError) as e:
             logger.warning("Verify-Batch-Fehler: %s", e)
             all_verified = [
                 *all_verified,
