@@ -103,11 +103,10 @@ def _check_source_balance(stats: dict[str, int]) -> list[str]:
     for source, count in active.items():
         ratio = count / total
         if ratio < 0.1:
-            warnings = [
-                *warnings,
+            warnings.append(
                 f"{source} lieferte nur {count}/{total} Papers ({ratio:.0%}). "
-                f"Ergebnisse koennten asymmetrisch sein.",
-            ]
+                f"Ergebnisse koennten asymmetrisch sein."
+            )
     return warnings
 
 
@@ -130,15 +129,13 @@ def _check_low_recall(
     ]
 
     if not has_exa:
-        warnings = [
-            *warnings,
-            "Empfehlung: Exa aktivieren fuer Web-Suche (export EXA_API_KEY=<key>).",
-        ]
+        warnings.append(
+            "Empfehlung: Exa aktivieren fuer Web-Suche (export EXA_API_KEY=<key>)."
+        )
     if not has_import:
-        warnings = [
-            *warnings,
-            "Empfehlung: Externe Papers importieren (--papers refs.bib).",
-        ]
+        warnings.append(
+            "Empfehlung: Externe Papers importieren (--papers refs.bib)."
+        )
 
     return warnings
 
@@ -163,7 +160,7 @@ async def _search_ss(
                     fields_of_study=config.fields_of_study or None,
                 )
                 batch = [from_semantic_scholar(p) for p in response.data]
-                papers = [*papers, *batch]
+                papers.extend(batch)
                 stats["ss_total"] += len(batch)
             except httpx.HTTPStatusError as e:
                 stats["ss_errors"] += 1
@@ -213,7 +210,7 @@ async def _search_openalex(
                         min_oa_relevance,
                     )
                 batch = [from_openalex(w) for w in relevant]
-                papers = [*papers, *batch]
+                papers.extend(batch)
                 stats["openalex_total"] += len(batch)
             except httpx.HTTPStatusError as e:
                 stats["openalex_errors"] += 1
@@ -249,7 +246,7 @@ async def _search_exa(
                     query, num_results=min(config.max_results_per_query, 50),
                 )
                 batch = [from_exa(r) for r in exa_response.results]
-                papers = [*papers, *batch]
+                papers.extend(batch)
                 stats["exa_total"] += len(batch)
             except httpx.HTTPStatusError as e:
                 stats["exa_errors"] += 1
@@ -358,12 +355,12 @@ async def search_papers(
         if isinstance(result, Exception):
             logger.warning("Quelle fehlgeschlagen: %s", result)
             continue
-        all_papers = [*all_papers, *result]
+        all_papers.extend(result)
 
     # Paper-Import aus BibTeX-Datei
     if config.papers_file is not None:
         imported = parse_bibtex_file(config.papers_file)
-        all_papers = [*all_papers, *imported]
+        all_papers.extend(imported)
         stats["import_total"] = len(imported)
         logger.info("Paper-Import: %d Papers aus %s", len(imported), config.papers_file.name)
 
@@ -426,7 +423,7 @@ def generate_search_queries(topic: str, leitfragen: list[str]) -> list[str]:
             if cleaned.startswith(prefix):
                 cleaned = cleaned[len(prefix):]
                 break
-        queries = [*queries, f"{topic} {cleaned}"]
+        queries.append(f"{topic} {cleaned}")
     return queries
 
 

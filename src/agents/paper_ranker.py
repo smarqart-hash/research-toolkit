@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import hashlib
 import logging
+import math
 from collections.abc import Sequence
 
 from pydantic import BaseModel, Field, computed_field
@@ -21,6 +22,10 @@ from src.agents.openalex_client import OpenAlexWork
 from src.agents.semantic_scholar import PaperResult
 
 logger = logging.getLogger(__name__)
+
+# Source-spezifische Citation-Caps (Modul-Konstanten)
+HEURISTIC_CITATION_CAPS = {"semantic_scholar": 0.4, "openalex": 0.15, "exa": 0.05}
+ENHANCED_CITATION_CAPS = {"semantic_scholar": 0.25, "openalex": 0.10, "exa": 0.03}
 
 # SPECTER2 Model-Cache (Lazy Loading)
 _specter2_model = None
@@ -67,17 +72,9 @@ class UnifiedPaper(BaseModel):
         weil breite Queries hochzitierte aber irrelevante Papers liefern.
         Max-Scores: SS ~1.0, OA ~0.75, Exa ~0.6.
         """
-        import math
-
         score = 0.0
 
-        # Source-spezifische Citation-Caps
-        _citation_caps = {
-            "semantic_scholar": 0.4,
-            "openalex": 0.15,
-            "exa": 0.05,
-        }
-        cite_cap = _citation_caps.get(self.source, 0.2)
+        cite_cap = HEURISTIC_CITATION_CAPS.get(self.source, 0.2)
 
         # Zitationen (log-skaliert, source-capped)
         if self.citation_count and self.citation_count > 0:
@@ -272,18 +269,10 @@ def _compute_enhanced_score(
     - 10% Open Access
     - 10% Abstract vorhanden
     """
-    import math
-
     s2_score = specter2_scores.get(paper.paper_id, 0.0)
     score = 0.3 * s2_score
 
-    # Source-spezifische Citation-Caps (konsistent mit relevance_score)
-    _citation_caps = {
-        "semantic_scholar": 0.25,
-        "openalex": 0.10,
-        "exa": 0.03,
-    }
-    cite_cap = _citation_caps.get(paper.source, 0.15)
+    cite_cap = ENHANCED_CITATION_CAPS.get(paper.source, 0.15)
 
     # Zitationen (log-skaliert, source-capped)
     if paper.citation_count and paper.citation_count > 0:
@@ -348,8 +337,8 @@ def _apply_source_quota(
         quota = min(effective_min, len(source_papers))
         for paper in source_papers[:quota]:
             if paper.paper_id not in reserved_ids:
-                reserved = [*reserved, paper]
-                reserved_ids = {*reserved_ids, paper.paper_id}
+                reserved.append(paper)
+                reserved_ids.add(paper.paper_id)
 
     # Phase 2: Restliche Plaetze nach Score auffuellen
     remaining_slots = max(0, top_k - len(reserved))
@@ -375,13 +364,10 @@ def rank_papers(
         specter2_scores = compute_specter2_similarity(query, papers)
         if specter2_scores:
             # SPECTER2-Scores auf Papers speichern
-            updated = []
-            for paper in papers:
-                s2_score = specter2_scores.get(paper.paper_id)
-                updated = [
-                    *updated,
-                    paper.model_copy(update={"specter2_score": s2_score}),
-                ]
+            updated = [
+                paper.model_copy(update={"specter2_score": specter2_scores.get(paper.paper_id)})
+                for paper in papers
+            ]
             enhanced_scores = {
                 p.paper_id: _compute_enhanced_score(p, specter2_scores) for p in updated
             }
