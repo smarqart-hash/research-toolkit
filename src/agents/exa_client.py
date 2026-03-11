@@ -44,7 +44,7 @@ class ExaClient:
     RETRY_DELAY_S = 2.0
 
     def __init__(self, api_key: str | None = None) -> None:
-        self._api_key = api_key or os.environ.get("EXA_API_KEY")
+        self._api_key = api_key if api_key is not None else os.environ.get("EXA_API_KEY")
 
     @property
     def is_available(self) -> bool:

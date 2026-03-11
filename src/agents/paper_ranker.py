@@ -217,6 +217,10 @@ def compute_specter2_similarity(
     except (ImportError, OSError) as e:
         logger.info("SPECTER2 nicht verfuegbar: %s", e)
         return {}
+    except Exception as e:
+        # torch kann auf Python 3.14 mit AssertionError crashen
+        logger.info("SPECTER2 Import-Fehler: %s", e)
+        return {}
 
     import numpy as np
 

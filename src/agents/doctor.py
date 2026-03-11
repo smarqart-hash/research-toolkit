@@ -60,7 +60,7 @@ def check_dependencies() -> list[DependencyStatus]:
         ),
     ]
 
-    # SPECTER2
+    # SPECTER2 — torch kann auf Python 3.14 mit AssertionError crashen
     try:
         import sentence_transformers  # noqa: F401
 
@@ -69,6 +69,9 @@ def check_dependencies() -> list[DependencyStatus]:
     except ImportError:
         specter2_available = False
         specter2_note = "pip install sentence-transformers"
+    except Exception as exc:
+        specter2_available = False
+        specter2_note = f"Import-Fehler: {type(exc).__name__}"
     deps = [
         *deps,
         DependencyStatus(
