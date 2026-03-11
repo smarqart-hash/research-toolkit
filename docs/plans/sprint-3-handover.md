@@ -1,7 +1,7 @@
-# Sprint 3 Handover: Smart Query Generation
+# ~~Sprint 3 Handover: Smart Query Generation~~
 
-> Status: BEREIT ZUR IMPLEMENTATION
-> Branch: `feature/smart-query-gen` (Worktree anlegen)
+> Status: ERLEDIGT (merged 2026-03-10, Spec `001-smart-query-gen`)
+> Branch: `feature/001-smart-query-gen` → master
 > Vorgaenger: Sprint 1+2 (abgeschlossen), kein offener PR
 
 ---
