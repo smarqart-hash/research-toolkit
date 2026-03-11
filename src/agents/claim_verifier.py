@@ -16,6 +16,8 @@ import httpx
 
 from pydantic import BaseModel, Field, computed_field
 
+from src.utils.llm_client import LLMConfig, llm_complete, load_llm_config
+
 logger = logging.getLogger(__name__)
 
 
@@ -79,8 +81,6 @@ class VerificationReport(BaseModel):
 
 
 # --- Claim Extraction ---
-
-from src.utils.llm_client import LLMConfig, llm_complete, load_llm_config
 
 _MAX_SECTION_CHARS = 12_000  # ~3K Tokens — sicher unter Context-Limit
 _EXTRACTION_MAX_TOKENS = 2048  # Extraction-Response braucht mehr als Default 1024

@@ -12,6 +12,7 @@ import logging
 import random
 from collections.abc import Sequence
 
+import httpx
 from pydantic import BaseModel, Field
 
 from src.utils.llm_client import LLMConfig, llm_complete, load_llm_config
@@ -172,7 +173,7 @@ async def run_bias_test(
         user_msg = _build_scoring_prompt(topic, prompt_texts)
         raw = await llm_complete(_SCORING_SYSTEM_PROMPT, user_msg, config=llm_config)
         raw_scorings = _parse_scoring_response(raw, valid_ids)
-    except Exception as e:
+    except (RuntimeError, httpx.HTTPError, json.JSONDecodeError, OSError) as e:
         logger.warning("Bias-Test LLM-Fehler: %s", e)
         return BiasTestResult()
 
