@@ -298,6 +298,7 @@ class TestSearchPapersMultiSource:
         paper.authors = []
         paper.citationCount = 5
         paper.isOpenAccess = False
+        paper.openAccessPdf = None
         paper.arxiv_id = None
         paper.fieldsOfStudy = []
         return paper
@@ -865,12 +866,12 @@ class TestCitationFilter:
             MagicMock(
                 doi="10.1/high", paperId="high", title="Hoch zitiert",
                 abstract="Test", year=2024, authors=[], citationCount=50,
-                isOpenAccess=False, arxiv_id=None, fieldsOfStudy=[],
+                isOpenAccess=False, openAccessPdf=None, arxiv_id=None, fieldsOfStudy=[],
             ),
             MagicMock(
                 doi="10.1/low", paperId="low", title="Wenig zitiert",
                 abstract="Test", year=2024, authors=[], citationCount=3,
-                isOpenAccess=False, arxiv_id=None, fieldsOfStudy=[],
+                isOpenAccess=False, openAccessPdf=None, arxiv_id=None, fieldsOfStudy=[],
             ),
         ]
 
@@ -903,7 +904,7 @@ class TestCitationFilter:
             MagicMock(
                 doi="10.1/low", paperId="low", title="Wenig zitiert",
                 abstract="Test", year=2024, authors=[], citationCount=1,
-                isOpenAccess=False, arxiv_id=None, fieldsOfStudy=[],
+                isOpenAccess=False, openAccessPdf=None, arxiv_id=None, fieldsOfStudy=[],
             ),
         ]
 
@@ -940,13 +941,13 @@ class TestJudgeFilter:
             MagicMock(
                 doi="10.1/relevant", paperId="rel", title="Relevant Paper",
                 abstract="Relevant abstract", year=2024, authors=[],
-                citationCount=20, isOpenAccess=False, arxiv_id=None,
+                citationCount=20, isOpenAccess=False, openAccessPdf=None, arxiv_id=None,
                 fieldsOfStudy=[],
             ),
             MagicMock(
                 doi="10.1/irrelevant", paperId="irr", title="Irrelevant Paper",
                 abstract="Off-topic abstract", year=2024, authors=[],
-                citationCount=100, isOpenAccess=False, arxiv_id=None,
+                citationCount=100, isOpenAccess=False, openAccessPdf=None, arxiv_id=None,
                 fieldsOfStudy=[],
             ),
         ]
@@ -997,7 +998,7 @@ class TestJudgeFilter:
             MagicMock(
                 doi="10.1/a", paperId="a", title="Paper A",
                 abstract="Abstract", year=2024, authors=[],
-                citationCount=5, isOpenAccess=False, arxiv_id=None,
+                citationCount=5, isOpenAccess=False, openAccessPdf=None, arxiv_id=None,
                 fieldsOfStudy=[],
             ),
         ]

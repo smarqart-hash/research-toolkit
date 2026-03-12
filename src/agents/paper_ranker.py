@@ -47,6 +47,7 @@ class UnifiedPaper(BaseModel):
     url: str | None = None
     is_open_access: bool = False
     tags: list[str] = Field(default_factory=list)
+    pdf_url: str | None = None  # Open Access PDF URL (von SS oder OA)
     specter2_score: float | None = None  # None wenn nicht berechnet
     language: str | None = None  # ISO 639-1 Sprachcode, z.B. "de", "en"
 
@@ -117,6 +118,7 @@ def from_semantic_scholar(paper: PaperResult) -> UnifiedPaper:
         arxiv_id=paper.arxiv_id,
         url=f"https://www.semanticscholar.org/paper/{paper.paperId}",
         is_open_access=paper.isOpenAccess or False,
+        pdf_url=paper.openAccessPdf.url if paper.openAccessPdf else None,
         tags=paper.fieldsOfStudy or [],
     )
 
@@ -167,6 +169,7 @@ def from_openalex(work: OpenAlexWork) -> UnifiedPaper:
         doi=doi,
         url=work.id,  # OpenAlex URL als Referenz
         is_open_access=work.open_access.is_oa,
+        pdf_url=work.open_access.oa_url,
         language=work.language,
     )
 

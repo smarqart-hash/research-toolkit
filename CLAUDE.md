@@ -132,6 +132,13 @@ Deduplication via DOI oder Title-Hash (SHA256).
 | `OPENALEX_MAILTO` | OpenAlex Polite Pool (Alternative zu API Key) | Nein (funktioniert ohne) |
 | `OUTPUT_DIR` | Output-Verzeichnis | Nein (default: ./output) |
 
+## Skills
+
+- **`/research-brief`** — Subject Decomposition: Topic → Facetten → N× fokussierte Search-Laeufe
+  - Skill-Datei: `.claude/skills/research-brief/SKILL.md` (lokal, nicht in Git)
+- **`skills/pipeline.md`** — Ceiling-Transparenz: Was die Pipeline kann und NICHT kann
+- **`skills/_archive/`** — Alte LLM-Instruktionen (search, draft, review, check) — ersetzt durch CLI `--help`
+
 ## Meta-Loop
 
 Reflexiver Feedback-Loop: Toolkit generiert Paper ueber sich selbst, leitet Findings ab.
