@@ -1,0 +1,68 @@
+{
+  "topic": "Qualitaet europaeischer Vergabedaten",
+  "research_question": "What is empirically known about data quality in European public procurement databases (TED, national platforms), and what gaps remain?",
+  "scope": "Empirical research on data quality in TED (Tenders Electronic Daily) and national procurement databases. Covers field quality (placeholders, missing values), entity resolution, competition indicators (single-bidding), data standards (OCDS, eForms), and the CN-CAN gap. Focus on quantitative evidence, not legal commentary.",
+  "core_terms": ["procurement data quality", "TED Tenders Electronic Daily", "single bidding corruption", "public procurement transparency"],
+  "exclusions": ["pure legal analysis of procurement directives", "procurement fraud detection without data quality angle", "private sector procurement", "defense procurement"],
+  "facets": [
+    {
+      "name": "TED Data Quality Empirics",
+      "description": "Studies that quantify data quality problems in TED: missing values, placeholder entries, field completeness, CN-CAN coverage gaps",
+      "search_queries": {
+        "openalex": "TED+Tenders+Electronic+Daily+data+quality+missing+values",
+        "web": "TED procurement data quality missing values placeholder 2020-2026"
+      }
+    },
+    {
+      "name": "Entity Resolution in Procurement",
+      "description": "Methods for matching/deduplicating buyer and supplier entities across procurement databases: record linkage, knowledge graphs, identifier systems",
+      "search_queries": {
+        "openalex": "entity+resolution+public+procurement+record+linkage+supplier",
+        "web": "entity resolution public procurement buyer supplier matching knowledge graph"
+      }
+    },
+    {
+      "name": "Single-Bidding & Competition Indicators",
+      "description": "Corruption Risk Index (CRI), single-bidding rates across EU, competition measurement methodology, red flags",
+      "search_queries": {
+        "openalex": "single+bidding+public+procurement+corruption+risk+indicator+Europe",
+        "web": "single bidding rate Europe procurement corruption risk indicator 2020-2026"
+      }
+    },
+    {
+      "name": "Data Standards: OCDS & eForms",
+      "description": "Open Contracting Data Standard adoption, eForms transition in EU, interoperability challenges, data model comparisons",
+      "search_queries": {
+        "openalex": "open+contracting+data+standard+OCDS+procurement+transparency",
+        "web": "eForms EU procurement data standard OCDS interoperability 2024 2025 2026"
+      }
+    },
+    {
+      "name": "Placeholder Detection in Administrative Data",
+      "description": "Methods for detecting phantom/placeholder values in administrative datasets broadly (not just procurement): sentinel values, data validation, anomaly detection",
+      "search_queries": {
+        "openalex": "placeholder+values+administrative+data+quality+detection+anomaly",
+        "web": "placeholder phantom values administrative data detection methods"
+      }
+    }
+  ],
+  "suggested_leitfragen": [
+    "Which empirical studies quantify data quality problems in TED specifically?",
+    "What entity resolution methods are applied to procurement data?",
+    "How has the single-bidding rate in Europe evolved over time?",
+    "What does the literature say about the CN-CAN gap (tender vs award coverage)?",
+    "What policy recommendations exist for improving procurement data quality?",
+    "Who are the most-cited researchers in this field?",
+    "How does eForms address known TED data quality issues?"
+  ],
+  "known_seed_papers": [
+    {"authors": "Fazekas & Kocsis", "year": 2020, "doi": "10.1017/s0007123417000461", "note": "CRI methodology, 177 citations"},
+    {"authors": "Fazekas et al.", "year": 2024, "doi": "10.1016/j.dib.2024.110412", "note": "GPPD dataset, ER methodology"},
+    {"authors": "Prier et al.", "year": 2018, "doi": "10.1504/IJPM.2018.095655", "note": "TED pitfalls"},
+    {"authors": "Soylu et al.", "year": 2022, "doi": "10.3390/info13002099", "note": "DQ barriers, missing IDs"},
+    {"authors": "TBFY", "year": 2022, "doi": "10.3233/sw-210442", "note": "TED Knowledge Graph"},
+    {"authors": "Telles", "year": 2025, "doi": "10.1007/s12027-025-00851-x", "note": "eForms criticism"},
+    {"authors": "Potin et al.", "year": 2023, "doi": "10.1038/s41597-023-02213-z", "note": "FOPPA French procurement"},
+    {"authors": "ECA", "year": 2023, "doi": null, "note": "Special Report 28/2023, Single-Bidding EU-wide"}
+  ]
+}
