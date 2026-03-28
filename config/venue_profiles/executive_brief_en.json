@@ -1,0 +1,24 @@
+{
+  "venue_id": "executive_brief_en",
+  "name": "Executive Brief (EN)",
+  "type": "briefing",
+  "language": "en",
+  "page_range": [1, 2],
+  "citation_style": "numeric",
+  "citation_format": "[1], [2]",
+  "sections": [
+    "Executive Summary",
+    "Key Findings",
+    "Implications",
+    "Recommended Actions",
+    "Sources"
+  ],
+  "handlungsempfehlungen": {
+    "format": "Numbered actions with owner/timeline",
+    "example": "1. [Action] — [Owner] by [Timeline]."
+  },
+  "review_criteria": ["actionability", "clarity", "evidence_quality"],
+  "ai_disclosure_required": true,
+  "ai_disclosure_template": "This brief was produced with AI-assisted research tools. All findings have been independently verified.",
+  "notes": "Ultra-kompaktes 1-2 Seiten Format fuer Entscheider. Bullet-heavy, decision-focused."
+}
