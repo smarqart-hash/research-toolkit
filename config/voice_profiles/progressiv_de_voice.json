@@ -1,0 +1,66 @@
+{
+  "name": "progressiv_de",
+  "description": "Sozialpolitischer Stil fuer Policy-Dokumente und gesellschaftspolitische Analysen. Formell-engagiert, strukturkritisch, zukunftsorientiert. Betont Chancengerechtigkeit, gesellschaftliche Teilhabe und systemische Gestaltungsmoeglichkeiten.",
+  "sentence_length": {"avg": 19, "range": [9, 36], "notes": "Mittellange Saetze mit konzessiven und kausalen Nebensaetzen. Haeufig Folgekonstruktionen ('Daraus ergibt sich', 'Dies bedingt') und normative Setzungen."},
+  "formality": "Formell-engagiert (policy-akademisches Register mit normativer Orientierung)",
+  "passive_ratio": "25-35%",
+  "typical_phrases": [
+    "Gesellschaftliche Teilhabe",
+    "Strukturelle Ursachen adressieren",
+    "Chancengerechtigkeit als Leitprinzip",
+    "Transformative Potenziale nutzen",
+    "Systemische Perspektive einnehmen",
+    "Solidarische Verantwortung",
+    "Intersektionale Betrachtung erfordert",
+    "Bestehende Ungleichheiten abbauen",
+    "Gestaltungsmoeglichkeiten erkennen und nutzen",
+    "Progressive Reformagenda"
+  ],
+  "recommendation_pattern": "Strukturiert als Handlungsoptionen mit Hinweis auf Zielgruppen: 'Um [strukturelle Barriere] zu ueberwinden, sollte [Akteur] [Massnahme] umsetzen.' Konjunktiv II fuer Empfehlungen, Betonung von Synergien.",
+  "number_embedding": "Zahlen zur Verdeutlichung von Ungleichheiten und Handlungsbedarf. Beispiel: 'Kinder aus bildungsfernen Haushalten erreichen seltener einen Hochschulabschluss — die Differenz betraegt 34 Prozentpunkte (Autorengruppe Bildungsberichterstattung 2024) — ein strukturelles Problem, das politisches Handeln erfordert.'",
+  "term_introduction": "Gesellschafts- und sozialpolitische Konzepte werden bei Ersterwaehnung situiert. Beispiel: 'Intersektionalitaet — die Verschraenkung mehrerer Diskriminierungsachsen wie Geschlecht, Herkunft und Klasse — offenbart, dass ...'",
+  "tone": "Formell-engagiert. Normativ explizit, aber evidenzbasiert. Betont Chancen, Gestaltungsspielraeume und gesellschaftliche Verantwortung. Kritisch gegenueber Strukturen, nicht gegenueber Individuen.",
+  "transition_patterns": [
+    "Vor dem Hintergrund dieser Befunde laesst sich schlussfolgern, dass ...",
+    "Gleichzeitig ergibt sich daraus die Notwendigkeit, ...",
+    "Dies verweist auf die strukturelle Dimension des Problems.",
+    "Entsprechend gilt es, ...",
+    "Daraus folgt die politische Aufgabe, ...",
+    "Nicht zuletzt zeigt sich, dass ...",
+    "Im Sinne eines ganzheitlichen Ansatzes ..."
+  ],
+  "uncertainty_language": [
+    "Die vorliegenden Daten legen nahe, auch wenn noch Forschungsbedarf besteht.",
+    "Offen bleibt, unter welchen Bedingungen die Wirkung am staerksten ist.",
+    "Weitere Evidenz ist notwendig, um kausale Schluesse zu ziehen.",
+    "Diese Einschaetzung ist als vorlaeufig zu verstehen.",
+    "Die Ergebnisse sind kontextabhaengig zu interpretieren.",
+    "Noch nicht vollstaendig geklart ist ..."
+  ],
+  "dos": [
+    "Strukturelle und systemische Ursachen von Problemen benennen",
+    "Betroffene Gruppen explizit sichtbar machen",
+    "Chancen und Gestaltungsmoeglichkeiten hervorheben",
+    "Inklusion und Teilhabe als Bewertungsmassstab anlegen",
+    "Internationale Vergleiche und Best-Practice-Beispiele einbeziehen",
+    "Empfehlungen konkret und adressatengerecht formulieren",
+    "Synergien zwischen sozialen und wirtschaftlichen Zielen zeigen"
+  ],
+  "donts": [
+    "Keine Individualisierung struktureller Probleme",
+    "Keine emotionalen Appelle ohne Evidenzbasis",
+    "Keine Superlative ohne Beleg",
+    "Nicht in aktivistischen Jargon verfallen",
+    "Keine Verallgemeinerungen ohne empirische Grundlage",
+    "Nicht betroffene Gruppen als passive Objekte darstellen",
+    "Keine informellen Abkuerzungen"
+  ],
+  "structural_patterns": {
+    "opening": "Problemframing: Was ist der Status quo -> Wer ist betroffen und wie -> Welche systemischen Ursachen liegen vor",
+    "body": "Ursachenanalyse (strukturell, nicht individuell) -> Internationale Vergleiche / Best Practice -> Handlungsoptionen mit Wirkungserwartungen",
+    "conclusion": "Zusammenfassung der strukturellen Befunde -> Konkrete Empfehlungen je Akteursebene -> Ausblick und Transformationspotenzial"
+  },
+  "paragraph_length": {"avg_sentences": "4-6", "notes": "Jeder Absatz entwickelt einen strukturellen Argumentationsschritt. Ursache-Wirkung-Handlungsbedarf als Grundmuster."},
+  "evidence_style": "Empirische Befunde zur Sichtbarmachung von Ungleichheiten und Wirkungsnachweisen. Beispiel: 'Wie Laengsstudien zeigen, verstaerken fruehe Bildungsbenachteiligungen spaetere Ungleichheiten (Becker & Lauterbach 2023), was den Ausbau fruehkindlicher Foerderung als prioritaere Massnahme ausweist.'",
+  "audience_targeting": "Sozialpolitische Entscheidungstraeger, NGOs, Wohlfahrtsverbaende, informierte Buerger mit sozialwissenschaftlichem Interesse. Setzt Grundwissen zu Sozialstruktur und Sozialpolitik voraus."
+}

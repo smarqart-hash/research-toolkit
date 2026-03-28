@@ -1,0 +1,65 @@
+{
+  "name": "executive_en",
+  "description": "Decision-oriented executive voice for briefings, memos, and board-level summaries. Short, direct sentences, no hedging, action-ready conclusions. Designed for time-constrained senior audiences.",
+  "sentence_length": {"avg": 12, "range": [5, 20], "notes": "Short, declarative sentences. One idea per sentence. No subordinate clause stacking. Bullets preferred for parallel items."},
+  "formality": "Formal but direct (executive business register)",
+  "passive_ratio": "10-15%",
+  "typical_phrases": [
+    "Key takeaway",
+    "Bottom line",
+    "Action required",
+    "Evidence suggests",
+    "This matters because",
+    "The data shows",
+    "Recommend immediate review",
+    "Three options exist",
+    "Risk level is",
+    "Decision needed by"
+  ],
+  "recommendation_pattern": "Direct, named-owner recommendations: '[Owner] should [action] by [date/condition].' No hedging. Explicit tradeoffs in parentheses if needed.",
+  "number_embedding": "Numbers lead, context follows. Example: '23% improvement in 6 months (Smith et al. 2024). This exceeds the 15% target. Caution: sample size was small.'",
+  "term_introduction": "Technical terms avoided or replaced. If unavoidable, one-word gloss in parentheses. Example: 'SPECTER2 (AI relevance scoring) ranks papers automatically.'",
+  "tone": "Confident, direct, action-oriented. No academic hedging. No emotional language. Every sentence earns its place. If uncertain, say so explicitly in one sentence.",
+  "transition_patterns": [
+    "However, ...",
+    "As a result, ...",
+    "The implication is ...",
+    "Specifically, ...",
+    "This leads to ...",
+    "Next step: ...",
+    "In contrast, ..."
+  ],
+  "uncertainty_language": [
+    "Data is limited. Treat as preliminary.",
+    "Confidence: medium. Further validation needed.",
+    "This is an estimate based on incomplete data.",
+    "Risk of reversal if [condition] changes.",
+    "Expert consensus is split on this point."
+  ],
+  "dos": [
+    "Lead with the conclusion, not the reasoning",
+    "Use bullet points for parallel options or evidence",
+    "Name owners and deadlines explicitly",
+    "State confidence level when uncertain",
+    "Quantify whenever possible",
+    "Cut every word that does not add information",
+    "Use bold for critical terms or decisions"
+  ],
+  "donts": [
+    "No academic hedging (may, suggests, appears to) for known facts",
+    "No long literature reviews",
+    "No passive voice for recommendations",
+    "No jargon without same-line gloss",
+    "No sentences over 20 words",
+    "No throat-clearing introductions",
+    "No footnotes in the main document — use an appendix"
+  ],
+  "structural_patterns": {
+    "opening": "Lead with the decision or finding: 'This briefing addresses [problem]. Key finding: [X]. Recommended action: [Y].'",
+    "body": "Problem -> Evidence (quantified) -> Options (2-3 max) -> Recommendation. Each section under one page.",
+    "conclusion": "Single paragraph: restate recommendation, owner, timeline, and next review date."
+  },
+  "paragraph_length": {"avg_sentences": "2-4", "notes": "Short paragraphs. White space is a feature, not waste. Long blocks signal buried key information."},
+  "evidence_style": "Cite source + year + single key metric. Example: 'Smith et al. (2024): 23% uplift, n=500.' Avoid quoting methodology in the main text.",
+  "audience_targeting": "C-suite, board members, senior policy advisors. Assumes high intelligence, very limited time. Domain knowledge varies — avoid field-specific terms."
+}
