@@ -1,0 +1,27 @@
+{
+  "venue_id": "kurzstudie_de",
+  "name": "Kurzstudie (DE)",
+  "type": "report",
+  "language": "de",
+  "page_range": [3, 7],
+  "citation_style": "apa",
+  "citation_format": "(Autor, Jahr)",
+  "sections": [
+    "Zusammenfassung",
+    "Ausgangslage",
+    "Forschungsstand",
+    "Analyse",
+    "Internationale Einordnung",
+    "Offene Fragen & Limitationen",
+    "Handlungsempfehlungen",
+    "Quellen"
+  ],
+  "handlungsempfehlungen": {
+    "format": "Nummerierte Empfehlungen mit Adressaten",
+    "example": "1. [Massnahme] — adressiert an [Stakeholder-Gruppe]."
+  },
+  "review_criteria": ["evidence_quality", "clarity", "policy_relevance", "completeness"],
+  "ai_disclosure_required": true,
+  "ai_disclosure_template": "Diese Kurzstudie wurde mit KI-gestuetzten Recherche-Tools erstellt. Alle Befunde wurden unabhaengig verifiziert.",
+  "notes": "Kompaktes deutschsprachiges Format fuer explorative Kurzstudien, Artikelgrundlagen und Policy-Inputs. Zielgruppe: informierte Oeffentlichkeit, Journalisten, Policy-Maker."
+}

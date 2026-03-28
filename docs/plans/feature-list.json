@@ -1,0 +1,215 @@
+{
+  "meta": {
+    "project": "auguri.us — Intelligence Briefing for Everybody",
+    "design_doc": "docs/plans/2026-03-28-intelligence-briefing-webapp-design.md",
+    "autonomy": 3,
+    "created": "2026-03-28",
+    "repos": {
+      "pipeline": "research-toolkit (Batch 1)",
+      "app": "briefing-app (Batch 2-4, neues Repo)"
+    }
+  },
+  "features": [
+    {
+      "id": "F-001",
+      "name": "decompose_topic() — LLM-basierte Subject Decomposition",
+      "batch": 1,
+      "agent": "builder",
+      "repo": "research-toolkit",
+      "depends_on": [],
+      "acceptance_criteria": [
+        "Funktion in src/agents/topic_decomposer.py",
+        "Nutzt llm_complete() via OpenRouter (Haiku)",
+        "Output: JSON mit topic, research_question, scope, core_terms, exclusions, facets[]",
+        "Jede Facette hat name, description, search_query",
+        "JSON-Schema-Validation auf Output",
+        "Fallback bei Garbage: min 2, max 8 Facetten",
+        "Tests in tests/test_topic_decomposer.py"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "F-002",
+      "name": "4 neue Voice-Profile (konservativ, progressiv, B1, executive)",
+      "batch": 1,
+      "agent": "builder",
+      "repo": "research-toolkit",
+      "depends_on": [],
+      "acceptance_criteria": [
+        "config/voice_profiles/konservativ_de_voice.json",
+        "config/voice_profiles/progressiv_de_voice.json",
+        "config/voice_profiles/b1_de_voice.json",
+        "config/voice_profiles/executive_en_voice.json",
+        "Alle folgen bestehendem VoiceProfile Schema (Pydantic)",
+        "load_voice_profile() laedt sie korrekt",
+        "Tests fuer Schema-Validierung"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "F-003",
+      "name": "2 neue Venue-Profile (quick_impuls, executive_brief)",
+      "batch": 1,
+      "agent": "builder",
+      "repo": "research-toolkit",
+      "depends_on": [],
+      "acceptance_criteria": [
+        "config/venue_profiles/quick_impuls_de.json",
+        "config/venue_profiles/executive_brief_en.json",
+        "Folgen bestehendem VenueProfile Schema",
+        "load_venue_profile() laedt sie korrekt",
+        "Tests fuer Schema-Validierung"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "F-004",
+      "name": "Code Review Batch 1",
+      "batch": 1,
+      "agent": "code-reviewer",
+      "repo": "research-toolkit",
+      "depends_on": ["F-001", "F-002", "F-003"],
+      "acceptance_criteria": ["Keine CRITICAL Findings"],
+      "status": "pending"
+    },
+    {
+      "id": "F-005",
+      "name": "FastAPI Backend — Wrapper um Research-Pipeline",
+      "batch": 2,
+      "agent": "builder",
+      "repo": "briefing-app",
+      "depends_on": ["F-001"],
+      "acceptance_criteria": [
+        "POST /generate (decompose → search → rank → draft → verify → review)",
+        "GET /status/:job_id (SSE progress updates)",
+        "GET /briefing/:id (fertiges Briefing als JSON)",
+        "Celery + Redis fuer async Job Processing",
+        "Timeout-Budget pro Step (wie im Design-Doc)",
+        "Graceful Degradation bei API-Ausfaellen",
+        "research-toolkit als pip-installierbares Package importiert",
+        "Tests fuer alle Endpoints"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "F-006",
+      "name": "Supabase Schema — briefings Table",
+      "batch": 2,
+      "agent": "builder",
+      "repo": "briefing-app",
+      "depends_on": [],
+      "acceptance_criteria": [
+        "Migration: briefings Table (id, topic, mode, venue, voice, status, result JSONB, html TEXT, created_at, facets JSONB, stats JSONB)",
+        "RLS enabled + Policy",
+        "Index auf status + created_at"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "F-007",
+      "name": "Code Review Batch 2",
+      "batch": 2,
+      "agent": "code-reviewer",
+      "repo": "briefing-app",
+      "depends_on": ["F-005", "F-006"],
+      "acceptance_criteria": ["Keine CRITICAL Findings"],
+      "status": "pending"
+    },
+    {
+      "id": "F-008",
+      "name": "Next.js Landing Page + Input-Form",
+      "batch": 3,
+      "agent": "builder",
+      "repo": "briefing-app",
+      "depends_on": ["F-005"],
+      "acceptance_criteria": [
+        "Landing Page mit Positioning + Tagline + 'Warum nicht ChatGPT'",
+        "Input-Form: Freitext + Modus (3) + Erweiterte Optionen",
+        "Erweiterte Optionen: Sprache, Tiefe, Stil, Perspektiv-Split",
+        "Stripe Payment Button (Platzhalter, wird in M-007 aktiviert)",
+        "Responsive, Dark-first, shadcn/ui",
+        "OG Meta Tags fuer auguri.us"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "F-009",
+      "name": "Progress-UI + Transparenz-Box",
+      "batch": 3,
+      "agent": "builder",
+      "repo": "briefing-app",
+      "depends_on": ["F-005"],
+      "acceptance_criteria": [
+        "SSE/Polling Connection zu /status/:job_id",
+        "Step-by-Step Progress (Decomposition → Search → Rank → Draft → Verify → QG)",
+        "Transparenz-Box: Pipeline-Visualisierung",
+        "Animierter Fortschrittsbalken"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "F-010",
+      "name": "Output-Page + Public Gallery + Social Cards",
+      "batch": 3,
+      "agent": "builder",
+      "repo": "briefing-app",
+      "depends_on": ["F-006"],
+      "acceptance_criteria": [
+        "/briefing/[id] — Public Briefing Page",
+        "Inline Citations mit Live-Links",
+        "PDF Export, BibTeX Export, Share-Button",
+        "OpenGraph + Twitter Card Meta Tags",
+        "Perspektiv-Split: Tab A / Tab B Side-by-Side",
+        "Gallery-Page: /gallery — letzte oeffentliche Briefings",
+        "KI-Disclosure automatisch"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "F-011",
+      "name": "Code Review Batch 3",
+      "batch": 3,
+      "agent": "code-reviewer",
+      "repo": "briefing-app",
+      "depends_on": ["F-008", "F-009", "F-010"],
+      "acceptance_criteria": ["Keine CRITICAL Findings"],
+      "status": "pending"
+    },
+    {
+      "id": "F-012",
+      "name": "End-to-End Integration Test",
+      "batch": 4,
+      "agent": "builder",
+      "repo": "briefing-app",
+      "depends_on": ["F-005", "F-008"],
+      "acceptance_criteria": [
+        "E2E: Topic eingeben → Decomposition → Search → Draft → Output sichtbar",
+        "Perspektiv-Split E2E",
+        "Error-Case: API-Timeout → Fehlermeldung",
+        "TypeScript clean (tsc --noEmit)"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "F-013",
+      "name": "Quality Gate (Gesamt)",
+      "batch": 4,
+      "agent": "quality-gate",
+      "repo": "briefing-app",
+      "depends_on": ["F-012"],
+      "acceptance_criteria": ["PASS oder PASS_WITH_WARNINGS"],
+      "status": "pending"
+    }
+  ],
+  "manual_steps": [
+    {"id": "M-001", "name": "Domain auguri.us kaufen + DNS", "depends_on": []},
+    {"id": "M-002", "name": "Stripe/Lemon Squeezy Account + Pricing", "depends_on": []},
+    {"id": "M-003", "name": "Vercel + Railway Accounts + Billing", "depends_on": []},
+    {"id": "M-004", "name": "API Keys (S2, Exa, OpenAlex, OpenRouter) fuer Production", "depends_on": []},
+    {"id": "M-005", "name": "Supabase Projekt erstellen + Env-Vars", "depends_on": []},
+    {"id": "M-006", "name": "Legal (Impressum, Datenschutz, AGB)", "depends_on": []},
+    {"id": "M-007", "name": "Stripe-Integration im Code aktivieren", "depends_on": ["F-008", "M-002"]},
+    {"id": "M-008", "name": "Landing Page Copy finalisieren", "depends_on": ["F-008"]},
+    {"id": "M-009", "name": "Deploy + Soft Launch", "depends_on": ["alle"]}
+  ]
+}
