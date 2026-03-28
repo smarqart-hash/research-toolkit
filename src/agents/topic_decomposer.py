@@ -10,7 +10,7 @@ import json
 import logging
 import re
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ValidationError
 
 from src.utils.llm_client import LLMConfig, llm_complete, load_llm_config
 
@@ -136,6 +136,9 @@ async def decompose_topic(
         RuntimeError: Wenn kein API-Key konfiguriert ist.
         httpx.HTTPStatusError: Bei API-Fehlern.
     """
+    if not topic or not topic.strip():
+        raise ValueError("topic darf nicht leer sein.")
+
     if config is None:
         config = load_llm_config()
 
@@ -164,7 +167,7 @@ async def decompose_topic(
 
     try:
         decomposition = TopicDecomposition.model_validate(data)
-    except Exception as exc:
+    except ValidationError as exc:
         raise ValueError(
             f"JSON-Schema-Validierung fehlgeschlagen: {exc}\n"
             f"Data: {data!r}"

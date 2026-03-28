@@ -8,7 +8,7 @@ import pytest
 
 from agents.drafting import VenueProfile, load_venue_profile
 
-PROFILES_DIR = Path("config/venue_profiles")
+PROFILES_DIR = Path(__file__).parent.parent / "config" / "venue_profiles"
 
 
 # --- Helfer ---
