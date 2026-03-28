@@ -1,0 +1,66 @@
+{
+  "name": "b1_de",
+  "description": "Einfache Sprache auf B1-Niveau fuer breite Bevoelkerung und Einsteiger. Kurze Saetze, keine Fachbegriffe ohne Erklaerung, aktiver Stil, alltagsnahe Vergleiche.",
+  "sentence_length": {"avg": 12, "range": [5, 18], "notes": "Kurze Saetze. Keine verschachtelten Nebensaetze. Ein Gedanke pro Satz. Haeufige Nutzung von Aufzaehlungen und Beispielen."},
+  "formality": "Sachlich, aber alltagsnahe (informell-verstaendliches Register)",
+  "passive_ratio": "5-10%",
+  "typical_phrases": [
+    "Das bedeutet",
+    "Einfach gesagt",
+    "Zum Beispiel",
+    "Das ist wichtig, weil",
+    "Was ist das genau?",
+    "Das koennen wir so erklaeren",
+    "Stellen Sie sich vor",
+    "In anderen Worten",
+    "Das zeigt uns",
+    "Daher gilt"
+  ],
+  "recommendation_pattern": "Direkte Handlungsempfehlungen in einfacher Sprache: 'Das bedeutet: [Akteur] sollte [konkrete Massnahme] tun.' Kein Konjunktiv ohne Erklaerung.",
+  "number_embedding": "Zahlen werden sofort in Alltagsbezug gesetzt. Beispiel: 'Von 100 Kindern schaffen 60 den Schulabschluss. Das sind fast zwei Drittel. Aber 40 Kinder schaffen es nicht — das ist zu viel.'",
+  "term_introduction": "Alle Fachwoerter werden sofort erklaert. Beispiel: 'Inflation bedeutet: Dinge werden teurer. Wenn ein Brot heute einen Euro kostet, kostet es naechstes Jahr vielleicht 1,10 Euro.'",
+  "tone": "Freundlich, klar, direkt. Respektiert die Leserin und den Leser. Kein Herablassen. Motivierend, nicht einschuechternd.",
+  "transition_patterns": [
+    "Jetzt kommen wir zu ...",
+    "Das haengt zusammen mit ...",
+    "Deshalb ist es wichtig, dass ...",
+    "Ein anderes Beispiel zeigt ...",
+    "Das bedeutet fuer die Praxis ...",
+    "Zusammengefasst: ...",
+    "Als Naechstes schauen wir uns an ..."
+  ],
+  "uncertainty_language": [
+    "Dazu gibt es noch keine sicheren Antworten.",
+    "Experten sind sich hier nicht einig.",
+    "Das ist noch nicht vollstaendig erforscht.",
+    "Wir wissen noch nicht genau, ob ...",
+    "Es koennte sein, dass ...",
+    "Mehr Forschung ist noetig."
+  ],
+  "dos": [
+    "Kurze Saetze schreiben (maximal 15 Woerter)",
+    "Aktiv schreiben: Subjekt handelt",
+    "Jedes Fachwort sofort erklaeren",
+    "Alltagsbeispiele und Vergleiche verwenden",
+    "Wichtiges am Anfang des Satzes stellen",
+    "Absaetze kurz halten (2-3 Saetze)",
+    "Zwischenueberschriften zur Orientierung nutzen"
+  ],
+  "donts": [
+    "Keine verschachtelten Nebensaetze",
+    "Keine Fachwoerter ohne Erklaerung",
+    "Kein Passiv ausser wenn unvermeidbar",
+    "Keine langen Wortkomposita (lieber ausschreiben)",
+    "Kein akademischer Jargon",
+    "Keine abstrakten Formulierungen ohne Beispiel",
+    "Keine Ironie oder Metaphern die missverstanden werden koennen"
+  ],
+  "structural_patterns": {
+    "opening": "Alltagsbezug herstellen: Warum ist das Thema wichtig fuer mich? Ein konkretes Beispiel voranstellen.",
+    "body": "Eine Idee pro Abschnitt. Erst erklaeren was es ist, dann warum es wichtig ist, dann was es bedeutet.",
+    "conclusion": "Kurze Zusammenfassung in 2-3 Saetzen. Was ist das Wichtigste? Was kann man tun?"
+  },
+  "paragraph_length": {"avg_sentences": "2-3", "notes": "Sehr kurze Absaetze. Viel Weissraum. Klare Gedankenschritte ohne Verdichtung."},
+  "evidence_style": "Zahlen als konkrete Bilder darstellen. Beispiel: 'Eine Studie hat 1.000 Menschen befragt. Das Ergebnis: Die Haelfte wusste nicht, was das bedeutet.'",
+  "audience_targeting": "Menschen mit geringen Deutschkenntnissen, Einsteiger ohne Fachvorwissen, breite Bevoelkerung. Kein Vorwissen vorausgesetzt."
+}

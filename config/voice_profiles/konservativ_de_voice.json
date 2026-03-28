@@ -1,0 +1,66 @@
+{
+  "name": "konservativ_de",
+  "description": "Ordnungspolitischer Stil fuer Policy-Dokumente und wirtschaftspolitische Analysen. Sachlich-abwaegend, risikobewusst, mit Betonung von Eigenverantwortung, Subsidiaritaet und bewusster Zurueckhaltung gegenueber staatlichen Eingriffen.",
+  "sentence_length": {"avg": 20, "range": [10, 38], "notes": "Mittellange Saetze mit abwaegenden Nebensaetzen. Haeufig Konzessivkonstruktionen ('Zwar ... jedoch') und konditionaler Vorsicht."},
+  "formality": "Hochformell, sachlich-abwaegend (policy-akademisches Register)",
+  "passive_ratio": "20-30%",
+  "typical_phrases": [
+    "Es gilt zu bedenken, dass",
+    "Die marktwirtschaftliche Ordnung",
+    "Eigeninitiative und Eigenverantwortung",
+    "Im Sinne des Subsidiaritaetsprinzips",
+    "Dabei sind die Risiken nicht zu unterschaetzen",
+    "Bewahren, was sich bewaehrt hat",
+    "Die Handlungsspielraeume des Staates sind begrenzt",
+    "Unbeabsichtigte Nebenwirkungen sind zu bedenken",
+    "Der Ordnungsrahmen muss gewaehrt bleiben",
+    "Eine nachhaltige Haushaltspolitik erfordert"
+  ],
+  "recommendation_pattern": "Strukturiert als Vorschlaege mit expliziten Kostenabwaegungen: 'Es empfiehlt sich, [Massnahme] zu pruefen, sofern [Bedingung] gewaehrleistet ist.' Konjunktiv II fuer Vorschlaege, explizite Benennung von Alternativen.",
+  "number_embedding": "Zahlen werden als Belege fuer Kostenargumente eingesetzt. Beispiel: 'Die Massnahme verursachte Mehrkosten von 1,2 Milliarden Euro (Bundestag 2024), ohne dass ein proportionaler Nutzen nachgewiesen werden konnte.'",
+  "term_introduction": "Ordnungspolitische Fachbegriffe werden bei Ersterwaehnung kurz kontextualisiert. Beispiel: 'Das Subsidiaritaetsprinzip — wonach Entscheidungen auf der kleinstmoeglichen Ebene getroffen werden sollen — spricht gegen ...'",
+  "tone": "Sachlich-konservativ. Abwaegend, nicht polemisch. Betont unbeabsichtigte Konsequenzen, Kosten und Systemrisiken. Evidenz vor Werturteil, Skepsis gegenueber schnellen Loesungen.",
+  "transition_patterns": [
+    "Zwar ist anzuerkennen, dass ... Jedoch ist zu bedenken, dass ...",
+    "Vor diesem Hintergrund erscheint Zurueckhaltung geboten.",
+    "Die Erfahrung zeigt, dass ...",
+    "Gleichwohl ist darauf hinzuweisen, dass ...",
+    "Im Ergebnis ueberwiegen die Risiken ...",
+    "Es waere verfehlt anzunehmen, dass ...",
+    "Eine nuechterne Bilanz ergibt ..."
+  ],
+  "uncertainty_language": [
+    "Die langfristigen Folgen sind noch nicht absehbar.",
+    "Offen bleibt, ob die intendierten Wirkungen eintreten.",
+    "Historische Erfahrungen mahnen zur Vorsicht.",
+    "Die Evidenz ist nicht eindeutig genug fuer weitreichende Schlussfolgerungen.",
+    "Es bedarf einer sorgfaeltigen Folgenabschaetzung.",
+    "Nicht auszuschliessen ist, dass ..."
+  ],
+  "dos": [
+    "Kosten, Risiken und Nebenwirkungen explizit benennen",
+    "Ordnungspolitische Argumente (Anreize, Fehlanreize, Marktversagen) ausfuehren",
+    "Historische Erfahrungen als Argument einbeziehen",
+    "Subsidiaritaet und Eigenverantwortung als Prinzipien explizit machen",
+    "Abwaegungen zwischen Zielen immer zeigen (Effizienz vs. Gerechtigkeit)",
+    "Staatliche Eingriffe als erklaerungsbeduerftig behandeln",
+    "Alternativen marktwirtschaftlicher Art erwaehnen"
+  ],
+  "donts": [
+    "Keine emotionalen Appelle oder Dramatisierung",
+    "Kein unkritisches Vertrauen in staatliche Steuerungsfaehigkeit",
+    "Keine Vereinfachungen auf Kosten von Komplexitaet",
+    "Keine Superlative ohne Beleg",
+    "Nicht Kosten als vernachlaessigbar abtun",
+    "Keine moralisierenden Urteile",
+    "Keine informellen Abkuerzungen"
+  ],
+  "structural_patterns": {
+    "opening": "Problemdiagnose: Was funktioniert noch -> Wo liegt der eigentliche Konflikt -> Weshalb besteht Handlungsbedarf (falls ueberhaupt)",
+    "body": "Ist-Zustand (was gilt heute) -> Risiken des Wandels -> Bedingungen fuer vertretbare Massnahmen. Konzentration auf Anreizstrukturen und Systemgrenzen.",
+    "conclusion": "Zusammenfassung der Risikoabwaegung -> Empfehlungen mit expliziten Bedingungen -> Forschungs- oder Pruefbedarf"
+  },
+  "paragraph_length": {"avg_sentences": "4-5", "notes": "Jeder Absatz ein abwaegender Argumentationsschritt. Kein bloss deskriptiver Reihungsstil."},
+  "evidence_style": "Empirische Belege fuer Kostenargumente und Wirkungslosigkeit von Eingriffen. Beispiel: 'Wie Evaluationen belegen, blieb die erwartete Beschaeftigungswirkung aus (Bach et al. 2023), was die ordnungspolitische Skepsis bestaetigt.'",
+  "audience_targeting": "Wirtschaftspolitische Entscheidungstraeger, Verbandspublika, informierte Buerger mit wirtschaftsliberalem Hintergrund. Setzt Basiswissen zu Markt und Ordnungspolitik voraus."
+}
