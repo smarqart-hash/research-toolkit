@@ -1,0 +1,21 @@
+{
+  "venue_id": "quick_impuls_de",
+  "name": "Quick Impuls (DE)",
+  "type": "briefing",
+  "language": "de",
+  "page_range": [2, 3],
+  "citation_style": "apa",
+  "citation_format": "(Autor, Jahr)",
+  "sections": [
+    "Kernaussage",
+    "Hintergrund",
+    "Analyse",
+    "Fazit & Ausblick",
+    "Quellen"
+  ],
+  "handlungsempfehlungen": {},
+  "review_criteria": ["evidence_quality", "clarity", "completeness"],
+  "ai_disclosure_required": true,
+  "ai_disclosure_template": "Dieses Dokument wurde mit KI-gestuetzten Recherche-Tools erstellt. Alle Befunde wurden unabhaengig verifiziert.",
+  "notes": "Verdichtetes 2-3 Seiten Format fuer schnelle Ueberblicke. B1-tauglich."
+}
