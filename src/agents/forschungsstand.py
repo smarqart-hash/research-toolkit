@@ -22,6 +22,7 @@ from pydantic import BaseModel, Field
 
 from src.agents.base_client import BASEClient
 from src.agents.bundestag_client import BundestagClient
+from src.agents.dblp_client import DBLPClient
 from src.agents.eurlex_client import EURLexClient
 from src.agents.exa_client import ExaClient
 from src.agents.openalex_client import OpenAlexClient
@@ -32,6 +33,7 @@ from src.agents.paper_ranker import (
     deduplicate,
     from_base,
     from_bundestag,
+    from_dblp,
     from_eurlex,
     from_exa,
     from_openalex,
@@ -101,6 +103,7 @@ def _check_source_balance(stats: dict[str, int]) -> list[str]:
         "Semantic Scholar": stats.get("ss_total", 0),
         "OpenAlex": stats.get("openalex_total", 0),
         "Exa": stats.get("exa_total", 0),
+        "DBLP": stats.get("dblp_total", 0),
         "BASE": stats.get("base_total", 0),
         "Bundestag DIP": stats.get("bundestag_total", 0),
         "EUR-Lex": stats.get("eurlex_total", 0),
@@ -272,6 +275,40 @@ async def _search_exa(
         return papers
 
 
+async def _search_dblp(
+    queries: list[str],
+    config: SearchConfig,
+    stats: dict[str, int],
+) -> list[UnifiedPaper]:
+    """Sucht Publikationen via DBLP (Computer Science Bibliographie).
+
+    Aktualisiert stats in-place fuer dblp_total/dblp_errors.
+    """
+    async with DBLPClient() as dblp_client:
+        papers: list[UnifiedPaper] = []
+        for query in queries:
+            try:
+                response = await dblp_client.search(
+                    query,
+                    hits=config.max_results_per_query,
+                )
+                batch = [from_dblp(hit) for hit in response.hits.hit]
+                papers.extend(batch)
+                stats["dblp_total"] += len(batch)
+            except httpx.HTTPStatusError as e:
+                stats["dblp_errors"] += 1
+                logger.warning(
+                    "DBLP HTTP %d fuer Query '%s': %s",
+                    e.response.status_code,
+                    query,
+                    e.response.text[:200],
+                )
+            except httpx.TimeoutException:
+                stats["dblp_errors"] += 1
+                logger.warning("DBLP Timeout fuer Query '%s'", query)
+        return papers
+
+
 async def _search_base(
     queries: list[str],
     config: SearchConfig,
@@ -417,6 +454,8 @@ async def search_papers(
         "openalex_errors": 0,
         "base_total": 0,
         "base_errors": 0,
+        "dblp_total": 0,
+        "dblp_errors": 0,
         "bundestag_total": 0,
         "bundestag_errors": 0,
         "eurlex_total": 0,
@@ -474,6 +513,9 @@ async def search_papers(
     if "exa" in config.sources:
         search_tasks.append(_search_exa(exa_queries, config, stats))
         sources_used.append("Exa")
+    if "dblp" in config.sources:
+        search_tasks.append(_search_dblp(ss_queries, config, stats))
+        sources_used.append("DBLP")
     if "base" in config.sources:
         base_queries = oa_queries if oa_queries else ss_queries
         search_tasks.append(_search_base(base_queries, config, stats))
@@ -504,7 +546,7 @@ async def search_papers(
     # Warnung wenn alle Quellen leer
     total_found = (
         stats["ss_total"] + stats["openalex_total"] + stats["exa_total"]
-        + stats["base_total"] + stats["bundestag_total"] + stats["eurlex_total"]
+        + stats["dblp_total"] + stats["base_total"] + stats["bundestag_total"] + stats["eurlex_total"]
     )
 
     # Source-Balance pruefen

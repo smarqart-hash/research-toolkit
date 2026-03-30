@@ -20,6 +20,7 @@ from pydantic import BaseModel, Field, computed_field
 
 from src.agents.base_client import BASEDocument
 from src.agents.bundestag_client import DIPDrucksache
+from src.agents.dblp_client import DBLPHit
 from src.agents.eurlex_client import EURLexDocument
 from src.agents.exa_client import ExaResult
 from src.agents.openalex_client import OpenAlexWork
@@ -28,8 +29,8 @@ from src.agents.semantic_scholar import PaperResult
 logger = logging.getLogger(__name__)
 
 # Source-spezifische Citation-Caps (Modul-Konstanten)
-HEURISTIC_CITATION_CAPS = {"semantic_scholar": 0.4, "openalex": 0.15, "exa": 0.05, "base": 0.10, "bundestag": 0.0, "eurlex": 0.0}
-ENHANCED_CITATION_CAPS = {"semantic_scholar": 0.25, "openalex": 0.10, "exa": 0.03, "base": 0.05, "bundestag": 0.0, "eurlex": 0.0}
+HEURISTIC_CITATION_CAPS = {"semantic_scholar": 0.4, "openalex": 0.15, "exa": 0.05, "base": 0.10, "bundestag": 0.0, "eurlex": 0.0, "dblp": 0.05}
+ENHANCED_CITATION_CAPS = {"semantic_scholar": 0.25, "openalex": 0.10, "exa": 0.03, "base": 0.05, "bundestag": 0.0, "eurlex": 0.0, "dblp": 0.03}
 
 # Recency-Berechnung: Papers vor RECENCY_BASELINE_YEAR bekommen 0 Punkte
 RECENCY_BASELINE_YEAR = 2018
@@ -240,6 +241,31 @@ def from_eurlex(doc: EURLexDocument) -> UnifiedPaper:
         url=doc.url,
         tags=[doc.doc_type, doc.subject] if doc.doc_type else [doc.subject] if doc.subject else [],
         language="de",
+    )
+
+
+def from_dblp(hit: DBLPHit) -> UnifiedPaper:
+    """Konvertiert einen DBLP-Treffer in UnifiedPaper.
+
+    DBLP liefert keine Abstracts und keine Citations.
+    Venue als Tag, DOI oft vorhanden.
+    """
+    info = hit.info
+    doi = info.doi
+    # DBLP-URL als Fallback-ID
+    paper_id = doi or hashlib.sha256(info.url.encode()).hexdigest()[:16] if info.url else hashlib.sha256(info.title.encode()).hexdigest()[:16]
+
+    return UnifiedPaper(
+        paper_id=paper_id,
+        title=info.title,
+        abstract=None,  # DBLP hat keine Abstracts
+        year=info.year_int,
+        authors=info.author_names,
+        citation_count=None,
+        source="dblp",
+        doi=doi,
+        url=info.ee or info.url,
+        tags=[info.venue] if info.venue else [],
     )
 
 
