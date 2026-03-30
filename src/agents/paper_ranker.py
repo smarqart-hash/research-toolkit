@@ -18,6 +18,9 @@ from collections.abc import Sequence
 
 from pydantic import BaseModel, Field, computed_field
 
+from src.agents.base_client import BASEDocument
+from src.agents.bundestag_client import DIPDrucksache
+from src.agents.eurlex_client import EURLexDocument
 from src.agents.exa_client import ExaResult
 from src.agents.openalex_client import OpenAlexWork
 from src.agents.semantic_scholar import PaperResult
@@ -25,8 +28,8 @@ from src.agents.semantic_scholar import PaperResult
 logger = logging.getLogger(__name__)
 
 # Source-spezifische Citation-Caps (Modul-Konstanten)
-HEURISTIC_CITATION_CAPS = {"semantic_scholar": 0.4, "openalex": 0.15, "exa": 0.05}
-ENHANCED_CITATION_CAPS = {"semantic_scholar": 0.25, "openalex": 0.10, "exa": 0.03}
+HEURISTIC_CITATION_CAPS = {"semantic_scholar": 0.4, "openalex": 0.15, "exa": 0.05, "base": 0.10, "bundestag": 0.0, "eurlex": 0.0}
+ENHANCED_CITATION_CAPS = {"semantic_scholar": 0.25, "openalex": 0.10, "exa": 0.03, "base": 0.05, "bundestag": 0.0, "eurlex": 0.0}
 
 # Recency-Berechnung: Papers vor RECENCY_BASELINE_YEAR bekommen 0 Punkte
 RECENCY_BASELINE_YEAR = 2018
@@ -171,6 +174,72 @@ def from_openalex(work: OpenAlexWork) -> UnifiedPaper:
         is_open_access=work.open_access.is_oa,
         pdf_url=work.open_access.oa_url,
         language=work.language,
+    )
+
+
+def from_base(doc: BASEDocument) -> UnifiedPaper:
+    """Konvertiert ein BASE-Dokument in UnifiedPaper.
+
+    BASE liefert keine Citations. DOI oft vorhanden.
+    Sprache als 3-Letter-Code (eng, deu) → auf 2-Letter normalisieren.
+    """
+    # Sprache normalisieren: "eng" → "en", "deu" → "de"
+    lang_map = {"eng": "en", "deu": "de", "fra": "fr", "spa": "es"}
+    language = lang_map.get(doc.dclang or "", doc.dclang)
+
+    return UnifiedPaper(
+        paper_id=doc.dcdoi or hashlib.sha256((doc.dctitle or "").encode()).hexdigest()[:16],
+        title=doc.dctitle,
+        abstract=doc.dcdescription,
+        year=doc.year,
+        authors=doc.dccreator,
+        citation_count=None,
+        source="base",
+        doi=doc.dcdoi,
+        url=doc.dcidentifier,
+        is_open_access=doc.is_open_access,
+        pdf_url=doc.dclink,
+        tags=doc.dcsubject,
+        language=language,
+    )
+
+
+def from_bundestag(drucksache: DIPDrucksache) -> UnifiedPaper:
+    """Konvertiert eine Bundestag-Drucksache in UnifiedPaper.
+
+    Bundestag-Dokumente haben keine DOI oder Citations.
+    Dokumentnummer als ID, Titel als Abstract-Ersatz.
+    """
+    return UnifiedPaper(
+        paper_id=f"dip:{drucksache.dokumentnummer}" if drucksache.dokumentnummer else f"dip:{drucksache.id}",
+        title=drucksache.titel,
+        abstract=drucksache.abstract or drucksache.titel,
+        year=drucksache.year,
+        authors=[],
+        citation_count=None,
+        source="bundestag",
+        url=drucksache.url,
+        tags=[drucksache.typ] if drucksache.typ else [],
+        language="de",
+    )
+
+
+def from_eurlex(doc: EURLexDocument) -> UnifiedPaper:
+    """Konvertiert ein EUR-Lex-Dokument in UnifiedPaper.
+
+    EU-Rechtsakte: CELEX-Nummer als ID, kein DOI, kein Abstract.
+    """
+    return UnifiedPaper(
+        paper_id=f"celex:{doc.celex}" if doc.celex else hashlib.sha256(doc.title.encode()).hexdigest()[:16],
+        title=doc.title,
+        abstract=doc.title,  # EUR-Lex hat keine Abstracts
+        year=doc.year,
+        authors=[],
+        citation_count=None,
+        source="eurlex",
+        url=doc.url,
+        tags=[doc.doc_type, doc.subject] if doc.doc_type else [doc.subject] if doc.subject else [],
+        language="de",
     )
 
 

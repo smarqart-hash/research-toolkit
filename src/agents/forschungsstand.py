@@ -20,6 +20,9 @@ from pathlib import Path
 import httpx
 from pydantic import BaseModel, Field
 
+from src.agents.base_client import BASEClient
+from src.agents.bundestag_client import BundestagClient
+from src.agents.eurlex_client import EURLexClient
 from src.agents.exa_client import ExaClient
 from src.agents.openalex_client import OpenAlexClient
 
@@ -27,6 +30,9 @@ logger = logging.getLogger(__name__)
 from src.agents.paper_ranker import (
     UnifiedPaper,
     deduplicate,
+    from_base,
+    from_bundestag,
+    from_eurlex,
     from_exa,
     from_openalex,
     from_semantic_scholar,
@@ -95,6 +101,9 @@ def _check_source_balance(stats: dict[str, int]) -> list[str]:
         "Semantic Scholar": stats.get("ss_total", 0),
         "OpenAlex": stats.get("openalex_total", 0),
         "Exa": stats.get("exa_total", 0),
+        "BASE": stats.get("base_total", 0),
+        "Bundestag DIP": stats.get("bundestag_total", 0),
+        "EUR-Lex": stats.get("eurlex_total", 0),
     }
     active = {k: v for k, v in source_counts.items() if v > 0}
     total = sum(active.values())
@@ -263,6 +272,117 @@ async def _search_exa(
         return papers
 
 
+async def _search_base(
+    queries: list[str],
+    config: SearchConfig,
+    stats: dict[str, int],
+) -> list[UnifiedPaper]:
+    """Sucht Dokumente via BASE (Bielefeld Academic Search Engine).
+
+    Aktualisiert stats in-place fuer base_total/base_errors.
+    """
+    async with BASEClient() as base_client:
+        papers: list[UnifiedPaper] = []
+        # Sprache fuer Filter: "de" → "deu", "en" → "eng"
+        lang_map = {"de": "deu", "en": "eng", "fr": "fra"}
+        lang_filter = None
+        if config.languages:
+            lang_filter = lang_map.get(config.languages[0])
+
+        for query in queries:
+            try:
+                response = await base_client.search(
+                    query,
+                    hits=config.max_results_per_query,
+                    language=lang_filter,
+                )
+                batch = [from_base(doc) for doc in response.response.docs]
+                papers.extend(batch)
+                stats["base_total"] += len(batch)
+            except httpx.HTTPStatusError as e:
+                stats["base_errors"] += 1
+                logger.warning(
+                    "BASE HTTP %d fuer Query '%s': %s",
+                    e.response.status_code,
+                    query,
+                    e.response.text[:200],
+                )
+            except httpx.TimeoutException:
+                stats["base_errors"] += 1
+                logger.warning("BASE Timeout fuer Query '%s'", query)
+        return papers
+
+
+async def _search_bundestag(
+    queries: list[str],
+    config: SearchConfig,
+    stats: dict[str, int],
+) -> list[UnifiedPaper]:
+    """Sucht Drucksachen via Bundestag DIP API.
+
+    Aktualisiert stats in-place fuer bundestag_total/bundestag_errors.
+    """
+    async with BundestagClient() as bt_client:
+        papers: list[UnifiedPaper] = []
+        for query in queries:
+            try:
+                response = await bt_client.search_drucksachen(
+                    query,
+                    rows=min(config.max_results_per_query, 50),
+                )
+                batch = [from_bundestag(d) for d in response.documents]
+                papers.extend(batch)
+                stats["bundestag_total"] += len(batch)
+            except httpx.HTTPStatusError as e:
+                stats["bundestag_errors"] += 1
+                logger.warning(
+                    "Bundestag DIP HTTP %d fuer Query '%s': %s",
+                    e.response.status_code,
+                    query,
+                    e.response.text[:200],
+                )
+            except httpx.TimeoutException:
+                stats["bundestag_errors"] += 1
+                logger.warning("Bundestag DIP Timeout fuer Query '%s'", query)
+        return papers
+
+
+async def _search_eurlex(
+    queries: list[str],
+    config: SearchConfig,
+    stats: dict[str, int],
+) -> list[UnifiedPaper]:
+    """Sucht EU-Rechtsdokumente via EUR-Lex SPARQL.
+
+    Aktualisiert stats in-place fuer eurlex_total/eurlex_errors.
+    """
+    async with EURLexClient() as eurlex_client:
+        papers: list[UnifiedPaper] = []
+        language = "de" if config.languages and "de" in config.languages else "en"
+        for query in queries:
+            try:
+                response = await eurlex_client.search(
+                    query,
+                    language=language,
+                    limit=min(config.max_results_per_query, 20),
+                )
+                batch = [from_eurlex(doc) for doc in response.documents]
+                papers.extend(batch)
+                stats["eurlex_total"] += len(batch)
+            except httpx.HTTPStatusError as e:
+                stats["eurlex_errors"] += 1
+                logger.warning(
+                    "EUR-Lex HTTP %d fuer Query '%s': %s",
+                    e.response.status_code,
+                    query,
+                    e.response.text[:200],
+                )
+            except httpx.TimeoutException:
+                stats["eurlex_errors"] += 1
+                logger.warning("EUR-Lex Timeout fuer Query '%s'", query)
+        return papers
+
+
 async def search_papers(
     topic: str,
     *,
@@ -295,6 +415,12 @@ async def search_papers(
         "exa_errors": 0,
         "openalex_total": 0,
         "openalex_errors": 0,
+        "base_total": 0,
+        "base_errors": 0,
+        "bundestag_total": 0,
+        "bundestag_errors": 0,
+        "eurlex_total": 0,
+        "eurlex_errors": 0,
         "import_total": 0,
     }
 
@@ -348,6 +474,16 @@ async def search_papers(
     if "exa" in config.sources:
         search_tasks.append(_search_exa(exa_queries, config, stats))
         sources_used.append("Exa")
+    if "base" in config.sources:
+        base_queries = oa_queries if oa_queries else ss_queries
+        search_tasks.append(_search_base(base_queries, config, stats))
+        sources_used.append("BASE")
+    if "bundestag" in config.sources:
+        search_tasks.append(_search_bundestag(ss_queries, config, stats))
+        sources_used.append("Bundestag DIP")
+    if "eurlex" in config.sources:
+        search_tasks.append(_search_eurlex(ss_queries, config, stats))
+        sources_used.append("EUR-Lex")
 
     results = await asyncio.gather(*search_tasks, return_exceptions=True)
 
@@ -366,7 +502,10 @@ async def search_papers(
         logger.info("Paper-Import: %d Papers aus %s", len(imported), config.papers_file.name)
 
     # Warnung wenn alle Quellen leer
-    total_found = stats["ss_total"] + stats["openalex_total"] + stats["exa_total"]
+    total_found = (
+        stats["ss_total"] + stats["openalex_total"] + stats["exa_total"]
+        + stats["base_total"] + stats["bundestag_total"] + stats["eurlex_total"]
+    )
 
     # Source-Balance pruefen
     balance_warnings = _check_source_balance(stats)
