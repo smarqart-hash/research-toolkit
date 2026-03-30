@@ -159,8 +159,10 @@ _REVISE_SYSTEM_PROMPT = """\
 Du bist ein akademischer Editor. Ueberarbeite den Text basierend auf den genannten Issues.
 
 REGELN:
-- NUR die genannten Sektionen ueberarbeiten
-- Andere Teile UNVERAENDERT lassen
+- Gib den VOLLSTAENDIGEN Text zurueck — nicht nur die geaenderten Teile
+- NUR die genannten Sektionen ueberarbeiten, andere WOERTLICH uebernehmen
+- KEIN Meta-Kommentar ("Hier ist...", "Ich habe...", "Rest bleibt...")
+- Beginne DIREKT mit dem Markdown des Textes (## Kernaussage ...)
 - Stil und Zitierweise beibehalten
 - Am Ende des Textes: JSON-Block mit Changelog:
 ```json
@@ -303,6 +305,8 @@ async def revise_draft(
 
 def _parse_revision_response(raw: str) -> tuple[str, RevisionChangelog]:
     """Extrahiert revidierten Text und Changelog aus LLM-Antwort."""
+    import re
+
     changelog = RevisionChangelog()
 
     # Changelog-JSON am Ende extrahieren
@@ -323,7 +327,45 @@ def _parse_revision_response(raw: str) -> tuple[str, RevisionChangelog]:
     else:
         text_part = raw
 
+    # Preamble-Stripping: Alles vor dem ersten ## entfernen
+    heading_match = re.search(r"^##\s", text_part, re.MULTILINE)
+    if heading_match and heading_match.start() > 0:
+        preamble = text_part[: heading_match.start()].strip()
+        if preamble:
+            logger.info(
+                "Preamble entfernt (%d Zeichen): %s...",
+                len(preamble),
+                preamble[:80],
+            )
+        text_part = text_part[heading_match.start() :]
+
+    # Trailing-Artefakte entfernen
+    text_part = re.sub(
+        r"\[Rest des Dokuments bleibt unveraendert\].*$",
+        "",
+        text_part,
+        flags=re.DOTALL | re.IGNORECASE,
+    ).strip()
+
     return text_part, changelog
+
+
+def _should_accept_revision(
+    original: str, revision: str, min_ratio: float = 0.5
+) -> bool:
+    """Prueft ob die Revision nicht zu stark gekuerzt wurde."""
+    if not original:
+        return True
+    ratio = len(revision) / len(original)
+    if ratio < min_ratio:
+        logger.warning(
+            "Revision verworfen: nur %.0f%% der Original-Laenge (%d -> %d chars)",
+            ratio * 100,
+            len(original),
+            len(revision),
+        )
+        return False
+    return True
 
 
 async def self_consistency_probe(
@@ -448,6 +490,14 @@ async def run_revise_loop(
         # 4. Revision
         new_md, changelog = await revise_draft(current_md, review.issues, config=config)
         result.changelogs = [*result.changelogs, changelog]
+
+        # Laengen-Guard: Revision verwerfen wenn zu kurz
+        if not _should_accept_revision(current_md, new_md):
+            result.aborted = True
+            result.abort_reason = "Revision zu kurz — Original beibehalten"
+            logger.warning("Iteration %d: %s", i + 1, result.abort_reason)
+            break
+
         current_md = new_md
         result.iterations += 1
 

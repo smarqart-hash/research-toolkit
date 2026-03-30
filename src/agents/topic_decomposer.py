@@ -33,9 +33,9 @@ Das JSON-Objekt muss exakt dieses Schema haben:
   "exclusions": ["string", ...],
   "facets": [
     {
-      "name": "string — Facetten-Name",
-      "description": "string — was dieser Aspekt abdeckt",
-      "search_query": "string — Search-Query fuer research-toolkit"
+      "name": "string — Facetten-Name (in der Sprache des Themas)",
+      "description": "string — was dieser Aspekt abdeckt (in der Sprache des Themas)",
+      "search_query": "string — Search-Query fuer research-toolkit (IMMER auf Englisch)"
     }
   ],
   "suggested_leitfragen": ["string", ...]
@@ -46,7 +46,8 @@ Regeln:
 - Jede Facette deckt einen ANDEREN Aspekt ab (Overlap < 20%)
 - core_terms: die 2-5 spezifischsten Begriffe (nicht generisch wie 'AI', 'research')
 - exclusions: explizit benennen um Off-Topic-Drift zu verhindern
-- search_query: auf Englisch, als Keywords (kein Boolean)
+- name und description: in der Sprache des Themas (DE-Topic → Deutsch, EN-Topic → Englisch)
+- search_query: IMMER auf Englisch, als Keywords (kein Boolean)
 - research_question und scope: auf Englisch (Search-APIs sind EN-dominant)"""
 
 _USER_PROMPT_DE = """Zerlege dieses Forschungsthema in {min}-{max} recherchierbare Facetten:

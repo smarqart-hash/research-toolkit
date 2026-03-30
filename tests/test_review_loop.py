@@ -298,6 +298,45 @@ class TestParseRevisionResponse:
         text, changelog = _parse_revision_response(raw)
         assert changelog.sections_modified == []
 
+    def test_strips_preamble(self):
+        raw = "Hier ist die ueberarbeitete Version:\n\n## Kernaussage\n\nText hier."
+        text, _ = _parse_revision_response(raw)
+        assert text.startswith("## Kernaussage")
+        assert "ueberarbeitete Version" not in text
+
+    def test_strips_rest_bleibt(self):
+        raw = "## Kernaussage\n\nText.\n\n[Rest des Dokuments bleibt unveraendert]"
+        text, _ = _parse_revision_response(raw)
+        assert "[Rest des Dokuments" not in text
+
+    def test_clean_text_unchanged(self):
+        raw = "## Kernaussage\n\nText hier.\n\n## Hintergrund\n\nMehr Text."
+        text, _ = _parse_revision_response(raw)
+        assert text == raw
+
+
+class TestShouldAcceptRevision:
+    """Tests fuer Revisions-Laengen-Guard."""
+
+    def test_short_revision_rejected(self):
+        from src.agents.review_loop import _should_accept_revision
+
+        original = "## Kernaussage\n\n" + "A" * 1000 + "\n\n## Hintergrund\n\n" + "B" * 1000
+        short_revision = "## Kernaussage\n\nKurzer Text."
+        assert _should_accept_revision(original, short_revision) is False
+
+    def test_full_revision_accepted(self):
+        from src.agents.review_loop import _should_accept_revision
+
+        original = "## Kernaussage\n\nText." * 10
+        full_revision = "## Kernaussage\n\nBesserer Text." * 10
+        assert _should_accept_revision(original, full_revision) is True
+
+    def test_empty_original_accepted(self):
+        from src.agents.review_loop import _should_accept_revision
+
+        assert _should_accept_revision("", "Neuer Text") is True
+
 
 # --- Test: LLM-Funktionen (gemockt) ---
 
