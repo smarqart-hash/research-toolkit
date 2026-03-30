@@ -782,8 +782,9 @@ class TestHigherLimits:
 
         captured: dict = {}
 
-        async def mock_search_papers(query, *, num_results):
+        async def mock_search_papers(query, *, num_results, additional_queries=None):
             captured["num_results"] = num_results
+            captured["additional_queries"] = additional_queries
             return ExaSearchResponse(results=[])
 
         async def run():

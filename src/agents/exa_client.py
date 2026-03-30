@@ -8,6 +8,9 @@ Best Practices (Stand Maerz 2026):
 - highlights statt text fuer Agent-Workflows (10x weniger Tokens)
 - category "research paper" statt include_domains (weniger restriktiv)
 - highlights.query fuer topic-relevante Excerpts
+- type "deep" fuer bessere Research-Qualitaet
+- additionalQueries fuer breitere Abdeckung
+- highlightsPerUrl + highlightsNumSentences fuer kontrollierte Excerpts
 """
 
 from __future__ import annotations
@@ -83,15 +86,19 @@ class ExaClient:
         self,
         query: str,
         *,
-        num_results: int = 20,
+        num_results: int = 30,
         start_published_date: str | None = None,
+        additional_queries: list[str] | None = None,
+        search_type: str = "deep",
     ) -> ExaSearchResponse:
         """Sucht nach akademischen Papers via Exa.
 
         Args:
             query: Suchbegriff.
-            num_results: Max Ergebnisse.
+            num_results: Max Ergebnisse (default 30, max 50).
             start_published_date: Fruehestes Datum (ISO, z.B. "2023-01-01").
+            additional_queries: Zusaetzliche Query-Varianten fuer breitere Abdeckung.
+            search_type: Suchtyp ("deep" fuer Qualitaet, "auto" fuer Speed).
 
         Raises:
             RuntimeError: Wenn kein API Key konfiguriert.
@@ -99,23 +106,28 @@ class ExaClient:
         if not self.is_available:
             raise RuntimeError("EXA_API_KEY nicht gesetzt")
 
-        # highlights statt text: 10x weniger Tokens, relevantere Excerpts
-        # category "research paper" statt include_domains: breiter, weniger Noise
-        # highlights.query: steuert Excerpt-Selektion auf Topic-Relevanz
+        # type "deep": bessere Qualitaet fuer Research (vs "auto")
+        # category "research paper": breiter als include_domains, weniger Noise
+        # highlights: 10x weniger Tokens, topic-relevante Excerpts
+        # highlightsPerUrl + highlightsNumSentences: kontrollierte Excerpt-Menge
         payload: dict = {
             "query": query,
-            "num_results": num_results,
-            "type": "auto",
+            "num_results": min(num_results, 50),
+            "type": search_type,
             "category": "research paper",
             "contents": {
                 "highlights": {
                     "max_characters": 4000,
                     "query": query,
+                    "highlightsPerUrl": 3,
+                    "highlightsNumSentences": 3,
                 },
             },
         }
         if start_published_date:
             payload["start_published_date"] = start_published_date
+        if additional_queries:
+            payload["additionalQueries"] = additional_queries[:4]
 
         for attempt in range(self.MAX_RETRIES + 1):
             response = await self._client.post(

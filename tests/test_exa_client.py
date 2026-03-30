@@ -115,5 +115,68 @@ class TestExaClient:
         assert "highlights" in contents, "Muss highlights statt text nutzen"
         assert "text" not in contents, "text-Mode entfernt zugunsten highlights"
         assert contents["highlights"]["query"] == "test query"
+        assert contents["highlights"]["highlightsPerUrl"] == 3
+        assert contents["highlights"]["highlightsNumSentences"] == 3
         assert captured_payload.get("category") == "research paper"
+        assert captured_payload.get("type") == "deep"
+        assert captured_payload.get("num_results") == 30
         assert "include_domains" not in captured_payload
+
+    def test_additional_queries_in_payload(self):
+        """Prueft dass additionalQueries korrekt im Payload landen."""
+        import asyncio
+        import unittest.mock as mock
+
+        client = ExaClient(api_key="test-key-123")
+
+        mock_response = mock.MagicMock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = {"results": []}
+        mock_response.raise_for_status = mock.MagicMock()
+
+        captured_payload: dict = {}
+
+        async def fake_post(url, **kwargs):
+            captured_payload.update(kwargs.get("json", {}))
+            return mock_response
+
+        client._client = mock.MagicMock()
+        client._client.post = fake_post
+        client._client.aclose = mock.AsyncMock()
+
+        asyncio.run(client.search_papers(
+            "main query",
+            additional_queries=["variant 1", "variant 2"],
+        ))
+
+        assert captured_payload.get("additionalQueries") == ["variant 1", "variant 2"]
+        assert captured_payload.get("query") == "main query"
+
+    def test_additional_queries_max_four(self):
+        """additionalQueries wird auf max 4 Eintraege begrenzt."""
+        import asyncio
+        import unittest.mock as mock
+
+        client = ExaClient(api_key="test-key-123")
+
+        mock_response = mock.MagicMock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = {"results": []}
+        mock_response.raise_for_status = mock.MagicMock()
+
+        captured_payload: dict = {}
+
+        async def fake_post(url, **kwargs):
+            captured_payload.update(kwargs.get("json", {}))
+            return mock_response
+
+        client._client = mock.MagicMock()
+        client._client.post = fake_post
+        client._client.aclose = mock.AsyncMock()
+
+        asyncio.run(client.search_papers(
+            "main query",
+            additional_queries=["q1", "q2", "q3", "q4", "q5", "q6"],
+        ))
+
+        assert len(captured_payload.get("additionalQueries", [])) == 4

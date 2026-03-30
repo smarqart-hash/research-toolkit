@@ -130,13 +130,13 @@ def _expand_local(
     if len(ss_queries) < 3:
         ss_queries = [*ss_queries, f"{topic} survey OR review"]
 
-    # Exa-Queries: Natural Language
+    # Exa-Queries: Natural Language (direkt + spezifisch)
     exa_queries: list[str] = [
-        f"What are recent advances in {topic}?",
-        f"Survey of {topic} methods and applications",
+        topic,
+        f"{topic} systematic review",
     ]
-    for kw in keywords[:2]:
-        exa_queries = [*exa_queries, f"How does {topic} relate to {kw}?"]
+    for kw in keywords[:3]:
+        exa_queries = [*exa_queries, f"{topic} {kw}"]
 
     # OA-Queries: Freitext ohne Boolean-Operatoren (OpenAlex nutzt eigene Relevanz-Engine)
     all_synonyms = [syn for _, syns in matches for syn in syns[:2]]

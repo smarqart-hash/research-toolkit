@@ -182,9 +182,10 @@ class TestExpandLocal:
         qs = _expand_local("machine learning")
         assert qs.ss_queries[0] == "machine learning"
 
-    def test_exa_queries_are_natural_language(self) -> None:
+    def test_exa_queries_are_topic_focused(self) -> None:
         qs = _expand_local("deep learning")
-        assert any("?" in q for q in qs.exa_queries)
+        assert any("deep learning" in q for q in qs.exa_queries)
+        assert len(qs.exa_queries) >= 2
 
     def test_with_leitfragen(self) -> None:
         qs = _expand_local(

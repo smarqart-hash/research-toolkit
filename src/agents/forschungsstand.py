@@ -246,6 +246,8 @@ async def _search_exa(
 ) -> list[UnifiedPaper]:
     """Sucht Papers via Exa (nur wenn API Key vorhanden).
 
+    Strategie: Erste Query als Haupt-Query mit restlichen als additionalQueries.
+    Dann weitere Queries einzeln fuer breitere Abdeckung.
     Aktualisiert stats in-place fuer exa_total/exa_errors.
     """
     async with ExaClient() as exa_client:
@@ -253,7 +255,35 @@ async def _search_exa(
             logger.info("Exa nicht verfuegbar (EXA_API_KEY nicht gesetzt)")
             return []
         papers: list[UnifiedPaper] = []
-        for query in queries:
+
+        # Erste Query mit additionalQueries fuer breitere Abdeckung
+        primary = queries[0] if queries else None
+        additional = queries[1:4] if len(queries) > 1 else None
+
+        if primary:
+            try:
+                exa_response = await exa_client.search_papers(
+                    primary,
+                    num_results=min(config.max_results_per_query, 50),
+                    additional_queries=additional,
+                )
+                batch = [from_exa(r) for r in exa_response.results]
+                papers.extend(batch)
+                stats["exa_total"] += len(batch)
+            except httpx.HTTPStatusError as e:
+                stats["exa_errors"] += 1
+                logger.warning(
+                    "Exa HTTP %d fuer Query '%s': %s",
+                    e.response.status_code,
+                    primary,
+                    e.response.text[:200],
+                )
+            except httpx.TimeoutException:
+                stats["exa_errors"] += 1
+                logger.warning("Exa Timeout fuer Query '%s'", primary)
+
+        # Restliche Queries (ab Index 4) einzeln
+        for query in queries[4:]:
             try:
                 exa_response = await exa_client.search_papers(
                     query, num_results=min(config.max_results_per_query, 50),
