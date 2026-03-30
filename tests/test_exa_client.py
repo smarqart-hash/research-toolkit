@@ -40,6 +40,23 @@ class TestExaResult:
         })
         assert result.published_date is None
 
+    def test_highlights_from_api(self):
+        """Exa API gibt highlights als Liste von Strings zurueck."""
+        result = ExaResult.model_validate({
+            "url": "https://arxiv.org/abs/2401.00001",
+            "title": "Highlight Paper",
+            "highlights": ["Key finding 1.", "Key finding 2."],
+            "highlightScores": [0.95, 0.87],
+        })
+        assert len(result.highlights) == 2
+        assert result.highlight_scores == [0.95, 0.87]
+
+    def test_highlights_default_empty(self):
+        """Ohne highlights: leere Liste als Default."""
+        result = ExaResult(url="https://example.com", title="No Highlights")
+        assert result.highlights == []
+        assert result.highlight_scores == []
+
 
 class TestExaSearchResponse:
     def test_empty(self):
@@ -68,8 +85,8 @@ class TestExaClient:
         client = ExaClient(api_key="test-key-123")
         assert client.is_available is True
 
-    def test_dach_domains_in_payload(self):
-        """Prueft dass DACH-Repositorien in include_domains enthalten sind."""
+    def test_highlights_mode_in_payload(self):
+        """Prueft dass highlights statt text als Content-Mode genutzt wird."""
         import asyncio
         import unittest.mock as mock
 
@@ -94,7 +111,9 @@ class TestExaClient:
 
         asyncio.run(client.search_papers("test query"))
 
-        domains = captured_payload.get("include_domains", [])
-        assert "gesis.org" in domains
-        assert "dnb.de" in domains
-        assert "zbw.eu" in domains
+        contents = captured_payload.get("contents", {})
+        assert "highlights" in contents, "Muss highlights statt text nutzen"
+        assert "text" not in contents, "text-Mode entfernt zugunsten highlights"
+        assert contents["highlights"]["query"] == "test query"
+        assert captured_payload.get("category") == "research paper"
+        assert "include_domains" not in captured_payload

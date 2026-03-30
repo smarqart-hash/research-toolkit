@@ -102,6 +102,33 @@ class TestFromExa:
         unified = from_exa(result)
         assert unified.authors == []
 
+    def test_highlights_as_abstract(self):
+        """Highlights werden zu Abstract zusammengefuegt."""
+        result = ExaResult(
+            url="https://arxiv.org/abs/2401.00001",
+            title="Highlight Paper",
+            highlights=["Finding one.", "Finding two."],
+        )
+        unified = from_exa(result)
+        assert unified.abstract == "Finding one. Finding two."
+
+    def test_text_fallback_without_highlights(self):
+        """Ohne highlights: text als Abstract (Abwaertskompatibilitaet)."""
+        result = _exa_result()  # hat text="Kurztext des Papers."
+        unified = from_exa(result)
+        assert unified.abstract == "Kurztext des Papers."
+
+    def test_highlights_preferred_over_text(self):
+        """Highlights haben Vorrang vor text."""
+        result = ExaResult(
+            url="https://example.com",
+            title="Both",
+            text="Old text mode.",
+            highlights=["Better highlight."],
+        )
+        unified = from_exa(result)
+        assert unified.abstract == "Better highlight."
+
 
 def _openalex_work_paper(
     work_id: str = "https://openalex.org/W99",

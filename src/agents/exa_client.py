@@ -4,6 +4,10 @@ Optional: Nur wenn EXA_API_KEY gesetzt. Findet neue/obskure Papers
 die Semantic Scholar noch nicht indexiert hat.
 
 API Docs: https://docs.exa.ai
+Best Practices (Stand Maerz 2026):
+- highlights statt text fuer Agent-Workflows (10x weniger Tokens)
+- category "research paper" statt include_domains (weniger restriktiv)
+- highlights.query fuer topic-relevante Excerpts
 """
 
 from __future__ import annotations
@@ -28,6 +32,10 @@ class ExaResult(BaseModel):
     url: str
     title: str
     text: str | None = None
+    highlights: list[str] = Field(default_factory=list)
+    highlight_scores: list[float] = Field(
+        default_factory=list, alias="highlightScores"
+    )
     published_date: str | None = Field(default=None, alias="publishedDate")
     author: str | None = None
     score: float | None = None
@@ -91,31 +99,20 @@ class ExaClient:
         if not self.is_available:
             raise RuntimeError("EXA_API_KEY nicht gesetzt")
 
+        # highlights statt text: 10x weniger Tokens, relevantere Excerpts
+        # category "research paper" statt include_domains: breiter, weniger Noise
+        # highlights.query: steuert Excerpt-Selektion auf Topic-Relevanz
         payload: dict = {
             "query": query,
             "num_results": num_results,
             "type": "auto",
             "category": "research paper",
             "contents": {
-                "text": {"max_characters": 500},
+                "highlights": {
+                    "max_characters": 4000,
+                    "query": query,
+                },
             },
-            "include_domains": [
-                "arxiv.org",
-                "doi.org",
-                "nature.com",
-                "ieee.org",
-                "sciencedirect.com",
-                "springer.com",
-                "mdpi.com",
-                "wiley.com",
-                "acm.org",
-                "nih.gov",
-                "nasa.gov",
-                # DACH-Repositorien
-                "gesis.org",
-                "dnb.de",
-                "zbw.eu",
-            ],
         }
         if start_published_date:
             payload["start_published_date"] = start_published_date

@@ -139,10 +139,17 @@ def from_exa(result: ExaResult) -> UnifiedPaper:
     if year is None:
         year = datetime.datetime.now(tz=datetime.timezone.utc).year
 
+    # highlights (neu) bevorzugen, text als Fallback (Abwaertskompatibilitaet)
+    abstract = None
+    if result.highlights:
+        abstract = " ".join(result.highlights)
+    elif result.text:
+        abstract = result.text
+
     return UnifiedPaper(
         paper_id=hashlib.sha256(result.url.encode()).hexdigest()[:16],
         title=result.title,
-        abstract=result.text,
+        abstract=abstract,
         year=year,
         authors=[result.author] if result.author else [],
         citation_count=None,
