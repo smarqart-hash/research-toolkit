@@ -260,4 +260,212 @@ class TestLearning:
         vocab = BundestagVocabulary(cache_path=tmp_path / "vocab.json", client=client)
 
         asyncio.run(vocab.get_or_learn("unknown-topic"))
-        client.search_vorgaenge.assert_called_once()
+        # Primary-Call + evtl. Broadening-Calls (alle leer) — mindestens 1
+        assert client.search_vorgaenge.call_count >= 1
+
+
+# ============================================================================
+# V3-Fix Adversarial Tests (2026-04-17)
+# ============================================================================
+
+
+class TestNormalizeTopicUmlautEquivalence:
+    """Adversarial: Unterschiedliche Schreibweisen muessen auf gleichen Key mappen."""
+
+    def test_umlaut_and_ascii_same_key(self):
+        from src.agents.bundestag_vocabulary import _normalize_topic
+        assert _normalize_topic("Künstliche Intelligenz") == "kuenstliche intelligenz"
+        assert _normalize_topic("Kuenstliche Intelligenz") == "kuenstliche intelligenz"
+
+    def test_all_umlauts_transliterated(self):
+        from src.agents.bundestag_vocabulary import _normalize_topic
+        assert _normalize_topic("Über Ärzte und Österreich") == "ueber aerzte und oesterreich"
+        assert _normalize_topic("Straße") == "strasse"
+
+    def test_uppercase_collapses_to_lower(self):
+        from src.agents.bundestag_vocabulary import _normalize_topic
+        assert _normalize_topic("KÜNSTLICHE INTELLIGENZ") == "kuenstliche intelligenz"
+
+    def test_whitespace_stripped(self):
+        from src.agents.bundestag_vocabulary import _normalize_topic
+        assert _normalize_topic("  Klimaschutz  ") == "klimaschutz"
+
+    def test_nfd_input_normalized_to_same_key_as_nfc(self):
+        """Adversarial: Clipboard/macOS liefert oft NFD (u + Combining Diaeresis).
+
+        Ohne NFC-Normalisierung wuerde _UMLAUT_MAP den NFD-Umlaut verpassen
+        (u und \\u0308 werden einzeln iteriert, kein Single-Char-Match).
+        """
+        from src.agents.bundestag_vocabulary import _normalize_topic
+        nfc = "K\u00fcnstliche Intelligenz"
+        nfd = "Ku\u0308nstliche Intelligenz"
+        assert _normalize_topic(nfc) == _normalize_topic(nfd) == "kuenstliche intelligenz"
+
+
+class TestTokenizeForFallback:
+    """Adversarial: Tokenizer darf nicht in Endlos-Loop gehen bzw. nur Stopwords liefern."""
+
+    def test_stopwords_filtered(self):
+        from src.agents.bundestag_vocabulary import _tokenize_for_fallback
+        tokens = _tokenize_for_fallback("the of in and")
+        assert tokens == []
+
+    def test_max_3_tokens_returned(self):
+        from src.agents.bundestag_vocabulary import _tokenize_for_fallback
+        # 5 Content-Woerter, sollte auf 3 gekappt werden
+        tokens = _tokenize_for_fallback("ethical implications regulatory compliance governance")
+        assert len(tokens) <= 3
+
+    def test_tokens_sorted_by_length_desc(self):
+        from src.agents.bundestag_vocabulary import _tokenize_for_fallback
+        tokens = _tokenize_for_fallback("cat elephant dog")
+        assert tokens == ["elephant", "cat", "dog"]
+
+    def test_domain_stopwords_filtered(self):
+        """'ai', 'ki', 'implications' sollen rausgefiltert werden (domain-stopwords)."""
+        from src.agents.bundestag_vocabulary import _tokenize_for_fallback
+        tokens = _tokenize_for_fallback("Agentic AI implications")
+        assert "ai" not in tokens
+        assert "implications" not in tokens
+        assert "agentic" in tokens
+
+
+class TestLearnMultiTokenFallback:
+    """Adversarial: Bei 0 Primary-Hits muss Multi-Token-Fallback aktiviert werden."""
+
+    def test_empty_primary_triggers_token_fallback(self, tmp_path, monkeypatch):
+        """Simuliert: Primary 0 Hits, Fallback-Tokens haben Hits."""
+        import src.agents.bundestag_vocabulary as bv_module
+        monkeypatch.setattr(bv_module, "RATE_LIMIT_SLEEP_S", 0.0)
+
+        # Mock: Primary 0 docs, Token-Queries liefern Deskriptoren
+        doc_with_desc = DIPVorgang(
+            id="v1",
+            titel="Test",
+            deskriptor=[Deskriptor(name="Testdeskriptor", typ="Sachbegriffe")],
+            sachgebiet=[],
+        )
+        primary_response = DIPVorgangResponse(documents=[])
+        fallback_response = DIPVorgangResponse(documents=[doc_with_desc])
+
+        client = MagicMock()
+        # call 1 = primary (leer), call 2+ = fallback-tokens (bis zu 3)
+        client.search_vorgaenge = AsyncMock(
+            side_effect=[
+                primary_response,
+                fallback_response,
+                fallback_response,
+                fallback_response,
+            ]
+        )
+        client.close = AsyncMock()
+
+        vocab = BundestagVocabulary(cache_path=tmp_path / "vocab.json", client=client)
+        # Topic hat mehrere content-tokens nach stopword-filter
+        result = asyncio.run(vocab.learn("CRISPR gene editing"))
+
+        # Primary + mindestens 1 Fallback-Call = >= 2 Calls
+        assert client.search_vorgaenge.call_count >= 2
+        # Deskriptor wurde gelernt (effective_min_freq=1 bei broadened)
+        assert len(result.descriptors) >= 1
+
+    def test_no_infinite_loop_when_all_tokens_stopwords(self, tmp_path, monkeypatch):
+        """Adversarial: Topic nur aus Stopwords → kein Rekursions-Loop."""
+        import src.agents.bundestag_vocabulary as bv_module
+        monkeypatch.setattr(bv_module, "RATE_LIMIT_SLEEP_S", 0.0)
+
+        client = MagicMock()
+        client.search_vorgaenge = AsyncMock(return_value=DIPVorgangResponse())
+        client.close = AsyncMock()
+
+        vocab = BundestagVocabulary(cache_path=tmp_path / "vocab.json", client=client)
+        # "the of in and" → 0 Tokens nach Stopword-Filter → nur Primary-Call
+        result = asyncio.run(vocab.learn("the of in and"))
+
+        assert client.search_vorgaenge.call_count == 1
+        assert result.sample_size == 0
+        assert result.descriptors == []
+
+
+class TestGetOrLearnReLearnsEmptyCache:
+    """Adversarial: Leerer Cache-Eintrag > 1h alt muss re-learnt werden."""
+
+    def test_empty_cache_old_triggers_re_learn(self, tmp_path, monkeypatch):
+        import src.agents.bundestag_vocabulary as bv_module
+        monkeypatch.setattr(bv_module, "RATE_LIMIT_SLEEP_S", 0.0)
+
+        client = MagicMock()
+        client.search_vorgaenge = AsyncMock(return_value=DIPVorgangResponse())
+        client.close = AsyncMock()
+
+        vocab = BundestagVocabulary(cache_path=tmp_path / "vocab.json", client=client)
+        # Leer-Eintrag der > 1h alt ist (aber < stale_days)
+        old_empty = TopicVocab(
+            topic="kuenstliche intelligenz",
+            descriptors=[],
+            sample_size=0,
+            learned_at=_utcnow() - timedelta(hours=2),
+        )
+        vocab.set(old_empty)
+
+        asyncio.run(vocab.get_or_learn("kuenstliche intelligenz"))
+        client.search_vorgaenge.assert_called()
+
+    def test_empty_cache_fresh_does_not_re_learn(self, tmp_path, monkeypatch):
+        import src.agents.bundestag_vocabulary as bv_module
+        monkeypatch.setattr(bv_module, "RATE_LIMIT_SLEEP_S", 0.0)
+
+        client = MagicMock()
+        client.search_vorgaenge = AsyncMock(return_value=DIPVorgangResponse())
+        client.close = AsyncMock()
+
+        vocab = BundestagVocabulary(cache_path=tmp_path / "vocab.json", client=client)
+        # Leer-Eintrag der nur 10min alt ist
+        fresh_empty = TopicVocab(
+            topic="frisches-leer",
+            descriptors=[],
+            sample_size=0,
+            learned_at=_utcnow() - timedelta(minutes=10),
+        )
+        vocab.set(fresh_empty)
+
+        asyncio.run(vocab.get_or_learn("frisches-leer"))
+        client.search_vorgaenge.assert_not_called()
+
+
+class TestSaveIsAtomic:
+    """Adversarial: save() darf bei Fehler den alten Cache nicht korrumpieren."""
+
+    def test_save_uses_atomic_replace(self, tmp_path, monkeypatch):
+        """Verifiziert dass save() via Temp-File schreibt und Temp nach Fehler entfernt wird."""
+        cache_path = tmp_path / "vocab.json"
+        # Initial-Cache mit bekanntem Inhalt
+        vocab = BundestagVocabulary(cache_path=cache_path)
+        vocab.set(_make_topic_vocab(descriptors=[("Initial", 10)]))
+        vocab.save()
+        initial_content = cache_path.read_text(encoding="utf-8")
+
+        # Simuliere OSError in os.replace
+        import src.agents.bundestag_vocabulary as bv_module
+        original_replace = bv_module.os.replace
+
+        call_count = {"n": 0}
+
+        def failing_replace(src, dst):
+            call_count["n"] += 1
+            raise OSError("simulated")
+
+        monkeypatch.setattr(bv_module.os, "replace", failing_replace)
+
+        vocab.set(_make_topic_vocab(descriptors=[("Broken", 99)]))
+        with pytest.raises(OSError):
+            vocab.save()
+
+        # Alter Cache bleibt unveraendert
+        assert cache_path.read_text(encoding="utf-8") == initial_content
+        # Temp-File wurde aufgeraeumt
+        tmp_file = cache_path.with_suffix(cache_path.suffix + ".tmp")
+        assert not tmp_file.exists()
+
+        # Cleanup: monkeypatch auf echtes os.replace zuruecksetzen und echt speichern
+        monkeypatch.setattr(bv_module.os, "replace", original_replace)

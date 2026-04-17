@@ -1,14 +1,14 @@
 {
   "_comment": "Initiales Topic-Set fuer BundestagVocabulary-Seed. Erweiterbar.",
   "_usage": "python scripts/build_bundestag_vocab.py",
-  "version": 1,
+  "version": 2,
   "topics": [
     "Klimaschutz",
     "Klimawandel",
     "Energiewende",
     "Erneuerbare Energien",
     "Digitalisierung",
-    "Kuenstliche Intelligenz",
+    "Künstliche Intelligenz",
     "Cybersicherheit",
     "Migration",
     "Asyl",
@@ -21,10 +21,15 @@
     "Impfung",
     "Bildung",
     "Schule",
-    "Universitaet",
+    "Universität",
     "Wohnen",
     "Mietpreisbremse",
     "EU-Regulierung",
-    "Buerokratieabbau"
+    "Bürokratieabbau",
+    "Carbon Capture",
+    "CRISPR",
+    "Quantencomputing",
+    "EU AI Act",
+    "Agentic AI"
   ]
 }
