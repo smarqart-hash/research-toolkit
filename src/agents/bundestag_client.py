@@ -12,13 +12,24 @@ from __future__ import annotations
 import asyncio
 import logging
 import os
+from typing import TYPE_CHECKING
 
 import httpx
 from pydantic import BaseModel, Field
 
+if TYPE_CHECKING:
+    from src.agents.bundestag_vocabulary import BundestagVocabulary
+    from src.agents.paper_ranker import UnifiedPaper
+
 logger = logging.getLogger(__name__)
 
 BASE_URL = "https://search.dip.bundestag.de/api/v1"
+
+# Anzahl Vorgaenge fuer Position-Enrichment bei include_positions=True
+TOPIC_POSITIONS_TOP_N = 10
+
+# Rate-Limit-Sleep zwischen Bulk-Calls (Positions-Loop)
+TOPIC_RATE_LIMIT_SLEEP_S = 1.0
 
 # Oeffentlicher Demo-Key aus der DIP API-Dokumentation
 # Oeffentlicher API-Key (gueltig bis Ende Mai 2026)
@@ -62,16 +73,38 @@ class DIPSearchResponse(BaseModel):
     documents: list[DIPDrucksache] = Field(default_factory=list)
 
 
+class Deskriptor(BaseModel):
+    """Ein Deskriptor aus dem kontrollierten DIP-Vokabular.
+
+    `typ` ist z.B. "Sachbegriffe", "Geograph. Begriffe", "Person".
+    `fundstelle` flagged ob der Deskriptor aus einer expliziten Fundstelle
+    stammt (selten, default False).
+    """
+
+    name: str = ""
+    typ: str = ""
+    fundstelle: bool = False
+
+
 class DIPVorgang(BaseModel):
-    """Ein Vorgang (Gesetzgebungsverfahren) aus der DIP API."""
+    """Ein Vorgang (Gesetzgebungsverfahren, Kleine Anfrage, ...) aus der DIP API.
+
+    Ein Vorgang buendelt mehrere Dokumente (Vorgangspositionen + Drucksachen)
+    zu einem Thema. Fuer die eigentlichen Dokumente: `get_vorgangspositionen()`.
+    """
 
     id: str = ""
     typ: str = ""
+    vorgangstyp: str = ""
+    wahlperiode: int | None = None
     titel: str = ""
     datum: str = ""
+    aktualisiert: str = ""
     initiative: list[str] = Field(default_factory=list)
     abstract: str | None = Field(default=None, alias="abstrakt")
     beratungsstand: str | None = None
+    deskriptor: list[Deskriptor] = Field(default_factory=list)
+    sachgebiet: list[str] = Field(default_factory=list)
 
     model_config = {"populate_by_name": True}
 
@@ -84,12 +117,81 @@ class DIPVorgang(BaseModel):
                 return None
         return None
 
+    @property
+    def url(self) -> str:
+        return f"https://dip.bundestag.de/vorgang/{self.id}"
+
 
 class DIPVorgangResponse(BaseModel):
     """Antwort der Vorgangs-Suche."""
 
     numFound: int = 0
     documents: list[DIPVorgang] = Field(default_factory=list)
+
+
+class Fundstelle(BaseModel):
+    """Fundstelle-Block einer Vorgangsposition (Drucksache-Referenz)."""
+
+    dokumentnummer: str = ""
+    pdf_url: str = ""
+    drucksachetyp: str = ""
+    urheber: list[str] = Field(default_factory=list)
+
+
+class DIPVorgangsposition(BaseModel):
+    """Einzelne Position innerhalb eines Vorgangs (Drucksache oder Debatten-Abschnitt).
+
+    Enthaelt die PDF-URL und Dokument-Metadaten. Liefert das einzige
+    verifiziert funktionierende Drucksache-Enrichment zu einem Vorgang:
+    `/vorgangsposition?f.vorgang={id}`.
+    """
+
+    id: str = ""
+    vorgang_id: str = ""
+    vorgangsposition: str = ""
+    dokumentart: str = ""
+    titel: str = ""
+    datum: str = ""
+    fundstelle: Fundstelle | None = None
+
+    @property
+    def year(self) -> int | None:
+        if self.datum and len(self.datum) >= 4:
+            try:
+                return int(self.datum[:4])
+            except ValueError:
+                return None
+        return None
+
+
+class DIPVorgangspositionResponse(BaseModel):
+    """Antwort der Vorgangspositions-Suche."""
+
+    numFound: int = 0
+    documents: list[DIPVorgangsposition] = Field(default_factory=list)
+
+
+def _position_key(vp: DIPVorgangsposition) -> str:
+    """Stabiler Dedup-Key: bevorzugt fundstelle.dokumentnummer, Fallback vp.id."""
+    if vp.fundstelle and vp.fundstelle.dokumentnummer:
+        return vp.fundstelle.dokumentnummer
+    return f"vp:{vp.id}"
+
+
+def _dedupe_positions(
+    positions: list[DIPVorgangsposition],
+    already_seen: set[str],
+) -> list[DIPVorgangsposition]:
+    """Filtert Positionen die bereits in already_seen sind (pure function)."""
+    result: list[DIPVorgangsposition] = []
+    local_seen: set[str] = set(already_seen)
+    for vp in positions:
+        key = _position_key(vp)
+        if key in local_seen:
+            continue
+        local_seen = {*local_seen, key}
+        result = [*result, vp]
+    return result
 
 
 class BundestagClient:
@@ -156,21 +258,29 @@ class BundestagClient:
         datum_end: str | None = None,
         rows: int = 20,
     ) -> DIPSearchResponse:
-        """Sucht Drucksachen im Bundestag.
+        """Sucht Drucksachen im Bundestag via Titel-Match.
 
         Args:
-            query: Suchbegriff (Freitext).
-            typ: Dokumenttyp (Antrag, Gesetzentwurf, Kleine Anfrage, etc.).
+            query: Titel-Phrase (Freitext, mehrere Woerter = Phrase-Match).
+                   Leerer/Whitespace-String laesst Parameter weg (Browse-Modus).
+            typ: Drucksachentyp (Antrag, Gesetzentwurf, Kleine Anfrage, ...).
             datum_start: Startdatum (YYYY-MM-DD).
             datum_end: Enddatum (YYYY-MM-DD).
             rows: Max Ergebnisse.
+
+        Note:
+            Fuer Topic-Research besser `search_topic()` nutzen — diese Methode
+            filtert nur auf `f.titel` (keine semantische Vokabular-Expansion).
+            DIP ignoriert `search=`/`q=`/`f.volltext=` am `/drucksache` Endpunkt
+            (empirisch verifiziert 2026-04-17, siehe docs/guides/bundestag-dip-api.md).
         """
         params: dict[str, str | int] = {
-            "search": query,
             "rows": min(rows, 100),
         }
+        if query and query.strip():
+            params["f.titel"] = query.strip()
         if typ:
-            params["f.typ"] = typ
+            params["f.drucksachetyp"] = typ
         if datum_start:
             params["f.datum.start"] = datum_start
         if datum_end:
@@ -186,19 +296,195 @@ class BundestagClient:
         datum_start: str | None = None,
         rows: int = 20,
     ) -> DIPVorgangResponse:
-        """Sucht Vorgaenge (Gesetzgebungsverfahren) im Bundestag.
+        """Sucht Vorgaenge (Gesetzgebungsverfahren) im Bundestag via Titel-Match.
 
         Args:
-            query: Suchbegriff (Freitext).
+            query: Titel-Phrase (Freitext, mehrere Woerter = Phrase-Match).
+                   Leerer/Whitespace-String laesst Parameter weg (Browse-Modus).
             datum_start: Startdatum (YYYY-MM-DD).
             rows: Max Ergebnisse.
+
+        Note:
+            Fuer Topic-Research besser `search_topic()` nutzen — diese Methode
+            filtert nur auf `f.titel` (keine Deskriptor-Vokabular-Expansion).
+            `/vorgang` unterstuetzt zusaetzlich `f.deskriptor` (semantisch wirksam),
+            aber diese Methode ist bewusst schlicht fuer Titel-Suche.
         """
         params: dict[str, str | int] = {
-            "search": query,
             "rows": min(rows, 100),
         }
+        if query and query.strip():
+            params["f.titel"] = query.strip()
         if datum_start:
             params["f.datum.start"] = datum_start
 
         response = await self._request("vorgang", params)
         return DIPVorgangResponse.model_validate(response.json())
+
+    async def get_vorgang(self, vorgang_id: str) -> DIPVorgang:
+        """Detail-Abruf eines Vorgangs (inkl. Deskriptoren + Sachgebiete).
+
+        Args:
+            vorgang_id: Vorgangs-ID aus DIP (z.B. "333085").
+
+        Returns:
+            DIPVorgang mit allen Metadaten-Feldern.
+
+        Note:
+            `/vorgang/{id}` liefert KEINE Drucksachen-Links (empirisch verifiziert
+            2026-04-17). Fuer assoziierte Dokumente: `get_vorgangspositionen()`.
+        """
+        response = await self._request(f"vorgang/{vorgang_id}", {})
+        return DIPVorgang.model_validate(response.json())
+
+    async def get_vorgangspositionen(
+        self,
+        vorgang_id: str,
+        *,
+        rows: int = 20,
+    ) -> DIPVorgangspositionResponse:
+        """Dokumente (Drucksachen + Plenarprotokolle) zu einem Vorgang.
+
+        VERIFIZIERTER Join-Pfad (2026-04-17):
+        `/vorgangsposition?f.vorgang={id}` liefert 2-N Positionen mit
+        `fundstelle.pdf_url` + `dokumentnummer` + `drucksachetyp`.
+
+        Achtung: `/drucksache?f.vorgang=` wird von der DIP ignoriert und
+        liefert den Vollbestand. Nur dieser Endpunkt funktioniert.
+
+        Args:
+            vorgang_id: Vorgangs-ID aus DIP.
+            rows: Max Ergebnisse (Cap 100).
+        """
+        params: dict[str, str | int] = {
+            "f.vorgang": vorgang_id,
+            "rows": min(rows, 100),
+        }
+        response = await self._request("vorgangsposition", params)
+        return DIPVorgangspositionResponse.model_validate(response.json())
+
+    async def search_topic(
+        self,
+        topic: str,
+        *,
+        rows: int = 50,
+        include_positions: bool = False,
+        vocabulary: BundestagVocabulary | None = None,
+        wahlperiode: int | None = None,
+    ) -> list[UnifiedPaper]:
+        """Topic-zentrierte Suche ueber Deskriptor-Vokabular.
+
+        Algorithmus:
+        1. Vocabulary-Lookup (cache-first). Falls Miss/Stale: learn().
+        2. Wenn Top-1-Deskriptor verfuegbar: `/vorgang?f.deskriptor=<top-1>`.
+           Sonst: Fallback auf `/vorgang?f.titel=<topic>` (graceful degradation).
+        3. Dedup via Vorgang-ID.
+        4. Wenn include_positions: `/vorgangsposition?f.vorgang={id}` fuer Top-N.
+        5. Ranking: Recency desc, Ties aufgeloest via Deskriptor-Frequenz-Score.
+
+        Args:
+            topic: Topic-String (z.B. "Klimaschutz").
+            rows: Max Vorgaenge (Cap 100 per Request).
+            include_positions: Wenn True, zusaetzlich Top-10 Vorgaenge auf
+                Positionen expandieren (liefert Drucksachen mit pdf_url).
+            vocabulary: BundestagVocabulary-Instanz (cached Deskriptoren).
+                Wenn None: Fallback auf f.titel-Suche (ohne Learning).
+            wahlperiode: Optional Filter auf Legislaturperiode.
+
+        Returns:
+            list[UnifiedPaper] mit source="bundestag", gerankt nach Recency.
+        """
+        from src.agents.paper_ranker import (
+            UnifiedPaper as _UP,
+            from_dip_vorgang,
+            from_dip_vorgangsposition,
+        )
+
+        top_descriptor: str | None = None
+        desc_freq_map: dict[str, int] = {}
+        if vocabulary is not None:
+            tv = await vocabulary.get_or_learn(topic)
+            top_descriptor = tv.top_descriptor()
+            desc_freq_map = {d.name: d.freq for d in tv.descriptors}
+
+        # Vorgang-Suche: Deskriptor bevorzugt, Titel als Fallback
+        params: dict[str, str | int] = {"rows": min(rows, 100)}
+        if top_descriptor:
+            params["f.deskriptor"] = top_descriptor
+            used_filter = f"f.deskriptor={top_descriptor}"
+        else:
+            if topic and topic.strip():
+                params["f.titel"] = topic.strip()
+            used_filter = f"f.titel={topic} (kein Deskriptor)"
+        if wahlperiode is not None:
+            params["f.wahlperiode"] = wahlperiode
+
+        logger.debug("search_topic '%s' via %s", topic, used_filter)
+        try:
+            response = await self._request("vorgang", params)
+        except httpx.HTTPError as exc:
+            logger.warning("search_topic '%s' Vorgang-Fetch fehlgeschlagen: %s", topic, exc)
+            return []
+        vorgang_response = DIPVorgangResponse.model_validate(response.json())
+        vorgaenge = vorgang_response.documents
+
+        # Dedup pro Vorgang-ID (immutable Akkumulation)
+        seen_ids: set[str] = set()
+        unique_vorgaenge: list[DIPVorgang] = []
+        for v in vorgaenge:
+            if v.id and v.id not in seen_ids:
+                seen_ids = {*seen_ids, v.id}
+                unique_vorgaenge = [*unique_vorgaenge, v]
+
+        # Ranking: Recency desc, Deskriptor-Freq-Score als Tiebreaker
+        def _rank_key(v: DIPVorgang) -> tuple[int, int]:
+            year = v.year or 0
+            freq_score = sum(desc_freq_map.get(d.name, 0) for d in v.deskriptor)
+            return (year, freq_score)
+
+        ranked_vorgaenge = sorted(unique_vorgaenge, key=_rank_key, reverse=True)
+
+        # Bei include_positions: Top-N expandieren zu Drucksachen
+        if include_positions:
+            return await self._expand_positions(ranked_vorgaenge[:TOPIC_POSITIONS_TOP_N])
+        return [from_dip_vorgang(v) for v in ranked_vorgaenge]
+
+    async def _expand_positions(
+        self,
+        vorgaenge: list[DIPVorgang],
+    ) -> list[UnifiedPaper]:
+        """Lade Vorgangspositionen pro Vorgang und baue UnifiedPaper[].
+
+        Rate-limit-freundlich: 1s Sleep zwischen Calls. Fehlerhafte Fetches
+        werden als WARNING geloggt, andere Vorgaenge weiter versucht.
+        Dedup ueber fundstelle.dokumentnummer (oder vp.id als Fallback).
+        """
+        from src.agents.paper_ranker import from_dip_vorgangsposition
+
+        papers: list[UnifiedPaper] = []
+        seen_keys: set[str] = set()
+        for idx, vorgang in enumerate(vorgaenge):
+            if idx > 0:
+                await asyncio.sleep(TOPIC_RATE_LIMIT_SLEEP_S)
+            try:
+                vp_response = await self.get_vorgangspositionen(vorgang.id, rows=50)
+            except httpx.HTTPError as exc:
+                logger.warning(
+                    "Positions-Fetch fuer %s fehlgeschlagen: %s",
+                    vorgang.id,
+                    exc,
+                )
+                continue
+            new_positions = _dedupe_positions(vp_response.documents, seen_keys)
+            seen_keys = {*seen_keys, *(_position_key(vp) for vp in new_positions)}
+            papers = [*papers, *(from_dip_vorgangsposition(vp) for vp in new_positions)]
+        return papers
+
+        logger.info(
+            "search_topic('%s'): %d Vorgaenge, %d UnifiedPaper (positions=%s)",
+            topic,
+            len(unique_vorgaenge),
+            len(papers),
+            include_positions,
+        )
+        return papers

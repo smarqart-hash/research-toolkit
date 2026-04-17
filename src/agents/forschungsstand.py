@@ -385,21 +385,29 @@ async def _search_bundestag(
     config: SearchConfig,
     stats: dict[str, int],
 ) -> list[UnifiedPaper]:
-    """Sucht Drucksachen via Bundestag DIP API.
+    """Sucht Vorgaenge via Bundestag DIP API (Topic-aware ueber Deskriptor-Vokabular).
+
+    Ab V3: nutzt `search_topic` statt `search_drucksachen` fuer semantisch
+    bessere Hits via kontrolliertem Vokabular (/vorgang?f.deskriptor=...).
+    Legacy `search_drucksachen` ist weiterhin verfuegbar als einfache Titel-Suche.
 
     Aktualisiert stats in-place fuer bundestag_total/bundestag_errors.
     """
+    from src.agents.bundestag_vocabulary import BundestagVocabulary
+
+    vocabulary = BundestagVocabulary()
     async with BundestagClient() as bt_client:
         papers: list[UnifiedPaper] = []
         for query in queries:
             try:
-                response = await bt_client.search_drucksachen(
+                topic_papers = await bt_client.search_topic(
                     query,
                     rows=min(config.max_results_per_query, 50),
+                    vocabulary=vocabulary,
+                    include_positions=False,
                 )
-                batch = [from_bundestag(d) for d in response.documents]
-                papers.extend(batch)
-                stats["bundestag_total"] += len(batch)
+                papers.extend(topic_papers)
+                stats["bundestag_total"] += len(topic_papers)
             except httpx.HTTPStatusError as e:
                 stats["bundestag_errors"] += 1
                 logger.warning(
@@ -411,6 +419,11 @@ async def _search_bundestag(
             except httpx.TimeoutException:
                 stats["bundestag_errors"] += 1
                 logger.warning("Bundestag DIP Timeout fuer Query '%s'", query)
+        # Persistiere neu gelernte Topics
+        try:
+            vocabulary.save()
+        except OSError as exc:
+            logger.warning("Vocabulary-Save fehlgeschlagen: %s", exc)
         return papers
 
 

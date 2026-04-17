@@ -54,3 +54,6 @@ target-version = ["py311"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src", "."]
+markers = [
+    "live: Live-API-Tests (benoetigen Internet + optional API-Keys)",
+]

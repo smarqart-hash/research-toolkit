@@ -1,0 +1,6650 @@
+{
+  "topics": {
+    "asyl": {
+      "descriptors": [
+        {
+          "freq": 48,
+          "name": "Asylverfahren",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 39,
+          "name": "Asylbewerber",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 23,
+          "name": "Flüchtling",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 22,
+          "name": "Flüchtlingspolitik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 19,
+          "name": "Europäische Union",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 16,
+          "name": "Migration",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 14,
+          "name": "Verordnung der EU",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 13,
+          "name": "Illegale Einwanderung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 12,
+          "name": "Fonds der EU",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 12,
+          "name": "Bundesamt für Migration und Flüchtlinge",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 10,
+          "name": "Ausländerintegration",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 10,
+          "name": "Flüchtlingshilfe",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 9,
+          "name": "Asyl-, Migrations- und Integrationsfonds",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 9,
+          "name": "Rückführung ausreisepflichtiger Personen",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 8,
+          "name": "Grenzschutz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Bundesmittel",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Asylrecht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Flüchtlingsunterbringung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Dublin-Verordnung",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 5,
+          "name": "Aufenthaltsrecht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Grenzkontrolle",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Abschiebung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "EU-Staaten",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Identitätsfeststellung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Einwanderung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Datenaustausch",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Zuständigkeit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Krisenbewältigung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Personalausstattung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Personenbezogene Daten",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Schleuserkriminalität",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Mobiltelefon",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Staatsangehörigkeit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Urkundendelikt",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Verwaltungsvorschrift",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Außenstelle",
+          "typ": "Freier Deskriptor"
+        },
+        {
+          "freq": 3,
+          "name": "Thüringen",
+          "typ": "Geograph. Begriffe"
+        }
+      ],
+      "learned_at": "2026-04-17T08:17:35.342700Z",
+      "sachgebiete": [
+        {
+          "freq": 24,
+          "name": "Migration und Aufenthaltsrecht"
+        },
+        {
+          "freq": 7,
+          "name": "Europapolitik und Europäische Union"
+        },
+        {
+          "freq": 6,
+          "name": "Staat und Verwaltung"
+        }
+      ],
+      "sample_size": 100,
+      "topic": "asyl"
+    },
+    "bildung": {
+      "descriptors": [
+        {
+          "freq": 24,
+          "name": "Ausschuss für Bildung, Forschung und Technikfolgenabschätzung <Dt. Bundestag>",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 23,
+          "name": "Technikfolgenabschätzung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 22,
+          "name": "Büro für Technikfolgen-Abschätzung beim Deutschen Bundestag",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 21,
+          "name": "Bericht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 18,
+          "name": "Bundesmittel",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 17,
+          "name": "Bundesministerium für Bildung und Forschung",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 16,
+          "name": "Programm der Bundesregierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 16,
+          "name": "Forschungspolitik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 14,
+          "name": "Bildungspolitik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 12,
+          "name": "Projektförderung",
+          "typ": "Freier Deskriptor"
+        },
+        {
+          "freq": 12,
+          "name": "Forschung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 11,
+          "name": "Bericht der Bundesregierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 11,
+          "name": "Bildung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 11,
+          "name": "Digitalisierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 9,
+          "name": "Bundeszentrale für politische Bildung",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 9,
+          "name": "Innovation",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 8,
+          "name": "Gesetzgebung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 8,
+          "name": "Qualitätssicherung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 8,
+          "name": "Nachhaltige Entwicklung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Politische Bildung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Soziale Medien",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Berufsbildung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Ganztagsschule",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Grundschule",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Schülerbetreuung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Klimaschutz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Forschungskooperation",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Internationale Zusammenarbeit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Europäische Union",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 6,
+          "name": "Bundesminister",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Berufliche Weiterbildung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Öffentlichkeitsarbeit der Bundesregierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Berufliche Qualifikation",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Rechtsanspruch",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Elementarbildung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Programm der EU",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Informationssicherheit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "COVID-19",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Bundesministerium",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Bundeshaushalt 2024",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Wissenschaftsfreiheit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Stark-Watzinger, Bettina",
+          "typ": "Personen"
+        },
+        {
+          "freq": 4,
+          "name": "Kosten",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Veranstaltung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Kooperation",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Wissenschaftliche Kooperation",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Kindertagesstätte",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Bürokratie",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Länder der Bundesrepublik Deutschland",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Forschungsprojekt",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Biodiversität",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Klimaneutralität",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Rohstoffwirtschaft",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Dual-Use-Technologie",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Parlamentsausschuss",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Fachkraft",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Klimawandel",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Informationsaustausch",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Berufsausbildung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Digitalpakt Schule",
+          "typ": "Freier Deskriptor"
+        },
+        {
+          "freq": 4,
+          "name": "Künstliche Intelligenz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Student",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Wissenschaft",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Evaluation",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Kommunikation",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Hochschule",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Ausschreibung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Bundesministerium für Bildung, Familie, Senioren, Frauen und Jugend",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 3,
+          "name": "Digitale Medien",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Website",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Ausbildungsförderung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Bundesausbildungsförderungsgesetz",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 3,
+          "name": "Studium",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Antisemitismus",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Führungskraft",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Rechtsextremismus",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Kinderbetreuung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Naturschutz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Leistungen für Bildung und Teilhabe",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Schulische Ausbildung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Kritische Infrastruktur",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "E-Government",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Allgemeinbildung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Finanzkompetenz",
+          "typ": "Freier Deskriptor"
+        },
+        {
+          "freq": 3,
+          "name": "Vermögensbildung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Erasmus+",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Forschungsprogramm der EU",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Ganztagsförderungsgesetz",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 3,
+          "name": "Eisen",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Immissionsschutz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Kunststoffindustrie",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Petrochemische Industrie",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Stahl",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Technologiepolitik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Zement",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Unternehmensgründung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Arbeitnehmer",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Landwirtschaft",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Regulierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Ernährungswirtschaft",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Pflanzenbau",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Bundesregierung",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 3,
+          "name": "Gutachten",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Schule",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Forschungseinrichtung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Lehr- und Lernmittel",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Staatssekretär",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Wissenschaftler",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Video",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Schüler",
+          "typ": "Sachbegriffe"
+        }
+      ],
+      "learned_at": "2026-04-17T08:17:43.838402Z",
+      "sachgebiete": [
+        {
+          "freq": 38,
+          "name": "Wissenschaft, Forschung und Technologie"
+        },
+        {
+          "freq": 31,
+          "name": "Bildung und Erziehung"
+        },
+        {
+          "freq": 15,
+          "name": "Medien, Kommunikation und Informationstechnik"
+        },
+        {
+          "freq": 12,
+          "name": "Staat und Verwaltung"
+        },
+        {
+          "freq": 10,
+          "name": "Gesellschaftspolitik, soziale Gruppen"
+        },
+        {
+          "freq": 10,
+          "name": "Umwelt"
+        },
+        {
+          "freq": 7,
+          "name": "Wirtschaft"
+        },
+        {
+          "freq": 6,
+          "name": "Politisches Leben, Parteien"
+        },
+        {
+          "freq": 6,
+          "name": "Gesundheit"
+        },
+        {
+          "freq": 5,
+          "name": "Landwirtschaft und Ernährung"
+        },
+        {
+          "freq": 4,
+          "name": "Außenpolitik und internationale Beziehungen"
+        },
+        {
+          "freq": 4,
+          "name": "Arbeit und Beschäftigung"
+        },
+        {
+          "freq": 3,
+          "name": "Energie"
+        }
+      ],
+      "sample_size": 100,
+      "topic": "bildung"
+    },
+    "buerokratieabbau": {
+      "descriptors": [],
+      "learned_at": "2026-04-17T08:17:50.100109Z",
+      "sachgebiete": [],
+      "sample_size": 0,
+      "topic": "buerokratieabbau"
+    },
+    "bundeswehr": {
+      "descriptors": [
+        {
+          "freq": 80,
+          "name": "Bundeswehr",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 19,
+          "name": "Bundeswehrangehöriger",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 10,
+          "name": "Personalbeschaffung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 10,
+          "name": "Verteidigungsausgaben",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 10,
+          "name": "Beschaffung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 8,
+          "name": "Öffentlichkeitsarbeit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Minderjähriger",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Kosten",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Soldat",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Bundesministerium der Verteidigung",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 6,
+          "name": "Auslandseinsatz der Bundeswehr",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Wehrtechnik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Wehrdienst",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Wehrdisziplinarrecht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Außenwerbung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Jugendoffizier",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Personenbezogene Daten",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Schule",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Schüler",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Informationssicherheit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Israel",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Militärroboter",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Vergaberecht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Bundesamt für den Militärischen Abschirmdienst",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 4,
+          "name": "Sicherheitsüberprüfung von Personen",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Verteidigung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Wehrmaterial",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "COVID-19",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Ausstellung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Berufsberatung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Hochschule",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Internet",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Messe",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Militärzeremonie",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Musikkorps",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Soziale Medien",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Sponsoring",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Sportveranstaltung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Sportverein",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Werbungskosten",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Personalausstattung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Wehrverwaltung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Öffentlicher Auftrag",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Gesetzgebung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Streitkräfte",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Militärische Infrastruktur",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Musterung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Rüstungsgut",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Alternative für Deutschland",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 3,
+          "name": "Impfpflicht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Impfung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Bundesamt für das Personalmanagement der Bundeswehr",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 3,
+          "name": "Bundesmittel",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Militärflugplatz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Rüstungskooperation",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Dienstvergehen",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Diebstahl",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Kommando Spezialkräfte",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 3,
+          "name": "Rechtsextremismus",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Verfassungstreue",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Militärstandort",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Kriegswaffe",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Militärische Ausbildung",
+          "typ": "Sachbegriffe"
+        }
+      ],
+      "learned_at": "2026-04-17T08:17:37.479840Z",
+      "sachgebiete": [
+        {
+          "freq": 27,
+          "name": "Verteidigung"
+        },
+        {
+          "freq": 8,
+          "name": "Staat und Verwaltung"
+        },
+        {
+          "freq": 3,
+          "name": "Gesundheit"
+        }
+      ],
+      "sample_size": 100,
+      "topic": "bundeswehr"
+    },
+    "cybersicherheit": {
+      "descriptors": [
+        {
+          "freq": 56,
+          "name": "Informationssicherheit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 22,
+          "name": "IT-Kriminalität",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 15,
+          "name": "Personalausstattung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 14,
+          "name": "Kritische Infrastruktur",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 11,
+          "name": "Rechenzentrum",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 10,
+          "name": "IT-Beruf",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 10,
+          "name": "Notfallvorsorge",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 10,
+          "name": "Agentur für Innovation in der Cybersicherheit",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 9,
+          "name": "Gefahrenabwehr",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 9,
+          "name": "Stellenplan",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 8,
+          "name": "Notstromversorgung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 8,
+          "name": "Öffentliche Investition",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Zuständigkeit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Bundesamt für Sicherheit in der Informationstechnik",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 6,
+          "name": "Personalplanung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Digitalisierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Schadsoftware",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Europäische Union",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 5,
+          "name": "Personalabbau",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Personalbeschaffung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Internationale Zusammenarbeit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Informations- und Kommunikationstechnik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Informationstechnikzentrum Bund",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 4,
+          "name": "Bundesministerium der Verteidigung",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 4,
+          "name": "Bundeswehr",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 4,
+          "name": "Personalentwicklung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Sicherheitspolitik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Bundesmittel",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Spionage",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Innovation",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Verordnung der EU",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Zertifizierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Forschungseinrichtung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Bundesministerium des Innern und für Heimat",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 3,
+          "name": "Behördenaufbau",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Personalbedarf",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Ernährungswirtschaft",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Nachrichtendienst",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Rechnernetz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Bundesbehörde",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Bundesministerium des Innern, für Bau und Heimat",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 3,
+          "name": "Internet",
+          "typ": "Sachbegriffe"
+        }
+      ],
+      "learned_at": "2026-04-17T08:17:33.205088Z",
+      "sachgebiete": [
+        {
+          "freq": 27,
+          "name": "Medien, Kommunikation und Informationstechnik"
+        },
+        {
+          "freq": 18,
+          "name": "Staat und Verwaltung"
+        },
+        {
+          "freq": 13,
+          "name": "Innere Sicherheit"
+        },
+        {
+          "freq": 4,
+          "name": "Wissenschaft, Forschung und Technologie"
+        },
+        {
+          "freq": 4,
+          "name": "Verteidigung"
+        },
+        {
+          "freq": 3,
+          "name": "Landwirtschaft und Ernährung"
+        },
+        {
+          "freq": 3,
+          "name": "Außenpolitik und internationale Beziehungen"
+        }
+      ],
+      "sample_size": 64,
+      "topic": "cybersicherheit"
+    },
+    "digitalisierung": {
+      "descriptors": [
+        {
+          "freq": 81,
+          "name": "Digitalisierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 20,
+          "name": "E-Government",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 10,
+          "name": "Informations- und Kommunikationstechnik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 9,
+          "name": "Bundeswehr",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 8,
+          "name": "E-Health",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 8,
+          "name": "Bundesmittel",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 8,
+          "name": "Onlinezugangsgesetz",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 7,
+          "name": "Programm der Bundesregierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Elektronischer Rechtsverkehr",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Künstliche Intelligenz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Formvorschrift",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Datenaustausch",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Datenverarbeitung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Verwaltungsverfahren",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Software",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Öffentliche Verwaltung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Öffentlicher Auftrag",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Gewerbeordnung",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 5,
+          "name": "Abgabenordnung",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 5,
+          "name": "Gesetz über das Verfahren in Familiensachen und in den Angelegenheiten der freiwilligen Gerichtsbarkeit",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 5,
+          "name": "Bürokratie",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Evaluation",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "BOS-Funk",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Bericht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Studie",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Informationsaustausch",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Gesetzgebung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Datenschutz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Bericht der Bundesregierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Register",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Zivilprozessordnung",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 4,
+          "name": "Bearbeitungsdauer",
+          "typ": "Freier Deskriptor"
+        },
+        {
+          "freq": 4,
+          "name": "Identitätsfeststellung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Stromnetz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Verwaltungsmodernisierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Bahntechnik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Gesundheitswesen",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Kosten",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Heer der Bundeswehr",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 4,
+          "name": "Informationssicherheit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Handelsgesetzbuch",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 3,
+          "name": "Arbeitsgerichtsgesetz",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 3,
+          "name": "Finanzgerichtsordnung",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 3,
+          "name": "Sozialgerichtsgesetz",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 3,
+          "name": "Verwaltungsgerichtsordnung",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 3,
+          "name": "Zustellung amtlicher Schriftstücke",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Bundesministerium für Digitales und Staatsmodernisierung",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 3,
+          "name": "Digitale Landwirtschaft",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Aufenthaltsgesetz",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 3,
+          "name": "Personenbezogene Daten",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Visum",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Älterer Mensch",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Internet",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Nachhaltige Entwicklung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Sozialgesetzbuch I",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 3,
+          "name": "Sozialgesetzbuch IV",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 3,
+          "name": "Sozialgesetzbuch V",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 3,
+          "name": "Sozialgesetzbuch VII",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 3,
+          "name": "Personalausstattung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Barrierefreiheit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Schienenverkehrsinfrastruktur",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Unternehmen",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Verordnung der EU",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Erneuerbare Energie",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Erneuerbare-Energien-Gesetz",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 3,
+          "name": "EU-Staaten",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Bahnstrecke",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Deutsche Bahn",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 3,
+          "name": "Bundesministerium für Digitales und Verkehr",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 3,
+          "name": "Beschaffung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Militärfahrzeug",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Informationssystem",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Elektronische Patientenakte",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Ausschuss für Bildung, Forschung und Technikfolgenabschätzung <Dt. Bundestag>",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 3,
+          "name": "Büro für Technikfolgen-Abschätzung beim Deutschen Bundestag",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 3,
+          "name": "Technikfolgenabschätzung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Gesetzesfolgenabschätzung",
+          "typ": "Sachbegriffe"
+        }
+      ],
+      "learned_at": "2026-04-17T08:17:31.134358Z",
+      "sachgebiete": [
+        {
+          "freq": 28,
+          "name": "Medien, Kommunikation und Informationstechnik"
+        },
+        {
+          "freq": 8,
+          "name": "Staat und Verwaltung"
+        },
+        {
+          "freq": 7,
+          "name": "Recht"
+        },
+        {
+          "freq": 6,
+          "name": "Gesundheit"
+        },
+        {
+          "freq": 5,
+          "name": "Gesellschaftspolitik, soziale Gruppen"
+        },
+        {
+          "freq": 5,
+          "name": "Arbeit und Beschäftigung"
+        },
+        {
+          "freq": 4,
+          "name": "Raumordnung, Bau- und Wohnungswesen"
+        },
+        {
+          "freq": 4,
+          "name": "Wirtschaft"
+        },
+        {
+          "freq": 4,
+          "name": "Bildung und Erziehung"
+        },
+        {
+          "freq": 4,
+          "name": "Verteidigung"
+        },
+        {
+          "freq": 3,
+          "name": "Soziale Sicherung"
+        },
+        {
+          "freq": 3,
+          "name": "Öffentliche Finanzen, Steuern und Abgaben"
+        },
+        {
+          "freq": 3,
+          "name": "Wissenschaft, Forschung und Technologie"
+        }
+      ],
+      "sample_size": 100,
+      "topic": "digitalisierung"
+    },
+    "energiewende": {
+      "descriptors": [
+        {
+          "freq": 66,
+          "name": "Energiewende",
+          "typ": "Freier Deskriptor"
+        },
+        {
+          "freq": 57,
+          "name": "Energiepolitik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 36,
+          "name": "Erneuerbare Energie",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 18,
+          "name": "Elektrizitätswirtschaft",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 18,
+          "name": "Energieversorgung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 17,
+          "name": "Klimaschutz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 13,
+          "name": "Energiewirtschaft",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 11,
+          "name": "Bericht der Bundesregierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 11,
+          "name": "Stromnetz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 10,
+          "name": "Strompreis",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 10,
+          "name": "Energieverbrauch",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 9,
+          "name": "Bundesministerium für Wirtschaft und Energie",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 9,
+          "name": "Energieforschung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 8,
+          "name": "Digitalisierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 8,
+          "name": "Intelligentes Messsystem",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Gesetzgebung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Bericht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Erneuerbare-Energien-Gesetz",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 7,
+          "name": "Stromverbrauch",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Programm der Bundesregierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Forschungspolitik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Monitoring",
+          "typ": "Freier Deskriptor"
+        },
+        {
+          "freq": 6,
+          "name": "Politikberatung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Bundesrechnungshof",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 6,
+          "name": "Elektrizitätserzeugung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Energietechnik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Studie",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Bundesmittel",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Kosten",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Investitionsförderung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Innovation",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Umlage",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Externe Beratung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Photovoltaik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Kraftwerk",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Verbraucher",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Wasserstoff",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Windenergieanlage",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Klimawandel",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Treibhausgas",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Normung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Nichtregierungsorganisation",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Datenschutz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Gesetz zum Neustart der Digitalisierung der Energiewende",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 4,
+          "name": "Stromzähler",
+          "typ": "Freier Deskriptor"
+        },
+        {
+          "freq": 3,
+          "name": "Bundesministerium",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "China",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Einspeisevergütung",
+          "typ": "Freier Deskriptor"
+        },
+        {
+          "freq": 3,
+          "name": "Kredit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Gebäudeenergieeffizienz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Energiespeicher",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Investition",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Gaswirtschaft",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Offshoretechnik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Industriepolitik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Stromleitung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Wettbewerb",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Bundeshaushaltsordnung",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 3,
+          "name": "Wasserstofftechnologie",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Bundesamt für Sicherheit in der Informationstechnik",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 3,
+          "name": "Datenaustausch",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Informationssicherheit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Energiepreis",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Energierecht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Energieeinsparung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Abgabe",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Elektrizitätseinspeisung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Gremium",
+          "typ": "Sachbegriffe"
+        }
+      ],
+      "learned_at": "2026-04-17T08:17:28.991639Z",
+      "sachgebiete": [
+        {
+          "freq": 48,
+          "name": "Energie"
+        },
+        {
+          "freq": 13,
+          "name": "Umwelt"
+        },
+        {
+          "freq": 8,
+          "name": "Wissenschaft, Forschung und Technologie"
+        },
+        {
+          "freq": 7,
+          "name": "Wirtschaft"
+        },
+        {
+          "freq": 3,
+          "name": "Staat und Verwaltung"
+        }
+      ],
+      "sample_size": 100,
+      "topic": "energiewende"
+    },
+    "erneuerbare energien": {
+      "descriptors": [
+        {
+          "freq": 93,
+          "name": "Erneuerbare Energie",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 26,
+          "name": "Elektrizitätserzeugung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 22,
+          "name": "Elektrizitätswirtschaft",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 21,
+          "name": "Photovoltaik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 20,
+          "name": "Erneuerbare-Energien-Gesetz",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 20,
+          "name": "Stromnetz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 16,
+          "name": "Windenergieanlage",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 14,
+          "name": "Windenergie",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 12,
+          "name": "Energieversorgung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 11,
+          "name": "Energietechnik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 10,
+          "name": "Elektrizitätseinspeisung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 10,
+          "name": "Energiepolitik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 10,
+          "name": "Gebäudeenergieeffizienz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 10,
+          "name": "Solartechnik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 10,
+          "name": "Energierecht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 9,
+          "name": "Genehmigung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 8,
+          "name": "Ausschreibung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 8,
+          "name": "Energiewende",
+          "typ": "Freier Deskriptor"
+        },
+        {
+          "freq": 7,
+          "name": "Gesetzgebung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Sonnenenergie",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Richtlinie der EU",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Programm der Bundesregierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Flächennutzung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Stromverbrauch",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Wasserstoff",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Klima- und Transformationsfonds",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 5,
+          "name": "Länder der Bundesrepublik Deutschland",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Bürokratie",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Energiespeicher",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Strompreis",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Heizung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Klimaschutz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Innerstaatliche Umsetzung von EU-Recht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Wärmeversorgung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Agri-Photovoltaik",
+          "typ": "Freier Deskriptor"
+        },
+        {
+          "freq": 4,
+          "name": "Investitionsförderung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Subvention",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Energiewirtschaftsgesetz",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 4,
+          "name": "Sondervermögen",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Verpflichtungsermächtigung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Verordnung der EU",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Frist",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Energiewirtschaft",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Batterie",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "KfW-Bankengruppe",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 4,
+          "name": "Kredit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Elektrizität",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Kosten",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Lieferkette",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "EU-Recht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Einspeisevergütung",
+          "typ": "Freier Deskriptor"
+        },
+        {
+          "freq": 3,
+          "name": "Unternehmen",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Artenschutz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Gebäudeenergiegesetz",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 3,
+          "name": "Biomasse",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Projektförderung",
+          "typ": "Freier Deskriptor"
+        },
+        {
+          "freq": 3,
+          "name": "Auslandsinvestition",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Gaswirtschaft",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Russland",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Europäische Union",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 3,
+          "name": "Biogasanlage",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Messstellenbetriebsgesetz",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 3,
+          "name": "Bericht der Bundesregierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Gesetzesfolgenabschätzung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Kommunale Gebietskörperschaft",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Wohneigentum",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Gesetz zur Änderung des Erneuerbare-Energien-Gesetzes und weiterer energiewirtschaftsrechtlicher Vorschriften zur Steigerung des Ausbaus photovoltaischer Energieerzeugung",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 3,
+          "name": "Energiefinanzierungsgesetz",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 3,
+          "name": "Warenkennzeichnung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Herkunftsnachweis <Energierecht>",
+          "typ": "Freier Deskriptor"
+        },
+        {
+          "freq": 3,
+          "name": "Umlage",
+          "typ": "Sachbegriffe"
+        }
+      ],
+      "learned_at": "2026-04-17T08:17:30.064394Z",
+      "sachgebiete": [
+        {
+          "freq": 33,
+          "name": "Energie"
+        },
+        {
+          "freq": 13,
+          "name": "Wirtschaft"
+        },
+        {
+          "freq": 11,
+          "name": "Umwelt"
+        },
+        {
+          "freq": 5,
+          "name": "Öffentliche Finanzen, Steuern und Abgaben"
+        },
+        {
+          "freq": 3,
+          "name": "Raumordnung, Bau- und Wohnungswesen"
+        }
+      ],
+      "sample_size": 100,
+      "topic": "erneuerbare energien"
+    },
+    "eu-regulierung": {
+      "descriptors": [],
+      "learned_at": "2026-04-17T08:17:49.070613Z",
+      "sachgebiete": [],
+      "sample_size": 5,
+      "topic": "eu-regulierung"
+    },
+    "gesundheitspolitik": {
+      "descriptors": [
+        {
+          "freq": 28,
+          "name": "Gesundheitspolitik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 10,
+          "name": "Gesundheit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Krankenversicherung",
+          "typ": "Freier Deskriptor"
+        },
+        {
+          "freq": 5,
+          "name": "Gesundheitswesen",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Internationale Zusammenarbeit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Bundesmittel",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Russland",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Arzneimittelversorgung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Weltgesundheitsorganisation",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 3,
+          "name": "Kostendämpfung im Gesundheitswesen",
+          "typ": "Freier Deskriptor"
+        },
+        {
+          "freq": 3,
+          "name": "Gesundheitsvorsorge",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Vereinbarte Debatte",
+          "typ": "Sachbegriffe"
+        }
+      ],
+      "learned_at": "2026-04-17T08:17:40.642934Z",
+      "sachgebiete": [
+        {
+          "freq": 19,
+          "name": "Gesundheit"
+        },
+        {
+          "freq": 6,
+          "name": "Soziale Sicherung"
+        }
+      ],
+      "sample_size": 31,
+      "topic": "gesundheitspolitik"
+    },
+    "impfung": {
+      "descriptors": [
+        {
+          "freq": 89,
+          "name": "Impfung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 85,
+          "name": "COVID-19",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 33,
+          "name": "Impfschaden",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 28,
+          "name": "Bundeswehr",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 22,
+          "name": "Bundeswehrangehöriger",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 21,
+          "name": "Impfstoff",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 17,
+          "name": "Paul-Ehrlich-Institut",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 17,
+          "name": "Impfpflicht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 13,
+          "name": "Todesfall",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 9,
+          "name": "Seuchenbekämpfung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 9,
+          "name": "Studie",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 8,
+          "name": "Grippe",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Soldat",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Datenerhebung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Evaluation",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Gesundheitsrisiko",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Medizinische Forschung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Wehrdisziplinarrecht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Bundesministerium für Gesundheit",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 4,
+          "name": "Pharmazeutische Industrie",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Gesundheitsschutz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Entschädigung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Kind",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Dienstvergehen",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Disziplinarmaßnahme",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Arzneimittelzulassung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Robert Koch-Institut",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 3,
+          "name": "Sanitätswesen",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Zentraler Sanitätsdienst der Bundeswehr",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 3,
+          "name": "Statistik",
+          "typ": "Sachbegriffe"
+        }
+      ],
+      "learned_at": "2026-04-17T08:17:42.768235Z",
+      "sachgebiete": [
+        {
+          "freq": 10,
+          "name": "Gesundheit"
+        },
+        {
+          "freq": 6,
+          "name": "Verteidigung"
+        },
+        {
+          "freq": 5,
+          "name": "Staat und Verwaltung"
+        }
+      ],
+      "sample_size": 100,
+      "topic": "impfung"
+    },
+    "integration": {
+      "descriptors": [
+        {
+          "freq": 40,
+          "name": "Ausländerintegration",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 17,
+          "name": "Flüchtling",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 14,
+          "name": "Integrationskurs",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 14,
+          "name": "Bundesmittel",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 13,
+          "name": "Migrant",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 11,
+          "name": "Arbeitsmarkt",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 11,
+          "name": "Migration",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 9,
+          "name": "Programm der Bundesregierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 8,
+          "name": "Erwerbstätigkeit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Sprachunterricht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Ukraine",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Aufenthaltsrecht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Beauftragter der Bundesregierung für Migration, Flüchtlinge und Integration",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 6,
+          "name": "Arbeitsförderung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Berufliche Qualifikation",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Personalausstattung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Grundsicherung für Arbeitsuchende",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Arbeitsvermittlung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Deutsches Zentrum für Integrations- und Migrationsforschung",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 5,
+          "name": "Asylbewerber",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Aufenthaltsgesetz",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 5,
+          "name": "Staatsangehörigkeit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Sprachkompetenz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Digitalisierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Informations- und Kommunikationstechnik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Ausländer",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Deutsch",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Bürgergeld",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Jobcenter",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Minderjähriger",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Lehrer",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Deutschunterricht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Sportverein",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Integrationsbericht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Einwanderung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Arbeitsmarktpolitik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Forschungskooperation",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Forschungsprogramm der Bundesregierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Forschungsprojekt",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Sozialforschung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Flüchtlingsunterbringung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Duldung <Aufenthaltsrecht>",
+          "typ": "Freier Deskriptor"
+        },
+        {
+          "freq": 4,
+          "name": "Einbürgerung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Datenerhebung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Bundesamt für Migration und Flüchtlinge",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 3,
+          "name": "Sozialgesetzbuch II",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 3,
+          "name": "Kosten",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Frau",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Kommunale Gebietskörperschaft",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Kostenerstattung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Sportförderung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Flüchtlingspolitik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Berufsbildung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Erneuerbare Energie",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Arbeitserlaubnis",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Beauftragter der Bundesregierung für Antirassismus",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 3,
+          "name": "Beruflicher Bildungsabschluss",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Diskriminierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Fachkraft",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Hasskriminalität",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Kriminalität",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Rassismus",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Kind",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Arbeitsloser",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Berufsausbildung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Flüchtlingshilfe",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Krieg",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "COVID-19",
+          "typ": "Sachbegriffe"
+        }
+      ],
+      "learned_at": "2026-04-17T08:17:36.407044Z",
+      "sachgebiete": [
+        {
+          "freq": 23,
+          "name": "Migration und Aufenthaltsrecht"
+        },
+        {
+          "freq": 8,
+          "name": "Arbeit und Beschäftigung"
+        },
+        {
+          "freq": 6,
+          "name": "Gesellschaftspolitik, soziale Gruppen"
+        },
+        {
+          "freq": 4,
+          "name": "Wissenschaft, Forschung und Technologie"
+        },
+        {
+          "freq": 3,
+          "name": "Soziale Sicherung"
+        }
+      ],
+      "sample_size": 100,
+      "topic": "integration"
+    },
+    "klimaschutz": {
+      "descriptors": [
+        {
+          "freq": 75,
+          "name": "Klimaschutz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 26,
+          "name": "Programm der Bundesregierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 25,
+          "name": "Bundesministerium für Wirtschaft und Klimaschutz",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 17,
+          "name": "Bundesmittel",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 12,
+          "name": "Klimaanpassung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 10,
+          "name": "Bundesministerium",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 9,
+          "name": "Erneuerbare Energie",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 9,
+          "name": "Gesetzgebung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 8,
+          "name": "Naturschutz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 8,
+          "name": "Wettbewerb",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 8,
+          "name": "Energiepolitik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Klimaneutralität",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Technologiepolitik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Verordnung der EU",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Bericht der Bundesregierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Innerstaatliche Umsetzung von EU-Recht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Kohlendioxid",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Subvention",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Klima- und Transformationsfonds",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 6,
+          "name": "Öffentliche Mittel",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Externe Beratung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Treibhausgas",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Luftreinhaltung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Wirtschaftspolitik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Elektrofahrzeug",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Energieversorgung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Habeck, Robert",
+          "typ": "Personen"
+        },
+        {
+          "freq": 6,
+          "name": "Richtlinie der EU",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "USA",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Moor",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Gebäudeenergieeffizienz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Kommunale Gebietskörperschaft",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Genehmigung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "CO2-Bepreisung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Klimaabkommen von Paris",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 5,
+          "name": "Bausanierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Informationsaustausch",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Bundesminister",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Europäische Kommission",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 5,
+          "name": "Standort Deutschland",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Steuerentlastung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Internationale Zusammenarbeit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Bundeshaushalt 2024",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Gerichtsentscheidung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Entwicklungszusammenarbeit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Internationale Wirtschaftsbeziehungen",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Wasserstofftechnologie",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Renaturierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Digitalisierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Wald",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Gutachten",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Projektförderung",
+          "typ": "Freier Deskriptor"
+        },
+        {
+          "freq": 4,
+          "name": "Gebäudeenergiegesetz",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 4,
+          "name": "Datenerhebung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Konferenz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Bundesverwaltungsgericht",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 4,
+          "name": "Emissionshandel",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Entwicklungsländer",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Klimawandel",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Personalbeschaffung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Gremium",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Lobbyismus",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Bürokratie",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Europäische Union",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 4,
+          "name": "Grenzwert",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Kernkraftwerk",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "CO2-Abscheidung und -Speicherung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Evaluation",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Flächennutzung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "China",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Luftverunreinigung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Programm der EU",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Investition",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Investitionsförderung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Afrika",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Russland",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Bundes-Klimaschutzgesetz",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 4,
+          "name": "Auenlandschaft",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Gewässerschutz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Meeresumweltschutz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Landwirtschaft",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Bundesbehörde",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Forschungseinrichtung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Öffentlicher Auftrag",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Umweltpolitik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Öffentliche Ausgaben",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Immissionsschutz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Bundesministerium für Umwelt, Naturschutz, nukleare Sicherheit und Verbraucherschutz",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 3,
+          "name": "Schwellenländer",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Forschungskooperation",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Kernfusion",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Unternehmen",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Energiepreis",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Industrie",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Jahreswirtschaftsbericht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Mittelstandspolitik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Nachhaltige Entwicklung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Schuldenbremse",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Unternehmensgründung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Strompreis",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Unternehmensbesteuerung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Wirtschaftsentwicklung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Entwicklungspolitik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Bundesverfassungsgericht",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 3,
+          "name": "Länder der Bundesrepublik Deutschland",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Oberverwaltungsgericht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Auslandsreise",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Bundestagsfraktion",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Elektrizitätswirtschaft",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Bioenergie",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Bürgerbeteiligung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Verkehr",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Bodenschutz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Klimaforschung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Waldschutz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Industriepolitik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Forstwirtschaft",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Biodiversität",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Ökosystem",
+          "typ": "Sachbegriffe"
+        }
+      ],
+      "learned_at": "2026-04-17T08:17:26.848806Z",
+      "sachgebiete": [
+        {
+          "freq": 29,
+          "name": "Umwelt"
+        },
+        {
+          "freq": 14,
+          "name": "Wirtschaft"
+        },
+        {
+          "freq": 12,
+          "name": "Staat und Verwaltung"
+        },
+        {
+          "freq": 8,
+          "name": "Öffentliche Finanzen, Steuern und Abgaben"
+        },
+        {
+          "freq": 6,
+          "name": "Energie"
+        },
+        {
+          "freq": 5,
+          "name": "Außenpolitik und internationale Beziehungen"
+        },
+        {
+          "freq": 4,
+          "name": "Wissenschaft, Forschung und Technologie"
+        },
+        {
+          "freq": 4,
+          "name": "Verkehr"
+        },
+        {
+          "freq": 4,
+          "name": "Entwicklungspolitik"
+        },
+        {
+          "freq": 3,
+          "name": "Recht"
+        }
+      ],
+      "sample_size": 100,
+      "topic": "klimaschutz"
+    },
+    "klimawandel": {
+      "descriptors": [
+        {
+          "freq": 65,
+          "name": "Klimawandel",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 42,
+          "name": "Klimaschutz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 20,
+          "name": "Klimaanpassung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 10,
+          "name": "Programm der Bundesregierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 8,
+          "name": "Biodiversität",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 8,
+          "name": "Bundesmittel",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Nachhaltige Entwicklung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Bericht der Bundesregierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Studie",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Landwirtschaft",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Entwicklungszusammenarbeit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Flüchtling",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Migration",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Luftverunreinigung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Monitoring",
+          "typ": "Freier Deskriptor"
+        },
+        {
+          "freq": 4,
+          "name": "Forstwirtschaft",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Konferenz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Vereinte Nationen",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 4,
+          "name": "Menschenrechte",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Gesundheitsrisiko",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Treibhausgas",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Gutachten",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Flächennutzung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Gesundheitsschutz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Infrastruktur",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Katastrophenschutz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Stadtentwicklung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Extremwetter",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Baum",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Bericht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Wald",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Waldschaden",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Waldschutz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Ökosystem",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Weltklimarat",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 3,
+          "name": "Europäische Union",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 3,
+          "name": "Kohlendioxid",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Hochwasserschutz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Umweltbelastung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Klimaforschung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Naturschutz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Tourismus",
+          "typ": "Sachbegriffe"
+        }
+      ],
+      "learned_at": "2026-04-17T08:17:27.913017Z",
+      "sachgebiete": [
+        {
+          "freq": 36,
+          "name": "Umwelt"
+        },
+        {
+          "freq": 4,
+          "name": "Landwirtschaft und Ernährung"
+        },
+        {
+          "freq": 3,
+          "name": "Wissenschaft, Forschung und Technologie"
+        },
+        {
+          "freq": 3,
+          "name": "Energie"
+        },
+        {
+          "freq": 3,
+          "name": "Außenpolitik und internationale Beziehungen"
+        },
+        {
+          "freq": 3,
+          "name": "Gesundheit"
+        },
+        {
+          "freq": 3,
+          "name": "Entwicklungspolitik"
+        }
+      ],
+      "sample_size": 100,
+      "topic": "klimawandel"
+    },
+    "kuenstliche intelligenz": {
+      "descriptors": [],
+      "learned_at": "2026-04-17T08:17:32.164570Z",
+      "sachgebiete": [],
+      "sample_size": 0,
+      "topic": "kuenstliche intelligenz"
+    },
+    "mietpreisbremse": {
+      "descriptors": [
+        {
+          "freq": 34,
+          "name": "Miete",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 34,
+          "name": "Mietpreisbremse",
+          "typ": "Freier Deskriptor"
+        },
+        {
+          "freq": 24,
+          "name": "Mietrecht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 22,
+          "name": "Mieterschutz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 9,
+          "name": "Gesetzgebung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Mietwohnung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Vergleichsmiete",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Evaluation",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Mietrechtsnovellierungsgesetz",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 3,
+          "name": "Gesetzesfolgenabschätzung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Kostenerstattung",
+          "typ": "Sachbegriffe"
+        }
+      ],
+      "learned_at": "2026-04-17T08:17:48.039521Z",
+      "sachgebiete": [
+        {
+          "freq": 7,
+          "name": "Raumordnung, Bau- und Wohnungswesen"
+        },
+        {
+          "freq": 7,
+          "name": "Recht"
+        }
+      ],
+      "sample_size": 34,
+      "topic": "mietpreisbremse"
+    },
+    "migration": {
+      "descriptors": [
+        {
+          "freq": 33,
+          "name": "Migration",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 29,
+          "name": "Illegale Einwanderung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 24,
+          "name": "Asylverfahren",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 24,
+          "name": "Asylbewerber",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 19,
+          "name": "Flüchtling",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 18,
+          "name": "Bundesamt für Migration und Flüchtlinge",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 16,
+          "name": "Ausländerintegration",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 15,
+          "name": "Flüchtlingspolitik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 15,
+          "name": "Einwanderung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 13,
+          "name": "Rückführung ausreisepflichtiger Personen",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 11,
+          "name": "Aufenthaltsrecht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 11,
+          "name": "Drittstaat",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 11,
+          "name": "Europäische Union",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 11,
+          "name": "Grenzkontrolle",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 9,
+          "name": "Integrationskurs",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 8,
+          "name": "Schleuserkriminalität",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 8,
+          "name": "Grenzschutz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 8,
+          "name": "EU-Staaten",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Flüchtlingshilfe",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Abschiebung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Personalausstattung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Arbeitsmigration",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Internationale Zusammenarbeit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Bundesmittel",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Migrant",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Dublin-Verordnung",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 6,
+          "name": "Afghanistan",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Einbürgerung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Familiennachzug",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Beauftragter der Bundesregierung für Migration, Flüchtlinge und Integration",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 6,
+          "name": "Identitätsfeststellung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Zuständigkeit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Asyl-, Migrations- und Integrationsfonds",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 5,
+          "name": "Abschiebungshaft",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Fachkraft",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Syrien",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Deutschunterricht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Staatsangehörigkeit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Flüchtlingsunterbringung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Sozialleistung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Ausländischer Arbeitnehmer",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Polen",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Fonds der EU",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Entwicklungszusammenarbeit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Gesetzgebung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Bundespolizei",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 4,
+          "name": "Außenstelle",
+          "typ": "Freier Deskriptor"
+        },
+        {
+          "freq": 4,
+          "name": "Thüringen",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Diskriminierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Programm der Bundesregierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Personalbedarf",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Einreisegenehmigung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Ausländer",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Datenerhebung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Gefährder",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Projektförderung",
+          "typ": "Freier Deskriptor"
+        },
+        {
+          "freq": 3,
+          "name": "Rückwanderung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Bevölkerungsentwicklung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Großbritannien",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Verordnung der EU",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Beauftragter der Bundesregierung für Antirassismus",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 3,
+          "name": "Duldung <Aufenthaltsrecht>",
+          "typ": "Freier Deskriptor"
+        },
+        {
+          "freq": 3,
+          "name": "Hasskriminalität",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Integrationsbericht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Rassismus",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Widerrufsverfahren",
+          "typ": "Freier Deskriptor"
+        },
+        {
+          "freq": 3,
+          "name": "Datenabgleich",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Personenbezogene Daten",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Kosten",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Leiharbeit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Kommunale Gebietskörperschaft",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Afrika",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Visum",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Schweiz",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Tschechien",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Personalbeschaffung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Länder der Bundesrepublik Deutschland",
+          "typ": "Sachbegriffe"
+        }
+      ],
+      "learned_at": "2026-04-17T08:17:34.275830Z",
+      "sachgebiete": [
+        {
+          "freq": 39,
+          "name": "Migration und Aufenthaltsrecht"
+        },
+        {
+          "freq": 8,
+          "name": "Europapolitik und Europäische Union"
+        },
+        {
+          "freq": 4,
+          "name": "Staat und Verwaltung"
+        },
+        {
+          "freq": 3,
+          "name": "Innere Sicherheit"
+        },
+        {
+          "freq": 3,
+          "name": "Gesellschaftspolitik, soziale Gruppen"
+        }
+      ],
+      "sample_size": 100,
+      "topic": "migration"
+    },
+    "nato": {
+      "descriptors": [
+        {
+          "freq": 86,
+          "name": "NATO",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 31,
+          "name": "Ukraine",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 29,
+          "name": "Russland",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 26,
+          "name": "Krieg",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 18,
+          "name": "Verteidigungsausgaben",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 14,
+          "name": "Bundeswehr",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 11,
+          "name": "USA",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 11,
+          "name": "Soldat",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 11,
+          "name": "Auslandseinsatz der Bundeswehr",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 9,
+          "name": "Militärhilfe",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 8,
+          "name": "China",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 8,
+          "name": "Sicherheitspolitik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Interparlamentarische Kooperation",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Parlamentarische Versammlung der NATO",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 7,
+          "name": "NATO-Erweiterung",
+          "typ": "Freier Deskriptor"
+        },
+        {
+          "freq": 7,
+          "name": "Militärbündnis",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Stationierungsstreitkräfte",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Waffenruhe",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Militärische Infrastruktur",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Israel",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Militäreinsatz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Rüstungsindustrie",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "NATO-Truppen",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 5,
+          "name": "Bundeswehrangehöriger",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Europäischer Rat",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 5,
+          "name": "Bundeshaushalt 2024",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "NATO-Truppenstatut",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 4,
+          "name": "Militärische Übung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Militärstandort",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Angriffskrieg",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Litauen",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Maritime Sicherheitsoperation Sea Guardian",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 4,
+          "name": "Mittelmeerraum",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Deutsche Marine",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 4,
+          "name": "Terrorismusbekämpfung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Nahostkonflikt",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Raketenabwehr",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Internationale Beziehungen",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Internationale Zusammenarbeit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Beschaffung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Luftverteidigung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Verteidigung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Friedenssicherung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Indischer Ozean",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Mittelmeer",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Schmuggel",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Waffe",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Georgien",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Gazastreifen",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Bundesministerium der Verteidigung",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 3,
+          "name": "Pipeline",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Frankreich",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Kriegsschiff",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Rüstungsgut",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Waffenhandel",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Großbritannien",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Marine",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Strafverfolgung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Diplomatie",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Gemeinsame Außen- und Sicherheitspolitik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Verteidigungspolitik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Munition",
+          "typ": "Sachbegriffe"
+        }
+      ],
+      "learned_at": "2026-04-17T08:17:39.602929Z",
+      "sachgebiete": [
+        {
+          "freq": 22,
+          "name": "Verteidigung"
+        },
+        {
+          "freq": 18,
+          "name": "Außenpolitik und internationale Beziehungen"
+        },
+        {
+          "freq": 5,
+          "name": "Europapolitik und Europäische Union"
+        },
+        {
+          "freq": 3,
+          "name": "Öffentliche Finanzen, Steuern und Abgaben"
+        }
+      ],
+      "sample_size": 100,
+      "topic": "nato"
+    },
+    "pflege": {
+      "descriptors": [
+        {
+          "freq": 38,
+          "name": "Pflege",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 37,
+          "name": "Pflegepersonal",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 22,
+          "name": "Häusliche Pflege",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 20,
+          "name": "Pflegeversicherung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 15,
+          "name": "Bundesmittel",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 14,
+          "name": "Pflegeeinrichtung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 13,
+          "name": "Gesetzgebung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 13,
+          "name": "Sozialversicherungsbeitrag",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 12,
+          "name": "Pflegebedürftigkeit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 12,
+          "name": "Pflegekosten",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 11,
+          "name": "Digitalisierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 11,
+          "name": "E-Health",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 11,
+          "name": "Arbeitsbedingungen",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 9,
+          "name": "Gesundheitsfinanzierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 9,
+          "name": "Sozialgesetzbuch XI",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 8,
+          "name": "Krankenhaus",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 8,
+          "name": "Medizinische Versorgung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Leiharbeit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Gesundheitsberuf",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Vergütung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Programm der Bundesregierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Gesetzliche Krankenversicherung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Personalausstattung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Altenpflege",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Vereinbarkeit von Familie und Beruf",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "COVID-19",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Ausländischer Arbeitnehmer",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Fachkraft",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Pflegehilfe",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Personalbeschaffung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Sozialgesetzbuch V",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 5,
+          "name": "Krankenpflege",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Pflegeunterstützungs- und -entlastungsgesetz",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 5,
+          "name": "Pflegegeld",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Gesundheitsvorsorge",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Medizinische Behandlung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Pflegezeitgesetz",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 4,
+          "name": "Ärztliche Verordnung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Beitragsbemessungsgrenze",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Sozialleistung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Kriegsgrab",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Patient",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Sozialgesetzbuch VI",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 4,
+          "name": "Digitale-Versorgung-und-Pflege-Modernisierungs-Gesetz",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 3,
+          "name": "Datenerhebung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Arbeitsmigration",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Elektronische Patientenakte",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Gesundheitskosten",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Krankenhausfinanzierungsgesetz",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 3,
+          "name": "Pflegeberatung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Sozialgesetzbuch VII",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 3,
+          "name": "Private Krankenversicherung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Entgeltersatzleistung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Tarifvertrag",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Berufsausbildung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Personalbedarf",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Selbstbeteiligung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Gesundheitspolitik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Pflegeheim",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Berufsbildung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Gerichtsentscheidung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Kind",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Regierungsprogramm",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Sozialgerichtsgesetz",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 3,
+          "name": "Bundesministerium für Gesundheit",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 3,
+          "name": "Datenschutz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Telemedizin",
+          "typ": "Sachbegriffe"
+        }
+      ],
+      "learned_at": "2026-04-17T08:17:41.705881Z",
+      "sachgebiete": [
+        {
+          "freq": 42,
+          "name": "Gesundheit"
+        },
+        {
+          "freq": 10,
+          "name": "Arbeit und Beschäftigung"
+        },
+        {
+          "freq": 3,
+          "name": "Migration und Aufenthaltsrecht"
+        },
+        {
+          "freq": 3,
+          "name": "Öffentliche Finanzen, Steuern und Abgaben"
+        },
+        {
+          "freq": 3,
+          "name": "Soziale Sicherung"
+        },
+        {
+          "freq": 3,
+          "name": "Bildung und Erziehung"
+        }
+      ],
+      "sample_size": 100,
+      "topic": "pflege"
+    },
+    "schule": {
+      "descriptors": [
+        {
+          "freq": 69,
+          "name": "Schule",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 30,
+          "name": "Schüler",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 17,
+          "name": "Lehrer",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 17,
+          "name": "Bundesmittel",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 14,
+          "name": "Digitalisierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 14,
+          "name": "Digitalpakt Schule",
+          "typ": "Freier Deskriptor"
+        },
+        {
+          "freq": 11,
+          "name": "Bildungsfinanzierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 11,
+          "name": "Programm der Bundesregierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 9,
+          "name": "Bund-Länder-Programm",
+          "typ": "Freier Deskriptor"
+        },
+        {
+          "freq": 8,
+          "name": "Allgemeinbildende Schule",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Kindertagesstätte",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Länder der Bundesrepublik Deutschland",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Datenerhebung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Gewalt",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Bundeswehr",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 6,
+          "name": "Politische Bildung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Gewaltkriminalität",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Berufsbildende Schule",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "E-Learning",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Bundeshaushalt 2025",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Schulleistung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Gesetzgebung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Lehrerbildung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Migrant",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Bildungspolitik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Studie",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Schulverpflegung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Unterricht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Soziale Medien",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Lehr- und Lernmittel",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Projektförderung",
+          "typ": "Freier Deskriptor"
+        },
+        {
+          "freq": 4,
+          "name": "Kriminalprävention",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Israel",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Kultusministerkonferenz",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 4,
+          "name": "Bund-Länder-Kooperation",
+          "typ": "Freier Deskriptor"
+        },
+        {
+          "freq": 3,
+          "name": "Gewaltprävention",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Kriminalstatistik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Politische Straftat",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Rechtsextremismus",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Jugendoffizier",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Minderjähriger",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Personalbeschaffung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Öffentlichkeitsarbeit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Ernährungsweise",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Investitionsförderung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Verpflegung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Staatsangehörigkeit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Akkreditierungs- und Zulassungsverordnung Arbeitsförderung",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 3,
+          "name": "Bildungseinrichtung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Zertifizierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Islam",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Berufliche Weiterbildung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Jugendlicher",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Antisemitismus",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Forschung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Forschungspolitik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Schüleraustausch",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Student",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Nahostkonflikt",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Bundesministerium für Bildung und Forschung",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 3,
+          "name": "Verwaltungsabkommen",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "COVID-19",
+          "typ": "Sachbegriffe"
+        }
+      ],
+      "learned_at": "2026-04-17T08:17:44.903472Z",
+      "sachgebiete": [
+        {
+          "freq": 25,
+          "name": "Bildung und Erziehung"
+        },
+        {
+          "freq": 6,
+          "name": "Medien, Kommunikation und Informationstechnik"
+        },
+        {
+          "freq": 5,
+          "name": "Innere Sicherheit"
+        },
+        {
+          "freq": 4,
+          "name": "Gesellschaftspolitik, soziale Gruppen"
+        },
+        {
+          "freq": 4,
+          "name": "Öffentliche Finanzen, Steuern und Abgaben"
+        },
+        {
+          "freq": 3,
+          "name": "Verteidigung"
+        },
+        {
+          "freq": 3,
+          "name": "Wissenschaft, Forschung und Technologie"
+        }
+      ],
+      "sample_size": 100,
+      "topic": "schule"
+    },
+    "universitaet": {
+      "descriptors": [],
+      "learned_at": "2026-04-17T08:17:45.938795Z",
+      "sachgebiete": [],
+      "sample_size": 0,
+      "topic": "universitaet"
+    },
+    "verteidigung": {
+      "descriptors": [
+        {
+          "freq": 33,
+          "name": "Bundesministerium der Verteidigung",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 26,
+          "name": "Bundeswehr",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 19,
+          "name": "Verteidigungsausgaben",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 17,
+          "name": "Beschaffung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 17,
+          "name": "Ukraine",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 14,
+          "name": "Krieg",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 13,
+          "name": "Militärhilfe",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 12,
+          "name": "Verteidigungspolitik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 12,
+          "name": "Russland",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 12,
+          "name": "Sicherheitspolitik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 11,
+          "name": "Personalausstattung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 11,
+          "name": "Auslandseinsatz der Bundeswehr",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 11,
+          "name": "Rüstungsindustrie",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 11,
+          "name": "Verteidigung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 10,
+          "name": "Wehrmaterial",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 10,
+          "name": "NATO",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 9,
+          "name": "Katastrophenschutz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 9,
+          "name": "Bundesminister",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 9,
+          "name": "Bundesakademie für Bevölkerungsschutz und Zivile Verteidigung",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 7,
+          "name": "Bundeswehrangehöriger",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Wehrdienst",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Bundesmittel",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Gemeinsame Sicherheits- und Verteidigungspolitik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Gesetzgebung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Militärische Infrastruktur",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Wehrtechnik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Medienberichterstattung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Sondervermögen",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Litauen",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Personalplanung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Informations- und Kommunikationstechnik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Informationssicherheit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Waffenhandel",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Bundesministerium",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Falschmeldung",
+          "typ": "Freier Deskriptor"
+        },
+        {
+          "freq": 6,
+          "name": "Medienrecht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "NATO-Truppen",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 5,
+          "name": "Bildungseinrichtung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Katastrophenhilfe",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Zivile Verteidigung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Zivilschutz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Öffentlichkeitsarbeit der Bundesregierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Gesundheitspolitik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Krankenhausfinanzierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Unbemanntes Fluggerät",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Externe Beratung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Personalbeschaffung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Genehmigung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Rüstungsgut",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Rüstung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Munition",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Bündnisfall",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Lambrecht, Christine",
+          "typ": "Personen"
+        },
+        {
+          "freq": 4,
+          "name": "Stralsund",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Afghanistan",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Verteidigungsfall",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Bundesanstalt Technisches Hilfswerk",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 3,
+          "name": "Notfallvorsorge",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "BOS-Funk",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Bürokratie",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "E-Health",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Elektronische Patientenakte",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Krankenhausbehandlung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Marschflugkörper",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Medizinische Versorgung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Militärische Ausbildung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Pflegeversicherung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Rüstungsforschung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Internationale Beziehungen",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Befristetes Arbeitsverhältnis",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Lobbyismus",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Rechtsdienstleistung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Soziale Medien",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Kritische Infrastruktur",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Vergaberecht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Öffentlicher Auftrag",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Rüstungskooperation",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "COVID-19",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Software",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Führungskraft",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Kriegswaffe",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Dienstreise",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Flugbereitschaft des Bundesministeriums der Verteidigung",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 3,
+          "name": "EU-Staaten",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Bundeshaushalt",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Desinformation",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Nachhaltige Entwicklung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "MINUSMA",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 3,
+          "name": "Mali",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Resolute Support Mission",
+          "typ": "Institutionen"
+        }
+      ],
+      "learned_at": "2026-04-17T08:17:38.541317Z",
+      "sachgebiete": [
+        {
+          "freq": 32,
+          "name": "Verteidigung"
+        },
+        {
+          "freq": 17,
+          "name": "Staat und Verwaltung"
+        },
+        {
+          "freq": 9,
+          "name": "Außenpolitik und internationale Beziehungen"
+        },
+        {
+          "freq": 8,
+          "name": "Medien, Kommunikation und Informationstechnik"
+        },
+        {
+          "freq": 5,
+          "name": "Innere Sicherheit"
+        },
+        {
+          "freq": 4,
+          "name": "Gesundheit"
+        },
+        {
+          "freq": 3,
+          "name": "Europapolitik und Europäische Union"
+        }
+      ],
+      "sample_size": 100,
+      "topic": "verteidigung"
+    },
+    "wohnen": {
+      "descriptors": [
+        {
+          "freq": 32,
+          "name": "Wohnungsbau",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 31,
+          "name": "Soziale Wohnraumförderung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 24,
+          "name": "Wohnungspolitik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 22,
+          "name": "Bundesmittel",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 19,
+          "name": "Wohnungsbauförderung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 17,
+          "name": "Gebäudeenergieeffizienz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 16,
+          "name": "Programm der Bundesregierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 16,
+          "name": "Wohnungsbedarf",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 15,
+          "name": "Wohnung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 14,
+          "name": "Bundesministerium für Wohnen, Stadtentwicklung und Bauwesen",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 14,
+          "name": "Stadtentwicklung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 14,
+          "name": "Junger Erwachsener",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 14,
+          "name": "Student",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 13,
+          "name": "Bausanierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 12,
+          "name": "Baukosten",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 12,
+          "name": "Bauwesen",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 12,
+          "name": "Miete",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 12,
+          "name": "Gesetzgebung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 12,
+          "name": "Wohnheim",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 12,
+          "name": "Auszubildender",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 12,
+          "name": "Wohnkosten",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 12,
+          "name": "Bund-Länder-Programm",
+          "typ": "Freier Deskriptor"
+        },
+        {
+          "freq": 10,
+          "name": "Barrierefreiheit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 10,
+          "name": "Wohnungsversorgung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 10,
+          "name": "Wohnungswirtschaft",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 9,
+          "name": "Gebäudeenergiegesetz",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 9,
+          "name": "Älterer Mensch",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 9,
+          "name": "Mieterschutz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 9,
+          "name": "Wohnungslosigkeit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 9,
+          "name": "Mietwohnung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 8,
+          "name": "Klimaschutz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 8,
+          "name": "Mietrecht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 8,
+          "name": "Neubau",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 8,
+          "name": "Wohngeld",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 8,
+          "name": "Bundesministerium",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Personalausstattung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Baugesetzbuch",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 6,
+          "name": "Bauwirtschaft",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Seniorenwohnung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Wohnimmobilien",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Grunderwerbsteuer",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Wohneigentum",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Bundesimmobilien",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Sozialwohnung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Energieeinsparung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Heizung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Bauplanung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Kommunale Gebietskörperschaft",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Vorkaufsrecht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Bundesverwaltung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Lobbyismus",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Bundesanstalt für Immobilienaufgaben",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 5,
+          "name": "Verwaltungsabkommen",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Gewerbeimmobilien",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Erneuerbare Energie",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Baurecht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Digitalisierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Leistungen für Unterkunft und Heizung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Behördenaufbau",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Wohnungsbaugenossenschaft",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Interessenverband",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Mietpreisbremse",
+          "typ": "Freier Deskriptor"
+        },
+        {
+          "freq": 4,
+          "name": "Bürokratie",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Immobilienwirtschaft",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Städtebau",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Wohnform",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "KfW-Bankengruppe",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 3,
+          "name": "Ukraine",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Stellenplan",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Behinderter Mensch",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Regierungsprogramm",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Mehrgenerationenhaus",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Wohngemeinschaft",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Gemeinnützige Wohnungswirtschaft",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Externe Beratung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Gutachten",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Baugenehmigung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Bauland",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Flächenverbrauch",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Modellprojekt",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Wohnungsleerstand",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Energieversorgung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Wärmeversorgung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Nachhaltige Entwicklung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Klimaanpassung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Steuerentlastung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Wohngebiet",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Bundesministerium des Innern, für Bau und Heimat",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 3,
+          "name": "Vergleichsmiete",
+          "typ": "Sachbegriffe"
+        }
+      ],
+      "learned_at": "2026-04-17T08:17:47.004296Z",
+      "sachgebiete": [
+        {
+          "freq": 49,
+          "name": "Raumordnung, Bau- und Wohnungswesen"
+        },
+        {
+          "freq": 10,
+          "name": "Staat und Verwaltung"
+        },
+        {
+          "freq": 6,
+          "name": "Öffentliche Finanzen, Steuern und Abgaben"
+        },
+        {
+          "freq": 6,
+          "name": "Gesellschaftspolitik, soziale Gruppen"
+        },
+        {
+          "freq": 5,
+          "name": "Umwelt"
+        },
+        {
+          "freq": 4,
+          "name": "Soziale Sicherung"
+        },
+        {
+          "freq": 4,
+          "name": "Energie"
+        },
+        {
+          "freq": 3,
+          "name": "Recht"
+        }
+      ],
+      "sample_size": 100,
+      "topic": "wohnen"
+    }
+  },
+  "updated": "2026-04-17T08:17:50.100566+00:00",
+  "version": 1
+}
