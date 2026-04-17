@@ -18,7 +18,10 @@ env/
 
 # Output
 output/
-data/
+# data/* ausgeschlossen, aber Vocabulary-Cache + Seed-Topics sind portable + kuratiert
+data/*
+!data/vocabularies/
+!data/seed_topics.json
 
 # IDE
 .vscode/
