@@ -32,6 +32,7 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
+import os
 from collections import Counter
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -47,6 +48,31 @@ CACHE_VERSION = 1
 DEFAULT_CACHE_PATH = Path("data/vocabularies/bundestag_deskriptoren.json")
 DEFAULT_STALE_DAYS = 30
 RATE_LIMIT_SLEEP_S = 1.0
+EMPTY_CACHE_RE_LEARN_AGE = timedelta(hours=1)
+
+# Stopwords fuer Multi-Token Keyword-Fallback (learn-Methode).
+_STOPWORDS_DE: frozenset[str] = frozenset({
+    "der", "die", "das", "den", "dem", "des",
+    "in", "im", "am", "an", "auf", "zu", "mit", "bei", "von", "vom",
+    "und", "oder", "als", "fuer", "für", "aus", "nach", "vor", "ueber", "über",
+    "ein", "eine", "einen", "einem", "einer", "eines",
+})
+_STOPWORDS_EN: frozenset[str] = frozenset({
+    "the", "of", "in", "and", "on", "for", "to", "at", "is", "are", "with",
+    "a", "an", "by", "from", "as", "or", "be", "this", "that", "it",
+})
+# Zusatz-Stopwords fuer generische Fach-Begriffe die zu vielen Fehl-Hits fuehren wuerden.
+_STOPWORDS_DOMAIN: frozenset[str] = frozenset({
+    "ai", "ki", "implications", "scalability", "applications",
+    "challenges", "current", "status", "general", "novel",
+})
+_STOPWORDS_ALL: frozenset[str] = _STOPWORDS_DE | _STOPWORDS_EN | _STOPWORDS_DOMAIN
+
+# Mapping Umlaut -> ASCII fuer _normalize_topic.
+# Wird NACH .lower() angewendet, daher nur kleinbuchstaben-Eintraege noetig.
+_UMLAUT_MAP: dict[str, str] = {
+    "ü": "ue", "ä": "ae", "ö": "oe", "ß": "ss",
+}
 
 
 class DescriptorEntry(BaseModel):
@@ -91,8 +117,40 @@ def _utcnow() -> datetime:
 
 
 def _normalize_topic(topic: str) -> str:
-    """Normalisiert Topic-Keys (lowercase, stripped) fuer Cache-Lookup."""
-    return topic.strip().lower()
+    """Normalisiert Topic-Keys (lowercase, stripped, umlaut-transliteriert).
+
+    Umlaut-Transliteration sorgt dafuer, dass "Künstliche Intelligenz" und
+    "Kuenstliche Intelligenz" auf den gleichen Cache-Key gemapped werden
+    (beide -> "kuenstliche intelligenz"). Verhindert Legacy-Duplikate.
+    """
+    lowered = topic.strip().lower()
+    for ch, repl in _UMLAUT_MAP.items():
+        lowered = lowered.replace(ch, repl)
+    return lowered
+
+
+def _tokenize_for_fallback(topic: str) -> list[str]:
+    """Zerlegt Topic in Content-Tokens fuer Keyword-Fallback.
+
+    Pipeline: whitespace-split -> lowercase -> stopword-filter -> len>=3.
+    Sortiert absteigend nach Laenge (laengste Tokens zuerst = typischerweise
+    spezifischer). Gibt max 3 Tokens zurueck, um API-Calls zu begrenzen.
+    """
+    words = topic.replace("-", " ").replace("/", " ").split()
+    content = [
+        w.lower().strip(".,;:!?()[]{}\"'")
+        for w in words
+    ]
+    content = [w for w in content if len(w) >= 3 and w not in _STOPWORDS_ALL]
+    # Dedup unter Erhaltung der Reihenfolge
+    seen: set[str] = set()
+    unique: list[str] = []
+    for w in content:
+        if w not in seen:
+            seen = {*seen, w}
+            unique = [*unique, w]
+    # Nach Laenge absteigend sortieren (immutable), max 3
+    return sorted(unique, key=len, reverse=True)[:3]
 
 
 class BundestagVocabulary:
@@ -140,7 +198,11 @@ class BundestagVocabulary:
                 logger.warning("Cache-Eintrag '%s' invalid: %s", key, exc)
 
     def save(self) -> None:
-        """Persistiert Cache nach Disk (erzeugt Parent-Dirs)."""
+        """Persistiert Cache nach Disk (atomic via Temp-File + os.replace).
+
+        Verhindert dass ein Crash mittendrin den Cache korrumpiert. Bei Fehler
+        bleibt der alte Cache intakt.
+        """
         self._cache_path.parent.mkdir(parents=True, exist_ok=True)
         payload = {
             "version": CACHE_VERSION,
@@ -150,10 +212,21 @@ class BundestagVocabulary:
                 for key, tv in self._topics.items()
             },
         }
-        self._cache_path.write_text(
-            json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True),
-            encoding="utf-8",
-        )
+        tmp_path = self._cache_path.with_suffix(self._cache_path.suffix + ".tmp")
+        try:
+            tmp_path.write_text(
+                json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True),
+                encoding="utf-8",
+            )
+            os.replace(tmp_path, self._cache_path)
+        except OSError:
+            # Aufraeumen wenn Temp-File liegen geblieben ist
+            if tmp_path.exists():
+                try:
+                    tmp_path.unlink()
+                except OSError:
+                    pass
+            raise
         logger.info(
             "Vocabulary gespeichert nach %s (%d Topics)",
             self._cache_path,
@@ -179,6 +252,34 @@ class BundestagVocabulary:
         """Alle gelernten Topic-Keys (unabhaengig von Stale-Status)."""
         return sorted(self._topics.keys())
 
+    async def _sample_titel(
+        self,
+        client: BundestagClient,
+        query: str,
+        sample_size: int,
+    ) -> tuple[Counter[tuple[str, str]], Counter[str], int]:
+        """Fuehrt einen /vorgang?f.titel=<query> Sample aus und aggregiert Counter.
+
+        Returns:
+            (desc_counter, sach_counter, n_documents). Leere Counter bei HTTP-Fehler.
+        """
+        desc_counter: Counter[tuple[str, str]] = Counter()
+        sach_counter: Counter[str] = Counter()
+        try:
+            response = await client.search_vorgaenge(query, rows=min(sample_size, 100))
+        except httpx.HTTPError as exc:
+            logger.warning("Sample '%s' fehlgeschlagen: %s", query, exc)
+            return desc_counter, sach_counter, 0
+
+        for vorgang in response.documents:
+            for desc in vorgang.deskriptor:
+                if desc.name:
+                    desc_counter[(desc.name, desc.typ)] += 1
+            for sach in vorgang.sachgebiet:
+                if sach:
+                    sach_counter[sach] += 1
+        return desc_counter, sach_counter, len(response.documents)
+
     async def learn(
         self,
         topic: str,
@@ -188,18 +289,25 @@ class BundestagVocabulary:
     ) -> TopicVocab:
         """Lernt Vokabular fuer ein Topic via /vorgang?f.titel={topic} Sampling.
 
-        Extrahiert alle `deskriptor[].name` + `sachgebiet[]` aus den Sample-Vorgaengen,
-        zaehlt Frequenzen, filtert auf min_freq, sortiert absteigend.
+        Algorithmus:
+        1. Primary-Sample: ganzer Topic-String als f.titel-Query.
+        2. Wenn 0 Treffer: Multi-Token-Fallback — Topic tokenisieren (stopword-filter),
+           bis zu 3 laengste Content-Tokens einzeln sampeln (rows=20 je Token).
+           Deskriptoren aus allen Sub-Samples aggregieren.
+        3. Filter auf min_freq, sortieren, in Cache ablegen.
+
+        Das `min_freq` wird bei kleinen Samples (< 10 Docs) automatisch auf 1 gesenkt,
+        damit spaerliche Topics nicht leer persistiert werden.
 
         Edge-Cases:
-        - 0 Treffer oder 0 Deskriptoren → TopicVocab mit leeren Listen (trotzdem cached).
-          Caller kann bei `top_descriptor() is None` auf f.titel-Fallback gehen.
-        - Rate-Limit: 1s Sleep vor Request, 429-Retry durch _request() des Clients.
+        - 0 Treffer in Primary UND allen Fallback-Tokens → leerer Vokabular-Eintrag.
+        - Keine Rekursion: Fallback laeuft genau 1x, dann Ende.
+        - Rate-Limit: 1s Sleep vor jedem Request, 429-Retry durch _request() des Clients.
 
         Args:
             topic: Topic-String (case-insensitive, wird normalisiert).
-            sample_size: Max Vorgaenge zum Sampling (rows). API cap 100.
-            min_freq: Minimale Frequenz fuer Aufnahme in den Cache.
+            sample_size: Max Vorgaenge fuer Primary-Sample. API cap 100.
+            min_freq: Minimale Frequenz fuer Aufnahme.
 
         Returns:
             TopicVocab mit absteigend sortierten Deskriptoren/Sachgebieten.
@@ -211,53 +319,64 @@ class BundestagVocabulary:
             client = BundestagClient()
             owns_client = True
         try:
+            # Primary-Sample: ganzer Topic-String
             await asyncio.sleep(RATE_LIMIT_SLEEP_S)
-            try:
-                response = await client.search_vorgaenge(
-                    topic, rows=min(sample_size, 100)
-                )
-            except httpx.HTTPError as exc:
-                logger.warning("Learn '%s' fehlgeschlagen: %s — cache leere Liste", topic, exc)
-                vocab = TopicVocab(topic=key, learned_at=_utcnow(), sample_size=0)
-                self.set(vocab)
-                return vocab
+            desc_counter, sach_counter, n_primary = await self._sample_titel(
+                client, topic, sample_size
+            )
+            total_n = n_primary
+            broadened = False
 
-            desc_counter: Counter[tuple[str, str]] = Counter()
-            sach_counter: Counter[str] = Counter()
+            # Fallback: Multi-Token-Sampling bei 0 Treffern
+            if n_primary == 0:
+                tokens = _tokenize_for_fallback(topic)
+                if tokens:
+                    logger.info(
+                        "Learn '%s': primary 0 hits, broadening via tokens %s",
+                        topic, tokens,
+                    )
+                    broadened = True
+                    for token in tokens:
+                        await asyncio.sleep(RATE_LIMIT_SLEEP_S)
+                        td, ts, n_token = await self._sample_titel(
+                            client, token, sample_size=20
+                        )
+                        desc_counter.update(td)
+                        sach_counter.update(ts)
+                        total_n += n_token
 
-            for vorgang in response.documents:
-                for desc in vorgang.deskriptor:
-                    if desc.name:
-                        desc_counter[(desc.name, desc.typ)] += 1
-                for sach in vorgang.sachgebiet:
-                    if sach:
-                        sach_counter[sach] += 1
+            # Adaptive min_freq: nur bei Broadening-Branch senken.
+            # Grund: Primary-Sample soll Caller-kontrolliert sein (Tests erwarten strikte
+            # min_freq-Filter), aber Fallback-Samples (kleine n_token-Sub-Samples) haben
+            # natuerlich wenig Wiederholung und brauchen min_freq=1.
+            effective_min_freq = 1 if broadened else min_freq
 
             descriptors = [
                 DescriptorEntry(name=name, typ=typ, freq=freq)
                 for (name, typ), freq in desc_counter.most_common()
-                if freq >= min_freq
+                if freq >= effective_min_freq
             ]
             sachgebiete = [
                 SachgebietEntry(name=name, freq=freq)
                 for name, freq in sach_counter.most_common()
-                if freq >= min_freq
+                if freq >= effective_min_freq
             ]
 
             vocab = TopicVocab(
                 topic=key,
                 descriptors=descriptors,
                 sachgebiete=sachgebiete,
-                sample_size=len(response.documents),
+                sample_size=total_n,
                 learned_at=_utcnow(),
             )
             self.set(vocab)
             logger.info(
-                "Learned '%s': %d descriptors, %d sachgebiete (sample=%d)",
+                "Learned '%s': %d descriptors, %d sachgebiete (sample=%d%s)",
                 key,
                 len(descriptors),
                 len(sachgebiete),
-                len(response.documents),
+                total_n,
+                ", broadened" if broadened else "",
             )
             return vocab
         finally:
@@ -271,8 +390,28 @@ class BundestagVocabulary:
         sample_size: int = 50,
         min_freq: int = 3,
     ) -> TopicVocab:
-        """Cache-first Lookup: lernt nur wenn Miss oder Stale."""
-        cached = self.get(topic)
-        if cached is not None:
-            return cached
+        """Cache-first Lookup: lernt nur wenn Miss, Stale oder leer-und-alt.
+
+        Ein Cache-Eintrag mit 0 Deskriptoren blockiert nicht dauerhaft — wenn er
+        aelter als EMPTY_CACHE_RE_LEARN_AGE (1h) ist, wird er neu gelernt.
+        Verhindert dass einmalige Fehl-Samples (z.B. Umlaut-Bug) persistent blocken.
+        """
+        key = _normalize_topic(topic)
+        entry = self._topics.get(key)
+        if entry is not None:
+            # Stale-Check (normales TTL)
+            if entry.is_stale(self._stale_days):
+                pass  # faellt durch zu learn()
+            elif not entry.descriptors:
+                # Leer-Eintrag: re-learn wenn > 1h alt, sonst zurueckgeben
+                age = _utcnow() - entry.learned_at
+                if age > EMPTY_CACHE_RE_LEARN_AGE:
+                    logger.debug(
+                        "Cache-Eintrag '%s' leer und > %s alt, re-learning",
+                        key, EMPTY_CACHE_RE_LEARN_AGE,
+                    )
+                else:
+                    return entry
+            else:
+                return entry
         return await self.learn(topic, sample_size=sample_size, min_freq=min_freq)

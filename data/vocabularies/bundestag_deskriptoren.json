@@ -1,5 +1,12 @@
 {
   "topics": {
+    "agentic ai": {
+      "descriptors": [],
+      "learned_at": "2026-04-17T12:17:28.993798Z",
+      "sachgebiete": [],
+      "sample_size": 0,
+      "topic": "agentic ai"
+    },
     "asyl": {
       "descriptors": [
         {
@@ -188,7 +195,7 @@
           "typ": "Geograph. Begriffe"
         }
       ],
-      "learned_at": "2026-04-17T08:17:35.342700Z",
+      "learned_at": "2026-04-17T12:17:06.647532Z",
       "sachgebiete": [
         {
           "freq": 24,
@@ -759,7 +766,7 @@
           "typ": "Sachbegriffe"
         }
       ],
-      "learned_at": "2026-04-17T08:17:43.838402Z",
+      "learned_at": "2026-04-17T12:17:15.257168Z",
       "sachgebiete": [
         {
           "freq": 38,
@@ -818,10 +825,345 @@
       "topic": "bildung"
     },
     "buerokratieabbau": {
-      "descriptors": [],
-      "learned_at": "2026-04-17T08:17:50.100109Z",
-      "sachgebiete": [],
-      "sample_size": 0,
+      "descriptors": [
+        {
+          "freq": 98,
+          "name": "Bürokratie",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 28,
+          "name": "Gesetzgebung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 18,
+          "name": "Nationaler Normenkontrollrat",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 14,
+          "name": "Klein- und Mittelunternehmen",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 11,
+          "name": "Digitalisierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 11,
+          "name": "E-Government",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 11,
+          "name": "Gesetzesfolgenabschätzung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 10,
+          "name": "Steuerrecht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 10,
+          "name": "Verwaltungskosten",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 9,
+          "name": "Bericht der Bundesregierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 9,
+          "name": "Verwaltungsmodernisierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 9,
+          "name": "Bessere Rechtsetzung",
+          "typ": "Freier Deskriptor"
+        },
+        {
+          "freq": 8,
+          "name": "Programm der Bundesregierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Richtlinie der EU",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Unternehmen",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Normenkontrolle",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Bericht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Landwirtschaft",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Verordnung der EU",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Gesetzgebungsverfahren",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Deregulierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Meldepflicht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Besteuerungsverfahren",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Landwirtschaftsbetrieb",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Personalausstattung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Innerstaatliche Umsetzung von EU-Recht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Verwaltungsverfahren",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Auskunftspflicht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Genossenschaft",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Genehmigung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Forstwirtschaft",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Steuervereinfachung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Unternehmensgründung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Rechtsvorschrift",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Kosten",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "EU-Agrarpolitik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Rechtsvereinfachung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Ausschuss",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Bundesministerium der Justiz",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 4,
+          "name": "Mittelstandspolitik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Vergaberecht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Standort Deutschland",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Bundesmittel",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Drittes Bürokratieentlastungsgesetz",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 3,
+          "name": "Rechtsverordnung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Evaluation",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Erneuerbare Energie",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Planung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Publizitätspflicht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Agrarpolitik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Pflanzenschutzmittel",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Regierungsprogramm",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Viehwirtschaft",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Interessenverband",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Bundesministerium",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Bürokratieentlastungsgesetz",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 3,
+          "name": "EU-Recht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Wirtschaft",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Öffentliche Verwaltung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Koordinator der Bundesregierung für Bessere Rechtsetzung und Bürokratieabbau",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 3,
+          "name": "Gesetz zur Einsetzung eines Nationalen Normenkontrollrates",
+          "typ": "Rechtsmaterialien"
+        }
+      ],
+      "learned_at": "2026-04-17T12:17:21.647297Z",
+      "sachgebiete": [
+        {
+          "freq": 35,
+          "name": "Staat und Verwaltung"
+        },
+        {
+          "freq": 34,
+          "name": "Wirtschaft"
+        },
+        {
+          "freq": 19,
+          "name": "Recht"
+        },
+        {
+          "freq": 6,
+          "name": "Öffentliche Finanzen, Steuern und Abgaben"
+        },
+        {
+          "freq": 5,
+          "name": "Gesundheit"
+        },
+        {
+          "freq": 5,
+          "name": "Landwirtschaft und Ernährung"
+        },
+        {
+          "freq": 3,
+          "name": "Energie"
+        }
+      ],
+      "sample_size": 100,
       "topic": "buerokratieabbau"
     },
     "bundeswehr": {
@@ -1142,7 +1484,7 @@
           "typ": "Sachbegriffe"
         }
       ],
-      "learned_at": "2026-04-17T08:17:37.479840Z",
+      "learned_at": "2026-04-17T12:17:08.803089Z",
       "sachgebiete": [
         {
           "freq": 27,
@@ -1159,6 +1501,92 @@
       ],
       "sample_size": 100,
       "topic": "bundeswehr"
+    },
+    "carbon capture": {
+      "descriptors": [
+        {
+          "freq": 1,
+          "name": "Bundesministerium für Umwelt, Naturschutz und Reaktorsicherheit",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 1,
+          "name": "CO2-Abscheidung und -Speicherung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Gabriel, Sigmar",
+          "typ": "Personen"
+        },
+        {
+          "freq": 1,
+          "name": "Gesetz zur Regelung von Abscheidung, Transport und dauerhafter Speicherung von Kohlendioxid",
+          "typ": "Rechtsmaterialien"
+        }
+      ],
+      "learned_at": "2026-04-17T12:17:22.691249Z",
+      "sachgebiete": [],
+      "sample_size": 1,
+      "topic": "carbon capture"
+    },
+    "crispr": {
+      "descriptors": [
+        {
+          "freq": 2,
+          "name": "Gentechnisch veränderter Organismus",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Apfel",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Gentechnikrecht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Grüne Gentechnik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Regulierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Fehlernährung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Gentechnik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Migration",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Reis",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Welternährung",
+          "typ": "Sachbegriffe"
+        }
+      ],
+      "learned_at": "2026-04-17T12:17:23.728769Z",
+      "sachgebiete": [],
+      "sample_size": 2,
+      "topic": "crispr"
     },
     "cybersicherheit": {
       "descriptors": [
@@ -1373,7 +1801,7 @@
           "typ": "Sachbegriffe"
         }
       ],
-      "learned_at": "2026-04-17T08:17:33.205088Z",
+      "learned_at": "2026-04-17T12:17:04.482675Z",
       "sachgebiete": [
         {
           "freq": 27,
@@ -1795,7 +2223,7 @@
           "typ": "Sachbegriffe"
         }
       ],
-      "learned_at": "2026-04-17T08:17:31.134358Z",
+      "learned_at": "2026-04-17T12:17:02.318662Z",
       "sachgebiete": [
         {
           "freq": 28,
@@ -2196,7 +2624,7 @@
           "typ": "Sachbegriffe"
         }
       ],
-      "learned_at": "2026-04-17T08:17:28.991639Z",
+      "learned_at": "2026-04-17T12:17:00.121783Z",
       "sachgebiete": [
         {
           "freq": 48,
@@ -2580,7 +3008,7 @@
           "typ": "Sachbegriffe"
         }
       ],
-      "learned_at": "2026-04-17T08:17:30.064394Z",
+      "learned_at": "2026-04-17T12:17:01.220430Z",
       "sachgebiete": [
         {
           "freq": 33,
@@ -2606,10 +3034,555 @@
       "sample_size": 100,
       "topic": "erneuerbare energien"
     },
+    "eu ai act": {
+      "descriptors": [
+        {
+          "freq": 48,
+          "name": "Verordnung der EU",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 33,
+          "name": "Online-Dienst",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 25,
+          "name": "Gesetz über digitale Dienste",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 22,
+          "name": "Datenaustausch",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 21,
+          "name": "Innerstaatliche Umsetzung von EU-Recht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 17,
+          "name": "USA",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 17,
+          "name": "Gesetzgebung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 14,
+          "name": "ITK-Branche",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 13,
+          "name": "Datenverarbeitung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 13,
+          "name": "Europäische Union",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 13,
+          "name": "Künstliche Intelligenz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 12,
+          "name": "Datenschutz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 10,
+          "name": "Digitale Medien",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 9,
+          "name": "Internet",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 8,
+          "name": "Soziale Medien",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 8,
+          "name": "Bundesmittel",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 8,
+          "name": "Gesetz über digitale Märkte",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 7,
+          "name": "Europäische Kommission",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 7,
+          "name": "Zuständigkeit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Gesetzesfolgenabschätzung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Europäischer Binnenmarkt",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Datenschutz-Grundverordnung",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 6,
+          "name": "Wettbewerb",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Aufsichtsbehörde",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Bundesnetzagentur für Elektrizität, Gas, Telekommunikation, Post und Eisenbahnen",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 6,
+          "name": "Personenbezogene Daten",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Netzwerkdurchsetzungsgesetz",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 5,
+          "name": "Industriepolitik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Bundesministerium",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "EU-Staaten",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Produktion",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Interessenverband",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "EU-Recht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "E-Government",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Elektronischer Handel",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Personalausstattung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Verbraucherschutz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Gesetzgebungsverfahren",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Genehmigung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Bundeskartellamt",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 4,
+          "name": "Richtlinie der EU",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Chip",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Mikroelektronik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Regulierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Monopolkommission",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 4,
+          "name": "Wettbewerbsrecht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Instant Messaging",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Unternehmen",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Website",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Meinungsfreiheit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Informationssicherheit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Klimaneutralität",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Programm der Bundesregierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Gremium",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Digitale-Dienste-Gesetz",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 3,
+          "name": "Breitbandkommunikation",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Bundesamt für Justiz",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 3,
+          "name": "Geschäftsgeheimnis",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Klein- und Mittelunternehmen",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Digitalisierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Gesetz gegen Wettbewerbsbeschränkungen",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 3,
+          "name": "Gutachten",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Mobilität",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Privatsphäre",
+          "typ": "Sachbegriffe"
+        }
+      ],
+      "learned_at": "2026-04-17T12:17:26.911750Z",
+      "sachgebiete": [
+        {
+          "freq": 14,
+          "name": "Medien, Kommunikation und Informationstechnik"
+        },
+        {
+          "freq": 11,
+          "name": "Wirtschaft"
+        },
+        {
+          "freq": 6,
+          "name": "Recht"
+        },
+        {
+          "freq": 5,
+          "name": "Europapolitik und Europäische Union"
+        },
+        {
+          "freq": 3,
+          "name": "Staat und Verwaltung"
+        }
+      ],
+      "sample_size": 100,
+      "topic": "eu ai act"
+    },
     "eu-regulierung": {
-      "descriptors": [],
-      "learned_at": "2026-04-17T08:17:49.070613Z",
-      "sachgebiete": [],
+      "descriptors": [
+        {
+          "freq": 2,
+          "name": "EU-Recht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Bodenschutz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Bundes-Bodenschutzgesetz",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 1,
+          "name": "PFAS",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Rückstände in Lebensmitteln",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Trinkwasser",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Wasserverunreinigung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Bundesminister",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Bundesministerium für Bildung und Forschung",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 1,
+          "name": "Bundesministerium für Ernährung und Landwirtschaft",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 1,
+          "name": "Europäische Kommission",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 1,
+          "name": "Forschung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Forschungseinrichtung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Forschungspolitik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Gentechnikrecht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Grüne Gentechnik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Innovation",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Nutzpflanze",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Pflanzenzüchtung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Regulierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Standort Deutschland",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Unternehmen",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Verordnung der EU",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Wettbewerb",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Wissenschaftler",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Öffentlichkeitsarbeit der Bundesregierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Fahrerlaubnis",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Fährschifffahrt",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Innerstaatliche Umsetzung von EU-Recht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Richtlinie der EU",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Schifffahrtsrecht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Mobilfunk",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Roaming",
+          "typ": "Freier Deskriptor"
+        },
+        {
+          "freq": 1,
+          "name": "Telefontarif",
+          "typ": "Sachbegriffe"
+        }
+      ],
+      "learned_at": "2026-04-17T12:17:20.563596Z",
+      "sachgebiete": [
+        {
+          "freq": 1,
+          "name": "Umwelt"
+        },
+        {
+          "freq": 1,
+          "name": "Europapolitik und Europäische Union"
+        },
+        {
+          "freq": 1,
+          "name": "Landwirtschaft und Ernährung"
+        },
+        {
+          "freq": 1,
+          "name": "Wissenschaft, Forschung und Technologie"
+        },
+        {
+          "freq": 1,
+          "name": "Medien, Kommunikation und Informationstechnik"
+        },
+        {
+          "freq": 1,
+          "name": "Wirtschaft"
+        }
+      ],
       "sample_size": 5,
       "topic": "eu-regulierung"
     },
@@ -2676,7 +3649,7 @@
           "typ": "Sachbegriffe"
         }
       ],
-      "learned_at": "2026-04-17T08:17:40.642934Z",
+      "learned_at": "2026-04-17T12:17:12.021312Z",
       "sachgebiete": [
         {
           "freq": 19,
@@ -2843,7 +3816,7 @@
           "typ": "Sachbegriffe"
         }
       ],
-      "learned_at": "2026-04-17T08:17:42.768235Z",
+      "learned_at": "2026-04-17T12:17:14.179507Z",
       "sachgebiete": [
         {
           "freq": 10,
@@ -3204,7 +4177,7 @@
           "typ": "Sachbegriffe"
         }
       ],
-      "learned_at": "2026-04-17T08:17:36.407044Z",
+      "learned_at": "2026-04-17T12:17:07.717244Z",
       "sachgebiete": [
         {
           "freq": 23,
@@ -3828,7 +4801,7 @@
           "typ": "Sachbegriffe"
         }
       ],
-      "learned_at": "2026-04-17T08:17:26.848806Z",
+      "learned_at": "2026-04-17T12:16:57.959375Z",
       "sachgebiete": [
         {
           "freq": 29,
@@ -4087,7 +5060,7 @@
           "typ": "Sachbegriffe"
         }
       ],
-      "learned_at": "2026-04-17T08:17:27.913017Z",
+      "learned_at": "2026-04-17T12:16:59.042404Z",
       "sachgebiete": [
         {
           "freq": 36,
@@ -4122,10 +5095,474 @@
       "topic": "klimawandel"
     },
     "kuenstliche intelligenz": {
-      "descriptors": [],
-      "learned_at": "2026-04-17T08:17:32.164570Z",
-      "sachgebiete": [],
-      "sample_size": 0,
+      "descriptors": [
+        {
+          "freq": 90,
+          "name": "Künstliche Intelligenz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 21,
+          "name": "Verordnung der EU",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 18,
+          "name": "Bundesmittel",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 12,
+          "name": "Innovation",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 10,
+          "name": "Studie",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 10,
+          "name": "Bundesministerium",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 10,
+          "name": "Forschungsprojekt",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 10,
+          "name": "Technikfolgenabschätzung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 10,
+          "name": "Digitalisierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 9,
+          "name": "Bundesverwaltung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 9,
+          "name": "Projektförderung",
+          "typ": "Freier Deskriptor"
+        },
+        {
+          "freq": 9,
+          "name": "Datenschutz",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 9,
+          "name": "ITK-Branche",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 9,
+          "name": "Regulierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 9,
+          "name": "Programm der Bundesregierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 8,
+          "name": "Wettbewerb",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 8,
+          "name": "Forschung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 8,
+          "name": "Evaluation",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 8,
+          "name": "Chatbot",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 8,
+          "name": "Bundesministerium für Bildung und Forschung",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 8,
+          "name": "Technologiepolitik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 8,
+          "name": "Unternehmensgründung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 8,
+          "name": "Informationssicherheit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Modellprojekt",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Gesetzgebung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Software",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Europäische Union",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 7,
+          "name": "Normung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Rechtsangleichung in der EU",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Personalbeschaffung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Bundeskanzleramt",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 6,
+          "name": "Digitale Souveränität",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Biometrie",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Informations- und Kommunikationstechnik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Forschungsfinanzierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Öffentliche Verwaltung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Forschungskooperation",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Berufliche Weiterbildung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Spitzentechnologie",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Nachgeordnete Behörde",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Sicherheitsbehörde",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Klein- und Mittelunternehmen",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "EU-Staaten",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Aufsichtsbehörde",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Innerstaatliche Umsetzung von EU-Recht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Unternehmen",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Identitätsfeststellung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Hochschule",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Schule",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Europäischer Binnenmarkt",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Fachkraft",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Automatisierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Internationale Zusammenarbeit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Personenbezogene Daten",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Forschungspolitik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Bundesnetzagentur für Elektrizität, Gas, Telekommunikation, Post und Eisenbahnen",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 3,
+          "name": "Konformitätsprüfung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Arbeitsbedingungen",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Arbeitsmarkt",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Internet",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Soziale Medien",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Haftung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Rechtssicherheit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Richtlinie der EU",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Stellungnahme des Bundestages in EU-Angelegenheiten",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Desinformation",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Verwaltungsmodernisierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Militärroboter",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Forschungsprogramm der Bundesregierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Labor",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Parlamentarisches Gremium",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Computer",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Supercomputer",
+          "typ": "Freier Deskriptor"
+        },
+        {
+          "freq": 3,
+          "name": "Datenverarbeitung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Öffentliche Investition",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Technischer Fortschritt",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Standort Deutschland",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Bildung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Bundesministerium für Arbeit und Soziales",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 3,
+          "name": "USA",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Gesetz über digitale Dienste",
+          "typ": "Rechtsmaterialien"
+        },
+        {
+          "freq": 3,
+          "name": "Urheberrecht",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Warenkennzeichnung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Gesetzgebungsverfahren",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Bundesamt für Migration und Flüchtlinge",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 3,
+          "name": "Polizei",
+          "typ": "Sachbegriffe"
+        }
+      ],
+      "learned_at": "2026-04-17T12:17:03.407003Z",
+      "sachgebiete": [
+        {
+          "freq": 32,
+          "name": "Medien, Kommunikation und Informationstechnik"
+        },
+        {
+          "freq": 22,
+          "name": "Wissenschaft, Forschung und Technologie"
+        },
+        {
+          "freq": 10,
+          "name": "Recht"
+        },
+        {
+          "freq": 8,
+          "name": "Staat und Verwaltung"
+        },
+        {
+          "freq": 7,
+          "name": "Wirtschaft"
+        },
+        {
+          "freq": 6,
+          "name": "Europapolitik und Europäische Union"
+        },
+        {
+          "freq": 4,
+          "name": "Bildung und Erziehung"
+        },
+        {
+          "freq": 3,
+          "name": "Arbeit und Beschäftigung"
+        }
+      ],
+      "sample_size": 100,
       "topic": "kuenstliche intelligenz"
     },
     "mietpreisbremse": {
@@ -4186,7 +5623,7 @@
           "typ": "Sachbegriffe"
         }
       ],
-      "learned_at": "2026-04-17T08:17:48.039521Z",
+      "learned_at": "2026-04-17T12:17:19.529261Z",
       "sachgebiete": [
         {
           "freq": 7,
@@ -4588,7 +6025,7 @@
           "typ": "Sachbegriffe"
         }
       ],
-      "learned_at": "2026-04-17T08:17:34.275830Z",
+      "learned_at": "2026-04-17T12:17:05.565720Z",
       "sachgebiete": [
         {
           "freq": 39,
@@ -4927,7 +6364,7 @@
           "typ": "Sachbegriffe"
         }
       ],
-      "learned_at": "2026-04-17T08:17:39.602929Z",
+      "learned_at": "2026-04-17T12:17:10.972748Z",
       "sachgebiete": [
         {
           "freq": 22,
@@ -5287,7 +6724,7 @@
           "typ": "Sachbegriffe"
         }
       ],
-      "learned_at": "2026-04-17T08:17:41.705881Z",
+      "learned_at": "2026-04-17T12:17:13.106597Z",
       "sachgebiete": [
         {
           "freq": 42,
@@ -5316,6 +6753,84 @@
       ],
       "sample_size": 100,
       "topic": "pflege"
+    },
+    "quantencomputing": {
+      "descriptors": [
+        {
+          "freq": 5,
+          "name": "Quantentechnologie",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Computer",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Bundesmittel",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Deutsches Zentrum für Luft- und Raumfahrt",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 2,
+          "name": "Technischer Fortschritt",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Forschungsfinanzierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Luft- und Raumfahrttechnik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Spitzentechnologie",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Forschungspolitik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Haushaltspolitik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Innovation",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Technologiepolitik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Ausschreibung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 1,
+          "name": "Investition",
+          "typ": "Sachbegriffe"
+        }
+      ],
+      "learned_at": "2026-04-17T12:17:24.795854Z",
+      "sachgebiete": [],
+      "sample_size": 5,
+      "topic": "quantencomputing"
     },
     "schule": {
       "descriptors": [
@@ -5630,7 +7145,7 @@
           "typ": "Sachbegriffe"
         }
       ],
-      "learned_at": "2026-04-17T08:17:44.903472Z",
+      "learned_at": "2026-04-17T12:17:16.331171Z",
       "sachgebiete": [
         {
           "freq": 25,
@@ -5665,10 +7180,267 @@
       "topic": "schule"
     },
     "universitaet": {
-      "descriptors": [],
-      "learned_at": "2026-04-17T08:17:45.938795Z",
-      "sachgebiete": [],
-      "sample_size": 0,
+      "descriptors": [
+        {
+          "freq": 67,
+          "name": "Universität",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 20,
+          "name": "Bundesmittel",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 14,
+          "name": "Hochschullehrer",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 11,
+          "name": "Student",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 10,
+          "name": "Hochschule",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 10,
+          "name": "Forschungsfinanzierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 10,
+          "name": "Forschungsprojekt",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 8,
+          "name": "Hochschulforschung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 8,
+          "name": "Hochschule der Bundeswehr",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 8,
+          "name": "Studie",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 7,
+          "name": "Forschungspolitik",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 6,
+          "name": "Bundesministerium für Bildung und Forschung",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 5,
+          "name": "Wissenschaftsfreiheit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Bundesministerium der Verteidigung",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 5,
+          "name": "Gutachten",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Wissenschaftliche Kooperation",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Forschungseinrichtung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Hochschulzulassung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "USA",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Berlin",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Rassismus",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Hochschulfinanzierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 5,
+          "name": "Türkei",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Bielefeld",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Israel",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Landtagsabgeordneter",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Personalauswahl",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Fachhochschule",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 4,
+          "name": "Entwicklungszusammenarbeit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Hochschullehre",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "München",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Deutscher Akademischer Austauschdienst",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 3,
+          "name": "China",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Forschungskooperation",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Ethnische Diskriminierung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Privathochschule",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Forschung",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "IT-Kriminalität",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "COVID-19",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Bundeswehr",
+          "typ": "Institutionen"
+        },
+        {
+          "freq": 3,
+          "name": "Informationssicherheit",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Bildungshilfe",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Palästinenser",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Lehrstuhl",
+          "typ": "Sachbegriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Hamburg",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Bonn",
+          "typ": "Geograph. Begriffe"
+        },
+        {
+          "freq": 3,
+          "name": "Kissinger, Henry",
+          "typ": "Personen"
+        }
+      ],
+      "learned_at": "2026-04-17T12:17:17.409951Z",
+      "sachgebiete": [
+        {
+          "freq": 11,
+          "name": "Wissenschaft, Forschung und Technologie"
+        },
+        {
+          "freq": 6,
+          "name": "Außenpolitik und internationale Beziehungen"
+        },
+        {
+          "freq": 3,
+          "name": "Bildung und Erziehung"
+        },
+        {
+          "freq": 3,
+          "name": "Verteidigung"
+        },
+        {
+          "freq": 3,
+          "name": "Entwicklungspolitik"
+        }
+      ],
+      "sample_size": 100,
       "topic": "universitaet"
     },
     "verteidigung": {
@@ -6124,7 +7896,7 @@
           "typ": "Institutionen"
         }
       ],
-      "learned_at": "2026-04-17T08:17:38.541317Z",
+      "learned_at": "2026-04-17T12:17:09.877229Z",
       "sachgebiete": [
         {
           "freq": 32,
@@ -6606,7 +8378,7 @@
           "typ": "Sachbegriffe"
         }
       ],
-      "learned_at": "2026-04-17T08:17:47.004296Z",
+      "learned_at": "2026-04-17T12:17:18.487494Z",
       "sachgebiete": [
         {
           "freq": 49,
@@ -6645,6 +8417,6 @@
       "topic": "wohnen"
     }
   },
-  "updated": "2026-04-17T08:17:50.100566+00:00",
+  "updated": "2026-04-17T12:17:29.022757+00:00",
   "version": 1
 }
