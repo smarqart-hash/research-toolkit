@@ -19,7 +19,7 @@ from collections.abc import Sequence
 from pydantic import BaseModel, Field, computed_field
 
 from src.agents.base_client import BASEDocument
-from src.agents.bundestag_client import DIPDrucksache
+from src.agents.bundestag_client import DIPDrucksache, DIPVorgang, DIPVorgangsposition
 from src.agents.dblp_client import DBLPHit
 from src.agents.eurlex_client import EURLexDocument
 from src.agents.exa_client import ExaResult
@@ -228,6 +228,76 @@ def from_bundestag(drucksache: DIPDrucksache) -> UnifiedPaper:
         source="bundestag",
         url=drucksache.url,
         tags=[drucksache.typ] if drucksache.typ else [],
+        language="de",
+    )
+
+
+def from_dip_vorgang(vorgang: DIPVorgang) -> UnifiedPaper:
+    """Konvertiert einen DIP-Vorgang in UnifiedPaper.
+
+    Vorgaenge buendeln Dokumente zu einem Thema (Gesetzgebungsverfahren,
+    Kleine Anfrage, ...). Ideal fuer Topic-Research auf der buendelnden Ebene.
+
+    Tags-Struktur: [typ, vorgangstyp, ...deskriptor.name, ...sachgebiet]
+    → breites Signal fuer Filterung + LLM-Context.
+    """
+    tags: list[str] = []
+    if vorgang.typ:
+        tags.append(vorgang.typ)
+    if vorgang.vorgangstyp and vorgang.vorgangstyp != vorgang.typ:
+        tags.append(vorgang.vorgangstyp)
+    tags.extend(d.name for d in vorgang.deskriptor if d.name)
+    tags.extend(s for s in vorgang.sachgebiet if s)
+
+    return UnifiedPaper(
+        paper_id=f"dip-vorgang:{vorgang.id}",
+        title=vorgang.titel,
+        abstract=vorgang.abstract or vorgang.titel,
+        year=vorgang.year,
+        authors=list(vorgang.initiative),
+        citation_count=None,
+        source="bundestag",
+        url=vorgang.url,
+        tags=tags,
+        language="de",
+    )
+
+
+def from_dip_vorgangsposition(vp: DIPVorgangsposition) -> UnifiedPaper:
+    """Konvertiert eine DIP-Vorgangsposition (Drucksache o. Debatten-Abschnitt).
+
+    Paper-ID bevorzugt Dokumentnummer (stabil fuer Dedup ueber Drucksachen),
+    fallback auf Vorgangsposition-ID.
+    """
+    fundstelle = vp.fundstelle
+    doknr = fundstelle.dokumentnummer if fundstelle else ""
+    paper_id = f"dip:{doknr}" if doknr else f"dip-vp:{vp.id}"
+    url = (
+        f"https://dip.bundestag.de/vorgang/{vp.vorgang_id}"
+        if vp.vorgang_id
+        else f"https://dip.bundestag.de/vorgangsposition/{vp.id}"
+    )
+    tags: list[str] = []
+    if vp.dokumentart:
+        tags.append(vp.dokumentart)
+    if fundstelle and fundstelle.drucksachetyp:
+        tags.append(fundstelle.drucksachetyp)
+    if vp.vorgangsposition:
+        tags.append(vp.vorgangsposition)
+
+    authors = list(fundstelle.urheber) if fundstelle else []
+
+    return UnifiedPaper(
+        paper_id=paper_id,
+        title=vp.titel,
+        abstract=vp.titel,
+        year=vp.year,
+        authors=authors,
+        citation_count=None,
+        source="bundestag",
+        url=url,
+        pdf_url=fundstelle.pdf_url if fundstelle and fundstelle.pdf_url else None,
+        tags=tags,
         language="de",
     )
 
