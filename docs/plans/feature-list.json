@@ -26,7 +26,7 @@
         "Fallback bei Garbage: min 2, max 8 Facetten",
         "Tests in tests/test_topic_decomposer.py"
       ],
-      "status": "pending"
+      "status": "done"
     },
     {
       "id": "F-002",
@@ -44,7 +44,7 @@
         "load_voice_profile() laedt sie korrekt",
         "Tests fuer Schema-Validierung"
       ],
-      "status": "pending"
+      "status": "done"
     },
     {
       "id": "F-003",
@@ -60,7 +60,7 @@
         "load_venue_profile() laedt sie korrekt",
         "Tests fuer Schema-Validierung"
       ],
-      "status": "pending"
+      "status": "done"
     },
     {
       "id": "F-004",
@@ -70,7 +70,7 @@
       "repo": "research-toolkit",
       "depends_on": ["F-001", "F-002", "F-003"],
       "acceptance_criteria": ["Keine CRITICAL Findings"],
-      "status": "pending"
+      "status": "done"
     },
     {
       "id": "F-005",
@@ -89,7 +89,7 @@
         "research-toolkit als pip-installierbares Package importiert",
         "Tests fuer alle Endpoints"
       ],
-      "status": "pending"
+      "status": "done"
     },
     {
       "id": "F-006",
@@ -103,7 +103,7 @@
         "RLS enabled + Policy",
         "Index auf status + created_at"
       ],
-      "status": "pending"
+      "status": "done"
     },
     {
       "id": "F-007",
@@ -113,7 +113,7 @@
       "repo": "briefing-app",
       "depends_on": ["F-005", "F-006"],
       "acceptance_criteria": ["Keine CRITICAL Findings"],
-      "status": "pending"
+      "status": "done"
     },
     {
       "id": "F-008",
@@ -130,7 +130,7 @@
         "Responsive, Dark-first, shadcn/ui",
         "OG Meta Tags fuer auguri.us"
       ],
-      "status": "pending"
+      "status": "done"
     },
     {
       "id": "F-009",
@@ -145,7 +145,7 @@
         "Transparenz-Box: Pipeline-Visualisierung",
         "Animierter Fortschrittsbalken"
       ],
-      "status": "pending"
+      "status": "done"
     },
     {
       "id": "F-010",
@@ -163,7 +163,7 @@
         "Gallery-Page: /gallery — letzte oeffentliche Briefings",
         "KI-Disclosure automatisch"
       ],
-      "status": "pending"
+      "status": "done"
     },
     {
       "id": "F-011",
@@ -173,7 +173,7 @@
       "repo": "briefing-app",
       "depends_on": ["F-008", "F-009", "F-010"],
       "acceptance_criteria": ["Keine CRITICAL Findings"],
-      "status": "pending"
+      "status": "done"
     },
     {
       "id": "F-012",
