@@ -56,9 +56,9 @@ async def seed_vocabulary(
     topics = _load_seed(seed_path)
     logger.info("Seed-Topics: %d aus %s", len(topics), seed_path)
 
-    vocab = BundestagVocabulary(cache_path=cache_path)
     async with BundestagClient() as client:
-        vocab._client = client  # Client fuer learn() wiederverwenden
+        # Client ueber Init-Parameter wiederverwenden (kein private-attr-access)
+        vocab = BundestagVocabulary(cache_path=cache_path, client=client)
 
         learned = 0
         skipped = 0
@@ -80,12 +80,11 @@ async def seed_vocabulary(
                     len(tv.sachgebiete),
                     tv.sample_size,
                 )
-                learned += 1
+                learned = learned + 1
             except Exception as exc:  # noqa: BLE001 — Netzwerk-tolerant
                 logger.exception("  -> FEHLER: %s", exc)
-                failed.append(topic)
+                failed = [*failed, topic]
 
-        vocab._client = None
         vocab.save()
         logger.info(
             "Done: %d gelernt, %d cache-hit, %d fehlgeschlagen. Cache: %s",

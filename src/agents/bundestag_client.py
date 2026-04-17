@@ -171,6 +171,29 @@ class DIPVorgangspositionResponse(BaseModel):
     documents: list[DIPVorgangsposition] = Field(default_factory=list)
 
 
+def _position_key(vp: DIPVorgangsposition) -> str:
+    """Stabiler Dedup-Key: bevorzugt fundstelle.dokumentnummer, Fallback vp.id."""
+    if vp.fundstelle and vp.fundstelle.dokumentnummer:
+        return vp.fundstelle.dokumentnummer
+    return f"vp:{vp.id}"
+
+
+def _dedupe_positions(
+    positions: list[DIPVorgangsposition],
+    already_seen: set[str],
+) -> list[DIPVorgangsposition]:
+    """Filtert Positionen die bereits in already_seen sind (pure function)."""
+    result: list[DIPVorgangsposition] = []
+    local_seen: set[str] = set(already_seen)
+    for vp in positions:
+        key = _position_key(vp)
+        if key in local_seen:
+            continue
+        local_seen = {*local_seen, key}
+        result = [*result, vp]
+    return result
+
+
 class BundestagClient:
     """Client fuer die Bundestag DIP API.
 
@@ -397,17 +420,21 @@ class BundestagClient:
             params["f.wahlperiode"] = wahlperiode
 
         logger.debug("search_topic '%s' via %s", topic, used_filter)
-        response = await self._request("vorgang", params)
+        try:
+            response = await self._request("vorgang", params)
+        except httpx.HTTPError as exc:
+            logger.warning("search_topic '%s' Vorgang-Fetch fehlgeschlagen: %s", topic, exc)
+            return []
         vorgang_response = DIPVorgangResponse.model_validate(response.json())
         vorgaenge = vorgang_response.documents
 
-        # Dedup pro Vorgang-ID
+        # Dedup pro Vorgang-ID (immutable Akkumulation)
         seen_ids: set[str] = set()
         unique_vorgaenge: list[DIPVorgang] = []
         for v in vorgaenge:
             if v.id and v.id not in seen_ids:
-                seen_ids.add(v.id)
-                unique_vorgaenge.append(v)
+                seen_ids = {*seen_ids, v.id}
+                unique_vorgaenge = [*unique_vorgaenge, v]
 
         # Ranking: Recency desc, Deskriptor-Freq-Score als Tiebreaker
         def _rank_key(v: DIPVorgang) -> tuple[int, int]:
@@ -415,37 +442,43 @@ class BundestagClient:
             freq_score = sum(desc_freq_map.get(d.name, 0) for d in v.deskriptor)
             return (year, freq_score)
 
-        unique_vorgaenge.sort(key=_rank_key, reverse=True)
+        ranked_vorgaenge = sorted(unique_vorgaenge, key=_rank_key, reverse=True)
 
         # Bei include_positions: Top-N expandieren zu Drucksachen
-        papers: list[_UP] = []
         if include_positions:
-            top_n = unique_vorgaenge[:TOPIC_POSITIONS_TOP_N]
-            seen_doknrs: set[str] = set()
-            for idx, vorgang in enumerate(top_n):
-                if idx > 0:
-                    await asyncio.sleep(TOPIC_RATE_LIMIT_SLEEP_S)
-                try:
-                    vp_response = await self.get_vorgangspositionen(vorgang.id, rows=50)
-                except httpx.HTTPError as exc:
-                    logger.warning(
-                        "Positions-Fetch fuer %s fehlgeschlagen: %s",
-                        vorgang.id,
-                        exc,
-                    )
-                    continue
-                for vp in vp_response.documents:
-                    key = (
-                        vp.fundstelle.dokumentnummer
-                        if vp.fundstelle and vp.fundstelle.dokumentnummer
-                        else f"vp:{vp.id}"
-                    )
-                    if key in seen_doknrs:
-                        continue
-                    seen_doknrs.add(key)
-                    papers.append(from_dip_vorgangsposition(vp))
-        else:
-            papers = [from_dip_vorgang(v) for v in unique_vorgaenge]
+            return await self._expand_positions(ranked_vorgaenge[:TOPIC_POSITIONS_TOP_N])
+        return [from_dip_vorgang(v) for v in ranked_vorgaenge]
+
+    async def _expand_positions(
+        self,
+        vorgaenge: list[DIPVorgang],
+    ) -> list[UnifiedPaper]:
+        """Lade Vorgangspositionen pro Vorgang und baue UnifiedPaper[].
+
+        Rate-limit-freundlich: 1s Sleep zwischen Calls. Fehlerhafte Fetches
+        werden als WARNING geloggt, andere Vorgaenge weiter versucht.
+        Dedup ueber fundstelle.dokumentnummer (oder vp.id als Fallback).
+        """
+        from src.agents.paper_ranker import from_dip_vorgangsposition
+
+        papers: list[UnifiedPaper] = []
+        seen_keys: set[str] = set()
+        for idx, vorgang in enumerate(vorgaenge):
+            if idx > 0:
+                await asyncio.sleep(TOPIC_RATE_LIMIT_SLEEP_S)
+            try:
+                vp_response = await self.get_vorgangspositionen(vorgang.id, rows=50)
+            except httpx.HTTPError as exc:
+                logger.warning(
+                    "Positions-Fetch fuer %s fehlgeschlagen: %s",
+                    vorgang.id,
+                    exc,
+                )
+                continue
+            new_positions = _dedupe_positions(vp_response.documents, seen_keys)
+            seen_keys = {*seen_keys, *(_position_key(vp) for vp in new_positions)}
+            papers = [*papers, *(from_dip_vorgangsposition(vp) for vp in new_positions)]
+        return papers
 
         logger.info(
             "search_topic('%s'): %d Vorgaenge, %d UnifiedPaper (positions=%s)",
