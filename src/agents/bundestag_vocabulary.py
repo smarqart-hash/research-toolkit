@@ -33,6 +33,7 @@ import asyncio
 import json
 import logging
 import os
+import unicodedata
 from collections import Counter
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -117,13 +118,20 @@ def _utcnow() -> datetime:
 
 
 def _normalize_topic(topic: str) -> str:
-    """Normalisiert Topic-Keys (lowercase, stripped, umlaut-transliteriert).
+    """Normalisiert Topic-Keys (Unicode-NFC, lowercase, stripped, umlaut-translit).
 
     Umlaut-Transliteration sorgt dafuer, dass "Künstliche Intelligenz" und
     "Kuenstliche Intelligenz" auf den gleichen Cache-Key gemapped werden
     (beide -> "kuenstliche intelligenz"). Verhindert Legacy-Duplikate.
+
+    NFC-Normalisierung VOR dem Umlaut-Mapping ist kritisch: ein NFD-kodiertes
+    "ü" ist `u` + U+0308 (Combining Diaeresis) und wuerde sonst als zwei
+    Zeichen das _UMLAUT_MAP verfehlen. Clipboard-Input oder macOS-Dateisysteme
+    liefern NFD, JSON-Parser meist NFC — die Normalisierung garantiert
+    konsistentes Verhalten unabhaengig von der Quelle.
     """
-    lowered = topic.strip().lower()
+    normalized = unicodedata.normalize("NFC", topic)
+    lowered = normalized.strip().lower()
     for ch, repl in _UMLAUT_MAP.items():
         lowered = lowered.replace(ch, repl)
     return lowered

@@ -290,6 +290,17 @@ class TestNormalizeTopicUmlautEquivalence:
         from src.agents.bundestag_vocabulary import _normalize_topic
         assert _normalize_topic("  Klimaschutz  ") == "klimaschutz"
 
+    def test_nfd_input_normalized_to_same_key_as_nfc(self):
+        """Adversarial: Clipboard/macOS liefert oft NFD (u + Combining Diaeresis).
+
+        Ohne NFC-Normalisierung wuerde _UMLAUT_MAP den NFD-Umlaut verpassen
+        (u und \\u0308 werden einzeln iteriert, kein Single-Char-Match).
+        """
+        from src.agents.bundestag_vocabulary import _normalize_topic
+        nfc = "K\u00fcnstliche Intelligenz"
+        nfd = "Ku\u0308nstliche Intelligenz"
+        assert _normalize_topic(nfc) == _normalize_topic(nfd) == "kuenstliche intelligenz"
+
 
 class TestTokenizeForFallback:
     """Adversarial: Tokenizer darf nicht in Endlos-Loop gehen bzw. nur Stopwords liefern."""
